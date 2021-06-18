@@ -9,6 +9,9 @@ function App() {
         <p>
           Welcome developers... and Nikola
         </p>
+        <p>
+          If you see this it means that CI/CD for SPA is working!
+        </p>
       </header>
     </div>
   );
