@@ -10,7 +10,7 @@ function App() {
           Welcome developers... and Nikola
         </p>
         <p>
-          If you see this it means that CI/CD for SPA is working!
+          If you see this it means that CI/CD for SPA is working! But almost.
         </p>
       </header>
     </div>
