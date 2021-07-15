@@ -7,11 +7,11 @@ const NotFound = () => {
         <Segment placeholder>
             <Header icon>
                 <Icon name='search' />
-                Oops - we've looked everywhere but couldn't find this.
+                Oops - Svuda smo gledali ali ovu putanju nismo našli.
             </Header>
             <Segment.Inline>
-                <Button as={Link} to='/activities' primary>
-                    Return to Activities page
+                <Button as={Link} to='/main' primary>
+                    Vrati se na glavnu stranu
                 </Button>
             </Segment.Inline>
         </Segment>
