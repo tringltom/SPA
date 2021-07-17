@@ -2,24 +2,24 @@ import { makeAutoObservable } from "mobx";
 import { RootStore } from "./rootStore";
 
 export default class ModalStore {
-    rootStore: RootStore;
-    constructor(rootStore: RootStore) {
+  rootStore: RootStore;
+  constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
-    }
+  };
 
-    modal = {
-        open: false,
-        body: null
-    }
+  modal = {
+    open: false,
+    body: null,
+  };
 
-    openModal = (content: any) => {
-        this.modal.open = true;
-        this.modal.body = content;
-    }
+  openModal = (content: any) => {
+    this.modal.open = true;
+    this.modal.body = content;
+  };
 
-    closeModal = () => {
-        this.modal.open = false;
-        this.modal.body = null;
-    }
+  closeModal = () => {
+    this.modal.open = false;
+    this.modal.body = null;
+  };
 }

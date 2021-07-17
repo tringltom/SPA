@@ -1,23 +1,23 @@
-import { FORM_ERROR } from 'final-form'
-import { observer } from 'mobx-react-lite'
-import React, { useContext } from 'react'
-import {Form as FinalForm, Field} from 'react-final-form'
-import { combineValidators, isRequired } from 'revalidate'
-import { Button, Divider, Form, Header } from 'semantic-ui-react'
-import { ErrorMessage } from '../../app/common/form/ErrorMessage'
-import { TextInput } from '../../app/common/form/TextInput'
-import { IUserFormValues } from '../../app/models/user'
-import { RootStoreContext } from '../../app/stores/rootStore';
-import SocialLoginFacebook from './SocialLoginFacebook'
-import SocialLoginInstagram from './SocialLoginInstagram'
+import { FORM_ERROR } from "final-form";
+import { observer } from "mobx-react-lite";
+import { useContext } from "react";
+import { Form as FinalForm, Field } from "react-final-form";
+import { combineValidators, isRequired } from "revalidate";
+import { Button, Divider, Form, Header } from "semantic-ui-react";
+import { ErrorMessage } from "../../app/common/form/ErrorMessage";
+import { TextInput } from "../../app/common/form/TextInput";
+import { IUserFormValues } from "../../app/models/user";
+import { RootStoreContext } from "../../app/stores/rootStore";
+import SocialLoginFacebook from "./SocialLoginFacebook";
+import SocialLoginInstagram from "./SocialLoginInstagram";
 
 const validate = combineValidators({
-  email: isRequired({ message: 'E-pošta je neophodna'}),
-  password: isRequired({ message: 'Šifra je neophodna'})
-})
+  email: isRequired({ message: "E-pošta je neophodna" }),
+  password: isRequired({ message: "Šifra je neophodna" }),
+});
 
 const LoginForm = () => {
-  const rootStore  = useContext(RootStoreContext);
+  const rootStore = useContext(RootStoreContext);
   const { login, fbLogin, loading } = rootStore.userStore;
   return (
     <FinalForm
@@ -42,7 +42,11 @@ const LoginForm = () => {
             color="teal"
             textAlign="center"
           />
-          <Field name="email" component={TextInput} placeholder="Email adresa" />
+          <Field
+            name="email"
+            component={TextInput}
+            placeholder="Email adresa"
+          />
           <Field
             name="password"
             type="password"
@@ -50,9 +54,7 @@ const LoginForm = () => {
             placeholder="Šifra"
           />
           {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage
-              error={submitError}
-            />
+            <ErrorMessage error={submitError} />
           )}
           <Button
             disabled={(invalid && !dirtySinceLastSubmit) || pristine}
@@ -62,12 +64,13 @@ const LoginForm = () => {
             fluid
           />
           <Divider horizontal>Ili</Divider>
-          <SocialLoginFacebook loading={loading} fbCallback={fbLogin}/>
-          <SocialLoginInstagram loading={loading} fbCallback={fbLogin}/>
+          <SocialLoginFacebook loading={loading} fbCallback={fbLogin} />
+          <SocialLoginInstagram loading={loading} fbCallback={fbLogin} />
+          {/* TO DO*/}
         </Form>
       )}
     />
   );
-}
+};
 
 export default observer(LoginForm);

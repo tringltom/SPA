@@ -1,21 +1,20 @@
-import React, { useContext } from 'react'
-import { combineValidators, isRequired } from 'revalidate'
-import { IUserFormValues } from '../../app/models/user';
-import {Form as FinalForm, Field} from 'react-final-form'
-import { Button, Header, Form } from 'semantic-ui-react';
-import { TextInput } from '../../app/common/form/TextInput';
-import { ErrorMessage } from '../../app/common/form/ErrorMessage';
-import { observer } from 'mobx-react-lite';
-import { FORM_ERROR } from 'final-form';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useContext } from "react";
+import { combineValidators, isRequired } from "revalidate";
+import { Form as FinalForm, Field } from "react-final-form";
+import { Button, Header, Form } from "semantic-ui-react";
+import { TextInput } from "../../app/common/form/TextInput";
+import { ErrorMessage } from "../../app/common/form/ErrorMessage";
+import { observer } from "mobx-react-lite";
+import { FORM_ERROR } from "final-form";
+import { RootStoreContext } from "../../app/stores/rootStore";
 
 const validate = combineValidators({
-  email: isRequired({ message: 'E-pošta je neophodna'})
-})
+  email: isRequired({ message: "E-pošta je neophodna" }),
+});
 
 export const ForgotPasswordForm = () => {
-  const rootStore  = useContext(RootStoreContext);
-  const { recoverPassword, loading} = rootStore.userStore;
+  const rootStore = useContext(RootStoreContext);
+  const { recoverPassword, loading } = rootStore.userStore;
   return (
     <FinalForm
       onSubmit={(email: string) =>
@@ -39,11 +38,13 @@ export const ForgotPasswordForm = () => {
             color="teal"
             textAlign="center"
           />
-          <Field name="email" component={TextInput} placeholder="Email adresa" />
+          <Field
+            name="email"
+            component={TextInput}
+            placeholder="Email adresa"
+          />
           {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage
-              error={submitError}
-            />
+            <ErrorMessage error={submitError} />
           )}
           <Button
             disabled={(invalid && !dirtySinceLastSubmit) || pristine}
@@ -56,6 +57,6 @@ export const ForgotPasswordForm = () => {
       )}
     />
   );
-}
+};
 
 export default observer(ForgotPasswordForm);
