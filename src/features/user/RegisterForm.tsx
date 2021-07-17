@@ -9,7 +9,7 @@ import { IUserFormValues } from '../../app/models/user'
 import { RootStoreContext } from '../../app/stores/rootStore';
 
 const validate = combineValidators({
-  email: isRequired({ message: 'E-pošta je neophodna'}),
+  email: isRequired({ message: 'Email adresa je neophodna'}),
   password: isRequired({ message: 'Šifra je neophodna'}),
   username: isRequired({ message: 'Korisničko ime je neophodno'})
 })
@@ -45,7 +45,7 @@ export const RegisterForm = () => {
               component={TextInput}
               placeholder="Korisničko ime"
             />
-            <Field name="email" component={TextInput} placeholder="E-pošta" />
+            <Field name="email" component={TextInput} placeholder="Email adresa" />
             <Field
               name="password"
               component={TextInput}

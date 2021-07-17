@@ -1,28 +1,25 @@
-import { FORM_ERROR } from 'final-form'
-import { observer } from 'mobx-react-lite'
 import React, { useContext } from 'react'
-import {Form as FinalForm, Field} from 'react-final-form'
 import { combineValidators, isRequired } from 'revalidate'
-import { Button, Divider, Form, Header } from 'semantic-ui-react'
-import { ErrorMessage } from '../../app/common/form/ErrorMessage'
-import { TextInput } from '../../app/common/form/TextInput'
-import { IUserFormValues } from '../../app/models/user'
+import { IUserFormValues } from '../../app/models/user';
+import {Form as FinalForm, Field} from 'react-final-form'
+import { Button, Header, Form } from 'semantic-ui-react';
+import { TextInput } from '../../app/common/form/TextInput';
+import { ErrorMessage } from '../../app/common/form/ErrorMessage';
+import { observer } from 'mobx-react-lite';
+import { FORM_ERROR } from 'final-form';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import SocialLoginFacebook from './SocialLoginFacebook'
-import SocialLoginInstagram from './SocialLoginInstagram'
 
 const validate = combineValidators({
-  email: isRequired({ message: 'E-pošta je neophodna'}),
-  password: isRequired({ message: 'Šifra je neophodna'})
+  email: isRequired({ message: 'E-pošta je neophodna'})
 })
 
-const LoginForm = () => {
+export const ForgotPasswordForm = () => {
   const rootStore  = useContext(RootStoreContext);
-  const { login, fbLogin, loading } = rootStore.userStore;
+  const { recoverPassword, loading} = rootStore.userStore;
   return (
     <FinalForm
-      onSubmit={(values: IUserFormValues) =>
-        login(values).catch((error) => ({
+      onSubmit={(email: string) =>
+        recoverPassword(email).catch((error) => ({
           [FORM_ERROR]: error,
         }))
       }
@@ -43,12 +40,6 @@ const LoginForm = () => {
             textAlign="center"
           />
           <Field name="email" component={TextInput} placeholder="Email adresa" />
-          <Field
-            name="password"
-            type="password"
-            component={TextInput}
-            placeholder="Šifra"
-          />
           {submitError && !dirtySinceLastSubmit && (
             <ErrorMessage
               error={submitError}
@@ -61,13 +52,10 @@ const LoginForm = () => {
             content="Potvrdi"
             fluid
           />
-          <Divider horizontal>Ili</Divider>
-          <SocialLoginFacebook loading={loading} fbCallback={fbLogin}/>
-          <SocialLoginInstagram loading={loading} fbCallback={fbLogin}/>
         </Form>
       )}
     />
   );
 }
 
-export default observer(LoginForm);
+export default observer(ForgotPasswordForm);

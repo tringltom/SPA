@@ -2,7 +2,7 @@ import axios, {AxiosResponse} from 'axios';
 import { IUser, IUserFormValues } from '../models/user';
 import { toast } from 'react-toastify';
 
-axios.defaults.baseURL = 'http://localhost:4000';
+axios.defaults.baseURL = 'https://localhost:4000';
 
 axios.interceptors.response.use(undefined, (error) => {
     if(error.message === 'Network Error' && !error.response) 
@@ -27,7 +27,8 @@ const User = {
     fbLogin: (accessToken: string) => requests.post(`/users/facebook`, {accessToken}),
     refreshToken: () : Promise<IUser> => requests.post(`/users/refreshToken`, {}),
     verifyEmail: (token: string, email: string) : Promise<void> => requests.post(`/users/verifyEmail`, {token, email}),
-    resendVerifyEmailConfirm: (email: string) : Promise<void> => requests.get(`/users/resendEmailVerification?email=${email}`)
+    resendVerifyEmailConfirm: (email: string) : Promise<void> => requests.get(`/users/resendEmailVerification?email=${email}`),
+    recoverPassword : (email: string) :Promise<string> => requests.post(`/users/RecoverPassword`, {email})
 }
 
 const sites = {

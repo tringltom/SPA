@@ -23,10 +23,10 @@ const RegisterSuccess: React.FC<RouteComponentProps> = ({location}) => {
             </Header>
             <Segment.Inline>
                 <div className="center">
-                    <p>Molimo Vas proverite poštu (uključujući junk fasciklu) stigla Vam je potvrda</p>
+                    <p>Molimo Vas proverite poštu (uključujući junk fasciklu), stigla Vam je potvrda.</p>
                     {email &&
                         <>
-                            <p>Niste dobili potvrdu? Molimo Vas zatražite opet klikom na dugnme ispod</p>
+                            <p>Niste dobili potvrdu? Molimo Vas zatražite opet klikom na dugme ispod.</p>
                             <Button onClick={handleConfirmEmailResend} primary content='Pošalji potvrdu' size='huge'/>
                         </>
                     }

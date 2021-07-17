@@ -1,6 +1,7 @@
 import { useContext } from 'react'
-import { Button, Container, Header, Segment } from 'semantic-ui-react'
+import { Button, Container, Header, Label, Segment } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
+import { ForgotPasswordForm } from '../user/ForgotPasswordForm';
 import LoginForm from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
 
@@ -40,6 +41,16 @@ export const HomePage = () => {
             inverted
           >
             Registruj se
+          </Button>
+
+        </Container>
+        <Container inverted style={{ marginTop: '1em' }}>
+        <Button
+            onClick={() => openModal(<ForgotPasswordForm />)}
+            size="small"
+            color="blue"
+          >
+            Zaboravili ste šifru, a imate nalog kod nas?
           </Button>
         </Container>
       </Segment>

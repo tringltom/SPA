@@ -1,4 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import { toast } from "react-toastify";
 import { history } from "../..";
 import agent from "../api/agent";
 import { IUser, IUserFormValues } from "../models/user";
@@ -89,13 +90,28 @@ export default class UserStore {
         this.rootStore.modalStore.closeModal();
         this.loading = false;
       })
-      history.push('/activities');
+      history.push('/main');
     } catch (error) {
       this.loading =false;
       throw error;
     }
-    console.log(response);
   }
+
+  recoverPassword = async (email: string) => {
+    try {
+      this.loading = true;
+        const message = await agent.User.recoverPassword(email);
+        runInAction(() => {
+          this.rootStore.modalStore.closeModal();
+          toast.success(message);
+          this.loading = false;
+        })
+        history.push(`/`);
+    } catch (error) {
+      this.loading =false;
+      throw error;
+    }
+}
 
   private startRefreshTokenTimer(user: IUser) {
     const jwtToken = JSON.parse(atob(user.token.split('.')[1]));
