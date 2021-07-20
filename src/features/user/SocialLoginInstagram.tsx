@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import InstagramLogin from "instagram-login-react";
-import { Button, Icon, Label } from "semantic-ui-react";
+import { Button, Icon} from "semantic-ui-react";
 
 interface IProps {
   fbCallback: (response: any) => void;

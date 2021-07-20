@@ -2,7 +2,9 @@ import axios, { AxiosResponse } from "axios";
 import { IUser, IUserFormValues } from "../models/user";
 import { toast } from "react-toastify";
 
-axios.defaults.baseURL = "https://ekviti.rs";
+axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
+? "https://localhost:4001"
+: "https://ekviti.rs/api";
 
 axios.interceptors.response.use(undefined, (error) => {
   if (error.message === "Network Error" && !error.response)
@@ -34,7 +36,7 @@ const User = {
   resendVerifyEmailConfirm: (email: string): Promise<void> =>
     requests.get(`/users/resendEmailVerification?email=${email}`),
   recoverPassword: (email: string): Promise<string> =>
-    requests.post(`/users/RecoverPassword`, { email }),
+    requests.post(`/users/RecoverPassword`, email),
 };
 
 const sites = {

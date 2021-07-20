@@ -9,12 +9,12 @@ import { FORM_ERROR } from "final-form";
 import { RootStoreContext } from "../../app/stores/rootStore";
 
 const validate = combineValidators({
-  email: isRequired({ message: "E-pošta je neophodna" }),
+  email: isRequired({ message: "Email adresa je neophodna" }),
 });
 
 export const ForgotPasswordForm = () => {
   const rootStore = useContext(RootStoreContext);
-  const { recoverPassword, loading } = rootStore.userStore;
+  const { recoverPassword } = rootStore.userStore;
   return (
     <FinalForm
       onSubmit={(email: string) =>

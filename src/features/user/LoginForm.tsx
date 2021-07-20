@@ -12,7 +12,7 @@ import SocialLoginFacebook from "./SocialLoginFacebook";
 import SocialLoginInstagram from "./SocialLoginInstagram";
 
 const validate = combineValidators({
-  email: isRequired({ message: "E-pošta je neophodna" }),
+  email: isRequired({ message: "Email adresa je neophodna" }),
   password: isRequired({ message: "Šifra je neophodna" }),
 });
 
