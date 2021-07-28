@@ -21,7 +21,7 @@ import ArenaDashboard from "../../features/activities/dashboard/ArenaDashboard";
 const App: React.FC<RouteComponentProps> = () => {
   return (
     <Fragment>
-      <Navbar/>
+      
       <Container style={{ marginTop: "7em" }}>
       </Container>
       <ModalContainer />
@@ -31,6 +31,7 @@ const App: React.FC<RouteComponentProps> = () => {
         path={"/(.+)"}
         render={() => (
           <Fragment>
+            <Navbar/>
             <Container style={{ marginTop: "7em" }}>
               
               <Switch>
