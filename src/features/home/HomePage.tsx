@@ -43,7 +43,7 @@ export const HomePage = () => {
           Registruj se
         </Button>
       </Container>
-      <Container inverted style={{ marginTop: "1em" }}>
+      <Container style={{ marginTop: "1em" }}>
         <Button
           onClick={() => openModal(<ForgotPasswordForm />)}
           size="small"
