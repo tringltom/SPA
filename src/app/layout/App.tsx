@@ -13,10 +13,17 @@ import { Container } from "semantic-ui-react";
 import RegisterSuccess from "../../features/user/RegisterSuccess";
 import VerifyEmail from "../../features/user/VerifyEmail";
 import NotFound from "./NotFound";
+import Navbar from "../../features/nav/Navbar";
+import  './styles.css';
+import ArenaDashboard from "../../features/arena/dashboard/ArenaDashboard";
+
 
 const App: React.FC<RouteComponentProps> = () => {
   return (
     <Fragment>
+      
+      <Container style={{ marginTop: "7em" }}>
+      </Container>
       <ModalContainer />
       <ToastContainer position="bottom-right" />
       <Route exact path="/" component={HomePage} />
@@ -24,13 +31,16 @@ const App: React.FC<RouteComponentProps> = () => {
         path={"/(.+)"}
         render={() => (
           <Fragment>
+            <Navbar/>
             <Container style={{ marginTop: "7em" }}>
+              
               <Switch>
                 <Route
                   path="/users/registerSuccess"
                   component={RegisterSuccess}
                 />
                 <Route path="/users/verifyEmail" component={VerifyEmail} />
+                <Route path="/arena" component={ArenaDashboard} />
                 <Route component={NotFound} />
               </Switch>
             </Container>
