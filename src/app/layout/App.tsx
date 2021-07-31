@@ -15,7 +15,7 @@ import VerifyEmail from "../../features/user/VerifyEmail";
 import NotFound from "./NotFound";
 import Navbar from "../../features/nav/Navbar";
 import  './styles.css';
-import ArenaDashboard from "../../features/activities/dashboard/ArenaDashboard";
+import ArenaDashboard from "../../features/arena/dashboard/ArenaDashboard";
 
 
 const App: React.FC<RouteComponentProps> = () => {

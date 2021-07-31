@@ -4,7 +4,6 @@ import ArenaList from './ArenaList';
 import ArenaMainPage from './ArenaMainPage';
 
 
-
 const users = ['pera','mika','zika','dragutin','milutin'];
 
 const ArenaDashboard = () => {
