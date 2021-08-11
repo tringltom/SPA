@@ -9,7 +9,7 @@ const NotFound = () => {
         Oops - Svuda smo gledali ali ovu putanju nismo našli.
       </Header>
       <Segment.Inline>
-        <Button as={Link} to="/main" primary>
+        <Button as={Link} to="/" primary>
           Vrati se na glavnu stranu
         </Button>
       </Segment.Inline>
