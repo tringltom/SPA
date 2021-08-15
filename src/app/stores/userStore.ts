@@ -27,7 +27,6 @@ export default class UserStore {
       runInAction(() => {
         this.user = user;
       });
-      console.log(user);
       this.rootStore.commonStore.setToken(user.token);
       this.startRefreshTokenTimer(user);
       this.rootStore.modalStore.closeModal();
@@ -113,6 +112,7 @@ export default class UserStore {
   };
 
   private startRefreshTokenTimer(user: IUser) {
+    
     const jwtToken = JSON.parse(atob(user.token.split('.')[1]));
     const expires = new Date(jwtToken.exp * 1000);
     const timeout = expires.getTime() - Date.now() - 60 * 1000;
