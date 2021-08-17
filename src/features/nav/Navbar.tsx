@@ -1,7 +1,14 @@
+import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite';
-import { Button, Container, Grid, GridColumn, Menu } from 'semantic-ui-react';
+import { Button, Container, Dropdown, Grid, GridColumn, Menu } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { RootStoreContext } from '../../app/stores/rootStore';
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
+
+  const rootStore = useContext(RootStoreContext);
+  const {logout} = rootStore.userStore;
+
     return (
       <Grid>
         <Menu fixed="top" inverted>
@@ -53,9 +60,17 @@ const Navbar = () => {
             </GridColumn>
 
             <GridColumn floated="right">
-              <Menu.Item>
-                <Button color="orange" content="Nalog" fluid inverted />
-              </Menu.Item>
+            <Dropdown pointing="top left" text="Nalog">
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    as={Link}
+                    to={`/settings`}
+                    text="Podešavanja"
+                    icon="user"
+                  />
+                  <Dropdown.Item onClick={logout}  text="Odjava" icon="power" />
+                </Dropdown.Menu>
+              </Dropdown>
             </GridColumn>
           </Container>
         </Menu>
