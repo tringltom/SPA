@@ -24,23 +24,22 @@ import { LoadingComponent } from "./LoadingComponent";
 
 const App: React.FC<RouteComponentProps> = () => {
   const rootStore = useContext(RootStoreContext);
-  const {setAppLoaded, token, appLoaded} = rootStore.commonStore;
-  const {getUser} = rootStore.userStore;
+  const { setAppLoaded, token, appLoaded } = rootStore.commonStore;
+  const { getUser } = rootStore.userStore;
 
-useEffect(() => {
-  if(token) {
-    getUser().finally(() => setAppLoaded())
-  } else {
-    setAppLoaded();
-  }
-}, [getUser, setAppLoaded, token])
+  useEffect(() => {
+    if (token) {
+      getUser().finally(() => setAppLoaded());
+    } else {
+      setAppLoaded();
+    }
+  }, [getUser, setAppLoaded, token]);
 
-if (!appLoaded) return <LoadingComponent content='Momenat, aplikacija se ucitava...'/>
+  if (!appLoaded)
+    return <LoadingComponent content="Momenat, aplikacija se ucitava..." />;
   return (
     <Fragment>
-      
-      <Container style={{ marginTop: "7em" }}>
-      </Container>
+      <Container style={{ marginTop: "7em" }}></Container>
       <ModalContainer />
       <ToastContainer position="bottom-right" />
       <Route exact path="/" component={HomePage} />
@@ -48,9 +47,8 @@ if (!appLoaded) return <LoadingComponent content='Momenat, aplikacija se ucitava
         path={"/(.+)"}
         render={() => (
           <Fragment>
-            <Navbar/>
+            <Navbar />
             <Container style={{ marginTop: "7em" }}>
-              
               <Switch>
                 <Route
                   path="/users/registerSuccess"

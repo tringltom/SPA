@@ -29,10 +29,10 @@ const HomePage = () => {
           />
         </div>
         <Header as="h2" content="Ekviti - za bolje danas" />
-        {isLoggedIn && user ? (
+        {isLoggedIn && user && token ? (
           <Fragment>
-            <Button as={Link} to='/arena' size='huge' inverted color='violet'>
-            Ulogovan si pravac arena
+            <Button as={Link} to="/arena" size="huge" inverted color="violet">
+              Ulogovan si, pravac arena!
             </Button>
           </Fragment>
         ) : (
