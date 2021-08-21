@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Button, Container, Dropdown, Grid, GridColumn, Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
+import  '../../app/layout/styles.css'
 
 const Navbar: React.FC = () => {
 
@@ -59,16 +60,16 @@ const Navbar: React.FC = () => {
               </Menu.Item>
             </GridColumn>
 
-            <GridColumn floated="right">
-            <Dropdown pointing="top left" text="Nalog">
-                <Dropdown.Menu>
+            <GridColumn floated="right" className="absoluteMiddle">
+              <Dropdown pointing="top" inline button text="Nalog">
+                <Dropdown.Menu direction={"left"}>
                   <Dropdown.Item
                     as={Link}
                     to={`/settings`}
                     text="Podešavanja"
                     icon="user"
                   />
-                  <Dropdown.Item onClick={logout}  text="Odjava" icon="power" />
+                  <Dropdown.Item onClick={logout} text="Odjava" icon="power" />
                 </Dropdown.Menu>
               </Dropdown>
             </GridColumn>

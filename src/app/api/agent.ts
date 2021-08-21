@@ -7,6 +7,7 @@ axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
 : "https://ekviti.rs/api";
 
 axios.interceptors.request.use((config) => {
+  config.withCredentials = true;
   const token = window.localStorage.getItem('jwt');
   if (token) config.headers.Authorization = `Bearer ${token}`;
      return config
@@ -14,7 +15,7 @@ axios.interceptors.request.use((config) => {
      return Promise.reject(error);
  })
 
-axios.interceptors.response.use(undefined, (error) => {
+ axios.interceptors.response.use(undefined, (error) => {
   if (error.message === "Network Error" && !error.response)
     toast.error("Mrežna Greška - Servis trenutno nije dostupan");
 
