@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
               </Menu.Item>
             </GridColumn>
 
-            <GridColumn floated="right" className="absoluteMiddle">
+            <GridColumn floated="right" className="navUserDropDown">
               <Dropdown pointing="top" inline button text="Nalog">
                 <Dropdown.Menu direction={"left"}>
                   <Dropdown.Item
