@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import { Fragment, useContext } from "react";
+import { Link } from "react-router-dom";
 import { Button, Container, Header, Segment } from "semantic-ui-react";
 import { RootStoreContext } from "../../app/stores/rootStore";
 import { ForgotPasswordForm } from "../user/ForgotPasswordForm";
@@ -12,9 +13,11 @@ const homePageImageStyle = {
   width: "100%",
 };
 
-export const HomePage = () => {
+const HomePage = () => {
+  const token = window.localStorage.getItem('jwt');
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
+  const {isLoggedIn, user} = rootStore.userStore;
   return (
     <Segment textAlign="center" vertical className="masthead">
       <Container background="blue">
@@ -26,32 +29,44 @@ export const HomePage = () => {
           />
         </div>
         <Header as="h2" content="Ekviti - za bolje danas" />
-        <Button
-          onClick={() => openModal(<LoginForm />)}
-          size="huge"
-          color="violet"
-          inverted
-        >
-          Uloguj se
-        </Button>
-        <Button
-          onClick={() => openModal(<RegisterForm />)}
-          size="huge"
-          color="violet"
-          inverted
-        >
-          Registruj se
-        </Button>
-      </Container>
-      <Container style={{ marginTop: "1em" }}>
-        <Button
-          onClick={() => openModal(<ForgotPasswordForm />)}
-          size="small"
-          color="blue"
-        >
-          Zaboravili ste šifru, a imate nalog kod nas?
-        </Button>
+        {isLoggedIn && user && token ? (
+          <Fragment>
+            <Button as={Link} to="/arena" size="huge" inverted color="violet">
+              Ulogovan si, pravac arena!
+            </Button>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Button
+              onClick={() => openModal(<LoginForm />)}
+              size="huge"
+              color="violet"
+              inverted
+            >
+              Uloguj se
+            </Button>
+            <Button
+              onClick={() => openModal(<RegisterForm />)}
+              size="huge"
+              color="violet"
+              inverted
+            >
+              Registruj se
+            </Button>
+            <Container style={{ marginTop: "1em" }}>
+              <Button
+                onClick={() => openModal(<ForgotPasswordForm />)}
+                size="small"
+                color="blue"
+              >
+                Zaboravili ste šifru, a imate nalog kod nas?
+              </Button>
+            </Container>
+          </Fragment>
+        )}
       </Container>
     </Segment>
   );
 };
+
+export default HomePage
