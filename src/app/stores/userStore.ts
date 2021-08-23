@@ -71,10 +71,14 @@ export default class UserStore {
     }
   };
 
-  logout = () => {
-    this.rootStore.commonStore.setToken(null);
-    this.user = null;
-    history.push("/");
+  logout = async () => {
+    try {
+      await agent.User.logout();
+    }
+    catch (error) {}
+      this.rootStore.commonStore.setToken(null);
+      this.user = null;
+      history.push("/");
   };
 
   fbLogin = async (response: any) => {

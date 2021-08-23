@@ -32,3 +32,7 @@ button.ui.orange.inverted.button {
 .ui.clearing.segment {
   border-radius: 20px !important;
 }
+
+.navUserDropDown {
+  padding-top: 7px;
+}
