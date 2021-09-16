@@ -19,11 +19,12 @@ const HomePage = () => {
   const { openModal } = rootStore.modalStore;
   const {isLoggedIn, user} = rootStore.userStore;
   return (
+    
     <Segment textAlign="center" vertical className="masthead">
       <Container background="blue">
         <div>
           <img
-            src={"/assets/uS.jpeg"}
+            src={"/assets/BG.png"}
             alt="noPicture"
             style={homePageImageStyle}
           />

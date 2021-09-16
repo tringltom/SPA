@@ -36,3 +36,43 @@ button.ui.orange.inverted.button {
 .navUserDropDown {
   padding-top: 7px;
 }
+
+#centerImg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+}
+#txtHomeScreen {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  text-align: center;
+  font-size: xxx-large;
+  color: aqua;
+}
+#bckGroundImg {
+ 
+  position: relative;
+  width:100%;
+  height: 100%;
+}
+#btmContaner {
+  position: absolute;
+  top: 85%;
+  width: 100%;
+  height: fit-content;
+}
+#root {
+  width: max-content;
+  height: max-content;
+}
+#homeGrid {
+  margin-top: -0rem; 
+  margin-bottom: -0rem; 
+  margin-left: -0rem;
+  margin-right: -0rem;
+}
