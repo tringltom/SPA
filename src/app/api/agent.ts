@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { IUser, IUserFormValues } from "../models/user";
 import { toast } from "react-toastify";
+import { IActivityFormValues } from "../models/activity";
 
 axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
 ? "https://localhost:4001"
@@ -50,8 +51,14 @@ const User = {
     requests.post(`/users/RecoverPassword`, email),
 };
 
+const Activity = {
+  create: (activity: IActivityFormValues): Promise<void> =>
+  requests.post(`/activities/create`, activity) 
+};
+
 const sites = {
   User,
+  Activity
 };
 
 export default sites;

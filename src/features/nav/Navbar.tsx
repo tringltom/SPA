@@ -3,7 +3,8 @@ import { observer } from 'mobx-react-lite';
 import { Button, Container, Dropdown, Grid, GridColumn, Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import  '../../app/layout/styles.css'
+import  '../../app/layout/styles.css';
+import { history } from "../..";
 
 const Navbar: React.FC = () => {
 
@@ -44,7 +45,7 @@ const Navbar: React.FC = () => {
 
             <GridColumn>
               <Menu.Item>
-                <Button positive content="Zagonetka" inverted />
+                <Button onClick={() => history.push("/puzzle")} positive content="Zagonetka" inverted />
               </Menu.Item>
             </GridColumn>
 
