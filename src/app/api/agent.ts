@@ -30,6 +30,11 @@ const requests = {
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
+  postForm: (url: string, formData : any) => {
+    return axios.post(url, formData, {
+        headers: {'Content-type': 'multipart/form-data'},
+    }).then(responseBody)
+}
 };
 
 const User = {
@@ -41,19 +46,22 @@ const User = {
   register: (user: IUserFormValues): Promise<IUser> =>
     requests.post("/users/register", user),
   fbLogin: (accessToken: string) =>
-    requests.post(`/users/facebook`, { accessToken }),
-  refreshToken: (): Promise<IUser> => requests.post(`/users/refreshToken`, {}),
+    requests.post("/users/facebook", { accessToken }),
+  refreshToken: (): Promise<IUser> => requests.post("/users/refreshToken", {}),
   verifyEmail: (token: string, email: string): Promise<void> =>
-    requests.post(`/users/verifyEmail`, { token, email }),
+    requests.post("/users/verifyEmail", { token, email }),
   resendVerifyEmailConfirm: (email: string): Promise<void> =>
     requests.get(`/users/resendEmailVerification?email=${email}`),
   recoverPassword: (email: string): Promise<string> =>
-    requests.post(`/users/RecoverPassword`, email),
+    requests.post("/users/RecoverPassword", email),
 };
 
 const Activity = {
-  create: (activity: IActivityFormValues): Promise<void> =>
-  requests.post(`/activities/create`, activity) 
+  create: (activity: IActivityFormValues): Promise<string> => {
+    let formData = new FormData();
+    Object.keys(activity).forEach(key => formData.append(key, activity[key]));
+    return requests.postForm("/activities/create", formData);
+  },
 };
 
 const sites = {

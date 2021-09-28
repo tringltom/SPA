@@ -1,36 +1,38 @@
-import React, { useContext } from 'react'
-import { Button, Header, Icon, Modal } from 'semantic-ui-react'
+import { observer } from 'mobx-react-lite';
+import React, { Fragment, useContext } from 'react'
+import { Button, Container, Divider, Header, Icon} from 'semantic-ui-react'
 import { RootStoreContext } from '../../stores/rootStore';
 
 interface IProps {
-    handleConfirmation: (values: any) => Promise<any>;
+  content : string,
+  icon: string,
+  handleConfirmation: (values: any) => Promise<any>;
 }
 
-const ModalYesNo : React.FC<IProps> = ({handleConfirmation}) => {
+const ModalYesNo : React.FC<IProps> = ({handleConfirmation, content, icon}) => {
     const rootStore = useContext(RootStoreContext);
     const { closeModal } = rootStore.modalStore;
+    const { submitting } = rootStore.activityStore;
   return (
-    <Modal
-      closeIcon
-      open = {true}
-    >
-      <Header icon='archive' content='Archive Old Messages' />
-      <Modal.Content>
-        <p>
-          Your inbox is getting full, would you like us to enable automatic
-          archiving of old messages?
-        </p>
-      </Modal.Content>
-      <Modal.Actions>
-        <Button color='red' onClick={() => closeModal}>
-          <Icon name='remove' /> No
+    <Fragment>
+      <Container textAlign="left">
+        <Header icon={icon} content={content} />
+      </Container>
+      <Divider />
+      <Container textAlign="left">
+        <p>Da li je ovo vaš konačan izbor?</p>
+      </Container>
+      <Divider />
+      <Container textAlign="right">
+        <Button color="red" onClick={closeModal} disabled = {submitting}>
+          <Icon name="remove" /> Ne
         </Button>
-        <Button color='green' onClick={() => handleConfirmation}>
-          <Icon name='checkmark' /> Yes
+        <Button color="green" loading={submitting} onClick={handleConfirmation}>
+          <Icon name="checkmark" /> Da
         </Button>
-      </Modal.Actions>
-    </Modal>
-  )
+      </Container>
+    </Fragment>
+  );
 }
 
-export default ModalYesNo
+export default observer(ModalYesNo);
