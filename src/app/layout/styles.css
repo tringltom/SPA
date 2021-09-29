@@ -44,6 +44,7 @@ button.ui.orange.inverted.button {
   transform: translate(-50%, -50%);
   width: 30%;
 }
+
 #txtHomeScreen {
   position: absolute;
   top: 60%;
@@ -54,25 +55,45 @@ button.ui.orange.inverted.button {
   font-size: xxx-large;
   color: aqua;
 }
+
 #bckGroundImg {
  
   position: relative;
   width:100%;
   height: 100%;
 }
+
 #btmContaner {
   position: absolute;
   top: 85%;
   width: 100%;
   height: fit-content;
 }
+
 #root {
   width: max-content;
   height: max-content;
 }
+
 #homeGrid {
   margin-top: -0rem; 
   margin-bottom: -0rem; 
   margin-left: -0rem;
   margin-right: -0rem;
+}
+
+.ui.message {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  
+}
+
+.aHyperlinkText{
+  
+  cursor: pointer !important;
+}
+
+.ui.container {
+  text-align: center;
 }

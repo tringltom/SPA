@@ -3,11 +3,12 @@ import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
 import { combineValidators, isRequired } from "revalidate";
-import { Button, Divider, Form, Header } from "semantic-ui-react";
+import { Button, Checkbox, Container, Divider, Form, Grid, Header, Image } from "semantic-ui-react";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import { TextInput } from "../../app/common/form/TextInput";
 import { IUserFormValues } from "../../app/models/user";
 import { RootStoreContext } from "../../app/stores/rootStore";
+import ForgotPasswordForm from "./ForgotPasswordForm";
 import SocialLoginFacebook from "./SocialLoginFacebook";
 import SocialLoginInstagram from "./SocialLoginInstagram";
 
@@ -19,6 +20,7 @@ const validate = combineValidators({
 const LoginForm = () => {
   const rootStore = useContext(RootStoreContext);
   const { login, fbLogin, loading } = rootStore.userStore;
+  const { openModal } = rootStore.modalStore;
   return (
     <FinalForm
       onSubmit={(values: IUserFormValues) =>
@@ -36,12 +38,13 @@ const LoginForm = () => {
         dirtySinceLastSubmit,
       }) => (
         <Form onSubmit={handleSubmit} error>
+         <Container><Image verticalAlign='middle' src="/assets/Ekviti_Logo_Log_In.png"></Image></Container>
           <Header
             as="h2"
-            content="Dobrodošli"
-            color="teal"
+            content="Dobrodošli nazad."
+            color="black"
             textAlign="center"
-          />
+          ></Header>
           <Field
             name="email"
             component={TextInput}
@@ -52,18 +55,29 @@ const LoginForm = () => {
             type="password"
             component={TextInput}
             placeholder="Šifra"
+            
           />
           {submitError && !dirtySinceLastSubmit && (
             <ErrorMessage error={submitError} />
           )}
+          <Form.Group>
+            <Form.Field>
+              <Checkbox label="Zapamti me" />
+            </Form.Field>
+            <div className="ui message">
+            Zaboravljena lozinka?  <a className="aHyperlinkText" onClick={() => openModal(<ForgotPasswordForm />)}>resetuj je</a>
+            </div>
+            
+          </Form.Group>
+
           <Button
             disabled={(invalid && !dirtySinceLastSubmit) || pristine}
             loading={submitting}
-            color="teal"
-            content="Potvrdi"
+            color="blue"
+            content="Prijavi se"
             fluid
           />
-          <Divider horizontal>Ili</Divider>
+          <Divider horizontal>ili</Divider>
           <SocialLoginFacebook loading={loading} fbCallback={fbLogin} />
           <SocialLoginInstagram loading={loading} fbCallback={fbLogin} />
           {/* TO DO*/}

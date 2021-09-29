@@ -4,14 +4,14 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import LoginForm from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
 
-const WellcomeScreenImagePart = () => {
+const WellcomeScreen = () => {
   const token = window.localStorage.getItem('jwt');
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
   const {isLoggedIn, user} = rootStore.userStore;
     return (
-      <Fragment>
-        <Image id="bckGroundImg" src="/assets/BG.png" />
+      <Fragment>   
+        <Image id="bckGroundImg" src="/assets/BG.png"/>
         <Image
           id="centerImg"
           src="/assets/Ekviti_Logo_Registracija.png"
@@ -23,7 +23,7 @@ const WellcomeScreenImagePart = () => {
           <Segment.Inline>
             <Grid id="homeGrid" centered verticalAlign="middle" columns="equal">
               <Grid.Column width={2}>
-                <Image size="big" src="/assets/Vitez_Registracija_Page.png" />
+                <Image size="big" src="/assets/Vitez_Registracija_Page.png"/>
               </Grid.Column>
               <Grid.Column width={3}>
                 <Button
@@ -52,6 +52,6 @@ const WellcomeScreenImagePart = () => {
     );
 }
 
-export default WellcomeScreenImagePart;
+export default WellcomeScreen;
 
 
