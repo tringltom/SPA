@@ -11,11 +11,13 @@ export default class ModalStore {
   modal = {
     open: false,
     body: null,
+    closeOnDimmerClick : true
   };
 
-  openModal = (content: any) => {
+  openModal = (content: any, closeOnDimmerClick : boolean = true) => {
     this.modal.open = true;
     this.modal.body = content;
+    this.modal.closeOnDimmerClick = closeOnDimmerClick;
   };
 
   closeModal = () => {

@@ -20,6 +20,7 @@ import PrivateRoute from "./PrivateRoute";
 import { useContext } from "react";
 import { RootStoreContext } from "../stores/rootStore";
 import { LoadingComponent } from "./LoadingComponent";
+import PuzzleForm from "../../features/activities/PuzzleForm";
 
 
 const App: React.FC<RouteComponentProps> = () => {
@@ -56,6 +57,7 @@ const App: React.FC<RouteComponentProps> = () => {
                 />
                 <Route path="/users/verifyEmail" component={VerifyEmail} />
                 <PrivateRoute path="/arena" component={ArenaDashboard} />
+                <PrivateRoute path="/puzzle" component={PuzzleForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>
