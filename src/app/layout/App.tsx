@@ -38,7 +38,6 @@ useEffect(() => {
 if (!appLoaded) return <LoadingComponent content='Momenat, aplikacija se ucitava...'/>
   return (
     <Fragment>
-     
       <ModalContainer />
       <ToastContainer position="bottom-right" />
       <Route exact path="/" component={WellcomeScreen} />

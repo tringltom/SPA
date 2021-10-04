@@ -17,14 +17,16 @@ const SocialLoginFacebook: React.FC<IProps> = ({ fbCallback, loading }) => {
         callback={fbCallback}
         render={(renderProps: any) => (
           <Button
+            style={{textAlign: "left", position: "relative"}}
             loading={loading}
             onClick={renderProps.onClick}
             type="button"
             fluid
-            color="facebook"
+            color="grey"
+            className="ekvitiPrimaryFont socialButtonSimpleOverride"
           >
-            <Icon name="facebook" />
-            Uloguj se preko Fejsbuka
+            <img src={"./assets/fb.png"} style={{ paddingRight: "10px"}}/>
+            <Button.Content style={{display: "inline-block", position: "absolute", top: "40%"}} >Prijava putem Fejsbuka</Button.Content>
           </Button>
         )}
       />

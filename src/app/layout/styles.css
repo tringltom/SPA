@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
 /* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -11,6 +12,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } */
+
+.ekvitiPrimaryFont {
+  font-family: 'Comfortaa', cursive !important; 
+}
+
+.textIndentedField input{
+  text-indent: 20px;
+}
 
 .body {
   background-color: rgb(234,234,234) !important;
@@ -37,6 +46,16 @@ button.ui.orange.inverted.button {
   padding-top: 7px;
 }
 
+.socialButtonSimpleOverride {
+  box-shadow: 0px 2px 2px 2px rgba(184,184,184,0.75)!important;
+  color: #767676!important;
+  background: transparent none!important;
+  font-weight: 500;
+  border-radius: .28571429rem;
+  text-transform: none;
+  text-shadow: none!important;
+}
+/*
 #centerImg {
   position: absolute;
   top: 50%;
@@ -97,3 +116,4 @@ button.ui.orange.inverted.button {
 .ui.container {
   text-align: center;
 }
+*/
