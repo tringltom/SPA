@@ -26,7 +26,7 @@ const validate = combineValidators({
     })
   )(),
   description: composeValidators(
-    isRequiredIf()((values: { image: any; }) => values && !values.image)({message: 'Opis je obavezxan ukoliko niste priložili sliku' }),
+    isRequiredIf()((values: { image: any; }) => values && !values.image)({message: 'Opis je obavezan ukoliko niste priložili sliku' }),
     hasLengthLessThan(250)({
       message: "Za opis je dozvoljeno maksimalno 250 karaktera",
     })
@@ -35,7 +35,7 @@ const validate = combineValidators({
 
 const PuzzleForm = () => {
   const rootStore = useContext(RootStoreContext);
-  const { create, submitting } = rootStore.activityStore;
+  const { create } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
   return (

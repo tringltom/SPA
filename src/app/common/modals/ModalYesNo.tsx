@@ -20,7 +20,7 @@ const ModalYesNo : React.FC<IProps> = ({handleConfirmation, content, icon}) => {
       </Container>
       <Divider />
       <Container textAlign="left">
-        <p>Da li je ovo vaš konačan izbor?</p>
+        <p>Da li je ovo Vaš konačan izbor?</p>
       </Container>
       <Divider />
       <Container textAlign="right">
