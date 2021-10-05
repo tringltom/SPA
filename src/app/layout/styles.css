@@ -1,17 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
-/* body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-} */
 
 .ekvitiPrimaryFont {
   font-family: 'Comfortaa', cursive !important; 
@@ -55,65 +42,3 @@ button.ui.orange.inverted.button {
   text-transform: none;
   text-shadow: none!important;
 }
-/*
-#centerImg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30%;
-}
-
-#txtHomeScreen {
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30%;
-  text-align: center;
-  font-size: xxx-large;
-  color: aqua;
-}
-
-#bckGroundImg {
- 
-  position: relative;
-  width:100%;
-  height: 100%;
-}
-
-#btmContaner {
-  position: absolute;
-  top: 85%;
-  width: 100%;
-  height: fit-content;
-}
-
-#root {
-  width: max-content;
-  height: max-content;
-}
-
-#homeGrid {
-  margin-top: -0rem; 
-  margin-bottom: -0rem; 
-  margin-left: -0rem;
-  margin-right: -0rem;
-}
-
-.ui.message {
-  margin: 0 !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-  
-}
-
-.aHyperlinkText{
-  
-  cursor: pointer !important;
-}
-
-.ui.container {
-  text-align: center;
-}
-*/
