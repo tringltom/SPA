@@ -25,7 +25,7 @@ const SocialLoginFacebook: React.FC<IProps> = ({ fbCallback, loading }) => {
             color="grey"
             className="ekvitiPrimaryFont socialButtonSimpleOverride"
           >
-            <img src={"./assets/fb.png"} style={{ paddingRight: "10px"}}/>
+            <img src={"./assets/FacebookIcon.png"} style={{ paddingRight: "10px"}}/>
             <Button.Content style={{display: "inline-block", position: "absolute", top: "40%"}} >Prijava putem Fejsbuka</Button.Content>
           </Button>
         )}

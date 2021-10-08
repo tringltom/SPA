@@ -19,7 +19,7 @@ import PrivateRoute from "./PrivateRoute";
 import { useContext } from "react";
 import { RootStoreContext } from "../stores/rootStore";
 import { LoadingComponent } from "./LoadingComponent";
-import WellcomeScreen from "../../features/home/WellcomeScreen";
+import WelcomeScreen from "../../features/home/WelcomeScreen";
 import PuzzleForm from "../../features/activities/PuzzleForm";
 
 
@@ -41,7 +41,7 @@ if (!appLoaded) return <LoadingComponent content='Momenat, aplikacija se ucitava
     <Fragment>
       <ModalContainer />
       <ToastContainer position="bottom-right" />
-      <Route exact path="/" component={WellcomeScreen} />
+      <Route exact path="/" component={WelcomeScreen} />
       <Route
         path={"/(.+)"}
         render={() => (

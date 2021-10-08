@@ -53,7 +53,7 @@ const LoginForm = () => {
         dirtySinceLastSubmit,
       }) => (
         <Fragment>
-          <Image size="small" centered verticalAlign="middle" src="/assets/Ekviti_Logo_Log_In.png"></Image>
+          <Image size="small" centered verticalAlign="middle" src="/assets/LogInEkvitiLogo.png"></Image>
           <Header
             size = "medium"
             as="h2"

@@ -25,7 +25,7 @@ const SocialLoginInstagram: React.FC<IProps> = ({ fbCallback, loading }) => {
             color="grey"
             className="ekvitiPrimaryFont socialButtonSimpleOverride"
           >
-            <img src={"./assets/ig.png"} style={{ paddingRight: "10px"}}/>
+            <img src={"./assets/InstagramIcon.png"} style={{ paddingRight: "10px"}}/>
             <Button.Content style={{display: "inline-block", position: "absolute", top: "40%"}} >Prijava putem Instagrama</Button.Content>
           </Button>
         )}

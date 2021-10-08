@@ -6,7 +6,7 @@ import { RegisterForm } from '../user/RegisterForm';
 import { EkvitiColors } from '../../app/layout/EkvitiColors';
 
 
-const WellcomeScreen = () => {
+const WelcomeScreen = () => {
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
 
@@ -23,7 +23,7 @@ const WellcomeScreen = () => {
   };
 
   const DivWithBackgroundStyle = {
-    backgroundImage: "url(/assets/BG.png)", backgroundPosition: 'center', height: '100vh', backgroundRepeat: 'no-repeat', backgroundSize: 'cover'
+    backgroundImage: "url(/assets/WelcomeBackground.png)", backgroundPosition: 'center', height: '100vh', backgroundRepeat: 'no-repeat', backgroundSize: 'cover'
   };
 
   const GridColumnStyle = {
@@ -38,7 +38,7 @@ const WellcomeScreen = () => {
 
             <Grid.Row style={{padding: 0}}>
               <Grid.Column verticalAlign="bottom">
-                  <Image src="/assets/Ekviti_Logo_Registracija.png" style={{minHeight: 30, maxHeight: 250, minWidth: 600}}
+                  <Image src="/assets/RegistrationEkvitiLogo.png" style={{minHeight: 30, maxHeight: 250, minWidth: 600}}
                   centered/>
               </Grid.Column>
             </Grid.Row>
@@ -50,7 +50,7 @@ const WellcomeScreen = () => {
                 </Segment>
 
                 <Segment style={{border:0, padding: 0, height: '40%'}} inverted color= 'blue'>
-                  <Image src="/assets/Vitez_Registracija_Page.png" style={{position: 'absolute', bottom: '3vh', left: '10vw'}}/>
+                  <Image src="/assets/RegistrationKnight.png" style={{position: 'absolute', bottom: '3vh', left: '10vw'}}/>
                   <Grid style={{height: '100%'}}>
                       <GridColumn width={4}></GridColumn>
                     <GridColumn width={4} verticalAlign="middle" style={{GridColumnStyle}}>
@@ -85,6 +85,6 @@ const WellcomeScreen = () => {
     );
 }
 
-export default WellcomeScreen;
+export default WelcomeScreen;
 
 
