@@ -20,6 +20,7 @@ import { useContext } from "react";
 import { RootStoreContext } from "../stores/rootStore";
 import { LoadingComponent } from "./LoadingComponent";
 import WellcomeScreen from "../../features/home/WellcomeScreen";
+import PuzzleForm from "../../features/activities/PuzzleForm";
 
 
 const App: React.FC<RouteComponentProps> = () => {
@@ -54,6 +55,7 @@ if (!appLoaded) return <LoadingComponent content='Momenat, aplikacija se ucitava
                 />
                 <Route path="/users/verifyEmail" component={VerifyEmail} />
                 <PrivateRoute path="/arena" component={ArenaDashboard} />
+                <PrivateRoute path="/puzzle" component={PuzzleForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>
