@@ -7,7 +7,6 @@ import {
   Switch,
   withRouter,
 } from "react-router-dom";
-import HomePage from "../../features/home/HomePage";
 import { ToastContainer } from "react-toastify";
 import { Container } from "semantic-ui-react";
 import RegisterSuccess from "../../features/user/RegisterSuccess";
@@ -20,35 +19,34 @@ import PrivateRoute from "./PrivateRoute";
 import { useContext } from "react";
 import { RootStoreContext } from "../stores/rootStore";
 import { LoadingComponent } from "./LoadingComponent";
+import WelcomeScreen from "../../features/home/WelcomeScreen";
 import PuzzleForm from "../../features/activities/PuzzleForm";
 
 
 const App: React.FC<RouteComponentProps> = () => {
   const rootStore = useContext(RootStoreContext);
-  const { setAppLoaded, token, appLoaded } = rootStore.commonStore;
-  const { getUser } = rootStore.userStore;
+  const {setAppLoaded, token, appLoaded} = rootStore.commonStore;
+  const {getUser, isLoggedIn} = rootStore.userStore;
 
-  useEffect(() => {
-    if (token && !appLoaded) {
-      getUser().finally(() => setAppLoaded());
-    } else {
-      setAppLoaded();
-    }
-  }, [getUser, setAppLoaded, token, appLoaded]);
+useEffect(() => {
+  if(token ) {
+    getUser().finally(() => setAppLoaded())
+  } else {
+    setAppLoaded();
+  }
+}, [getUser, setAppLoaded, token])
 
-  if (!appLoaded)
-    return <LoadingComponent content="Momenat, aplikacija se ucitava..." />;
+if (!appLoaded) return <LoadingComponent content='Momenat, aplikacija se ucitava...'/>
   return (
     <Fragment>
-      <Container style={{ marginTop: "7em" }}></Container>
       <ModalContainer />
       <ToastContainer position="bottom-right" />
-      <Route exact path="/" component={HomePage} />
+      <Route exact path="/" component={WelcomeScreen} />
       <Route
         path={"/(.+)"}
         render={() => (
           <Fragment>
-            <Navbar />
+            {isLoggedIn && <Navbar />}
             <Container style={{ marginTop: "7em" }}>
               <Switch>
                 <Route
