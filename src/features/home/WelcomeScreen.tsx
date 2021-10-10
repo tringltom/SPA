@@ -32,14 +32,6 @@ const WelcomeScreen = () => {
     top: "0",
   };
 
-  const GridColumnStyle = {
-    border: 0,
-    padding: "0px",
-    height: "100%",
-    background: "black",
-    verticalAlign: "middle",
-  };
-
   return (
     <Fragment>
       <Grid style={DivWithBackgroundStyle}>
