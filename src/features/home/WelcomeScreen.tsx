@@ -91,13 +91,6 @@ const WelcomeScreen = () => {
                   <Image
                     src="/assets/RegistrationKnight.png"
                     style={{
-                      // position: "absolute",
-                      // bottom: "1vh",
-                      // left: "10vw",
-                      // width: "22vw",
-                      // maxWidth:"22vh"
-                      // height: "auto",
-                      // maxHeight: "100%",
                       float: "right",
                       top: "-1.5vw",
                     }}
