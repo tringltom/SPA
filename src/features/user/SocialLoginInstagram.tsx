@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import InstagramLogin from "instagram-login-react";
-import { Button, Icon} from "semantic-ui-react";
+import { Button} from "semantic-ui-react";
 
 interface IProps {
   fbCallback: (response: any) => void;
@@ -17,7 +17,7 @@ const SocialLoginInstagram: React.FC<IProps> = ({ fbCallback, loading }) => {
         onFailure={fbCallback}
         render={(renderProps: any) => (
           <Button
-            style={{textAlign: "left", position: "relative"}}
+            style={{ textAlign: "left", position: "relative" }}
             loading={loading}
             onClick={renderProps.onClick}
             type="button"
@@ -25,8 +25,20 @@ const SocialLoginInstagram: React.FC<IProps> = ({ fbCallback, loading }) => {
             color="grey"
             className="ekvitiPrimaryFont socialButtonSimpleOverride"
           >
-            <img src={"./assets/InstagramIcon.png"} style={{ paddingRight: "10px"}}/>
-            <Button.Content style={{display: "inline-block", position: "absolute", top: "40%"}} >Prijava putem Instagrama</Button.Content>
+            <img
+              alt="ins"
+              src={"./assets/InstagramIcon.png"}
+              style={{ paddingRight: "10px" }}
+            />
+            <Button.Content
+              style={{
+                display: "inline-block",
+                position: "absolute",
+                top: "40%",
+              }}
+            >
+              Prijava putem Instagrama
+            </Button.Content>
           </Button>
         )}
       />

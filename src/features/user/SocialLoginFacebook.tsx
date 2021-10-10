@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-import { Button, Icon } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
 interface IProps {
   fbCallback: (response: any) => void;
@@ -17,7 +17,7 @@ const SocialLoginFacebook: React.FC<IProps> = ({ fbCallback, loading }) => {
         callback={fbCallback}
         render={(renderProps: any) => (
           <Button
-            style={{textAlign: "left", position: "relative"}}
+            style={{ textAlign: "left", position: "relative" }}
             loading={loading}
             onClick={renderProps.onClick}
             type="button"
@@ -25,8 +25,20 @@ const SocialLoginFacebook: React.FC<IProps> = ({ fbCallback, loading }) => {
             color="grey"
             className="ekvitiPrimaryFont socialButtonSimpleOverride"
           >
-            <img src={"./assets/FacebookIcon.png"} style={{ paddingRight: "10px"}}/>
-            <Button.Content style={{display: "inline-block", position: "absolute", top: "40%"}} >Prijava putem Fejsbuka</Button.Content>
+            <img
+              alt="fcb"
+              src={"./assets/FacebookIcon.png"}
+              style={{ paddingRight: "10px" }}
+            />
+            <Button.Content
+              style={{
+                display: "inline-block",
+                position: "absolute",
+                top: "40%",
+              }}
+            >
+              Prijava putem Fejsbuka
+            </Button.Content>
           </Button>
         )}
       />
