@@ -19,21 +19,15 @@ const validate = combineValidators({
       message: "Za naziv je dozvoljeno maksimalno 50 karaktera",
     })
   )(),
-  answer: composeValidators(
-    isRequired({ message: "Odgovor je neophodan" }),
-    hasLengthLessThan(100)({
-      message: "Za odgovor je dozvoljeno maksimalno 100 karaktera",
-    })
-  )(),
   description: composeValidators(
     isRequiredIf()((values: { image: any; }) => values && !values.image)({message: 'Opis je obavezan ukoliko niste priložili sliku' }),
     hasLengthLessThan(250)({
-      message: "Za opis je dozvoljeno maksimalno 250 karaktera",
+      message: "Za vic je dozvoljeno maksimalno 250 karaktera",
     })
   )(),
 });
 
-const PuzzleForm = () => {
+const JokeForm = () => {
   const rootStore = useContext(RootStoreContext);
   const { create } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
@@ -44,9 +38,10 @@ const PuzzleForm = () => {
         openModal(
           <ModalYesNo
             handleConfirmation={() => create(values)}
-            content="Nova Zagonetka"
-            icon="puzzle piece"
-          />, false
+            content="Novi vic"
+            icon="smile outline"
+          />,
+          false
         )
       }
       validate={validate}
@@ -58,19 +53,18 @@ const PuzzleForm = () => {
         dirtySinceLastSubmit,
       }) => (
         <Form autoComplete="off" onSubmit={handleSubmit} error>
-          <Field hidden name="type" component='input' initialValue={4}/>
-          <Header as="h2" content="Zagonetka" color="teal" textAlign="center" />
+          <Field hidden name="type" component="input" initialValue={2} />
+          <Header as="h2" content="Vic" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
-          <Divider horizontal>Priložite sliku ili opišite zagonetku</Divider>
-          <Field name="image" component={FileInput}  />
+          <Divider horizontal>Priložite sliku ili napišite tekst vica</Divider>
+          <Field name="image" component={FileInput} placeholder="Odgovor" />
           <Divider horizontal></Divider>
           <Field
             name="description"
             component={TextAreaInput}
             placeholder="Opis (nije potreban ukoliko priložite sliku)"
           />
-          <Divider horizontal></Divider>
-          <Field name="answer" component={TextInput} placeholder="Odgovor" />
+
           {submitError && !dirtySinceLastSubmit && (
             <ErrorMessage error={submitError} />
           )}
@@ -86,4 +80,4 @@ const PuzzleForm = () => {
   );
 };
 
-export default observer(PuzzleForm);
+export default observer(JokeForm);
