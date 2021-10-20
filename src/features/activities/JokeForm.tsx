@@ -56,13 +56,13 @@ const JokeForm = () => {
           <Field hidden name="type" component="input" initialValue={2} />
           <Header as="h2" content="Vic" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
-          <Divider horizontal>Priložite sliku ili napišite tekst vica</Divider>
-          <Field name="image" component={FileInput} placeholder="Odgovor" />
+          <Divider horizontal>Priložite sliku ili napišite vic</Divider>
+          <Field name="image" component={FileInput} />
           <Divider horizontal></Divider>
           <Field
             name="description"
             component={TextAreaInput}
-            placeholder="Opis (nije potreban ukoliko priložite sliku)"
+            placeholder="Vic (nije potreban ukoliko priložite sliku)"
           />
 
           {submitError && !dirtySinceLastSubmit && (

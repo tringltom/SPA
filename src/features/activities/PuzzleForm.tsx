@@ -46,7 +46,8 @@ const PuzzleForm = () => {
             handleConfirmation={() => create(values)}
             content="Nova Zagonetka"
             icon="puzzle piece"
-          />, false
+          />,
+          false
         )
       }
       validate={validate}
@@ -58,11 +59,11 @@ const PuzzleForm = () => {
         dirtySinceLastSubmit,
       }) => (
         <Form autoComplete="off" onSubmit={handleSubmit} error>
-          <Field hidden name="type" component='input' initialValue={4}/>
+          <Field hidden name="type" component="input" initialValue={4} />
           <Header as="h2" content="Zagonetka" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
           <Divider horizontal>Priložite sliku ili opišite zagonetku</Divider>
-          <Field name="image" component={FileInput}  />
+          <Field name="image" component={FileInput} />
           <Divider horizontal></Divider>
           <Field
             name="description"
