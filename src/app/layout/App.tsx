@@ -22,6 +22,7 @@ import { LoadingComponent } from "./LoadingComponent";
 import WelcomeScreen from "../../features/home/WelcomeScreen";
 import PuzzleForm from "../../features/activities/PuzzleForm";
 import JokeForm from "../../features/activities/JokeForm";
+import QuoteForm from "../../features/activities/QuoteForm";
 
 
 const App: React.FC<RouteComponentProps> = () => {
@@ -58,6 +59,7 @@ if (!appLoaded) return <LoadingComponent content='Momenat, aplikacija se ucitava
                 <PrivateRoute path="/arena" component={ArenaDashboard} />
                 <PrivateRoute path="/puzzle" component={PuzzleForm} />
                 <PrivateRoute path="/joke" component={JokeForm} />
+                <PrivateRoute path="/quote" component={QuoteForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>
