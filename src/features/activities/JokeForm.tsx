@@ -62,7 +62,7 @@ const JokeForm = () => {
           <Field
             name="description"
             component={TextAreaInput}
-            placeholder="Vic (nije potreban ukoliko priložite sliku)"
+            placeholder="Tekst (nije potreban ukoliko priložite sliku)"
           />
 
           {submitError && !dirtySinceLastSubmit && (
