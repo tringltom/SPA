@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { IActivityFormValues } from "../models/activity";
 
 axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
-? "https://localhost:4001"
+? "http://192.168.0.15:4001"
 : "https://ekviti.rs/api";
 
 axios.interceptors.request.use((config) => {
