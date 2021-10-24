@@ -21,6 +21,7 @@ import { RootStoreContext } from "../stores/rootStore";
 import { LoadingComponent } from "./LoadingComponent";
 import WelcomeScreen from "../../features/home/WelcomeScreen";
 import PuzzleForm from "../../features/activities/PuzzleForm";
+import JokeForm from "../../features/activities/JokeForm";
 import QuoteForm from "../../features/activities/QuoteForm";
 
 
@@ -57,6 +58,7 @@ if (!appLoaded) return <LoadingComponent content='Momenat, aplikacija se ucitava
                 <Route path="/users/verifyEmail" component={VerifyEmail} />
                 <PrivateRoute path="/arena" component={ArenaDashboard} />
                 <PrivateRoute path="/puzzle" component={PuzzleForm} />
+                <PrivateRoute path="/joke" component={JokeForm} />
                 <PrivateRoute path="/quote" component={QuoteForm} />
                 <Route component={NotFound} />
               </Switch>

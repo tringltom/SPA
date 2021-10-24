@@ -33,9 +33,10 @@ const Navbar: React.FC = () => {
             </GridColumn>
             <GridColumn>
               <Menu.Item>
-                <Button positive content="Vic" inverted />
+              <Button icon="smile outline" onClick={() => history.push("/joke")} positive content="Vic" inverted />
               </Menu.Item>
             </GridColumn>
+            
 
             <GridColumn>
               <Menu.Item>
