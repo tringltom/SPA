@@ -21,6 +21,7 @@ import { RootStoreContext } from "../stores/rootStore";
 import { LoadingComponent } from "./LoadingComponent";
 import WelcomeScreen from "../../features/home/WelcomeScreen";
 import PuzzleForm from "../../features/activities/PuzzleForm";
+import Approvals from "../../features/activities/Approvals";
 
 
 const App: React.FC<RouteComponentProps> = () => {
@@ -56,6 +57,7 @@ if (!appLoaded) return <LoadingComponent content='Momenat, aplikacija se ucitava
                 <Route path="/users/verifyEmail" component={VerifyEmail} />
                 <PrivateRoute path="/arena" component={ArenaDashboard} />
                 <PrivateRoute path="/puzzle" component={PuzzleForm} />
+                <PrivateRoute path="/approvals" component={Approvals} />
                 <Route component={NotFound} />
               </Switch>
             </Container>

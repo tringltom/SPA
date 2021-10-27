@@ -70,6 +70,7 @@ const Navbar: React.FC = () => {
                     text="Podešavanja"
                     icon="user"
                   />
+                  <Dropdown.Item as={Link} to={`/approvals`} text="Odobrenja" icon="check" />
                   <Dropdown.Item onClick={logout} text="Odjava" icon="power" />
                 </Dropdown.Menu>
               </Dropdown>

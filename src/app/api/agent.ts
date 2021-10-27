@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { IUser, IUserFormValues } from "../models/user";
 import { toast } from "react-toastify";
-import { IActivityFormValues } from "../models/activity";
+import { IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
 
 axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
 ? "https://localhost:4001"
@@ -62,6 +62,7 @@ const Activity = {
     Object.keys(activity).forEach(key => formData.append(key, activity[key]));
     return requests.postForm("/activities/create", formData);
   },
+  getPendingActivities: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get('/activities',{params: params}).then(responseBody),
 };
 
 const sites = {
