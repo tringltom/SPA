@@ -12,7 +12,6 @@ interface IProps {
 const ModalYesNo : React.FC<IProps> = ({handleConfirmation, content, icon}) => {
     const rootStore = useContext(RootStoreContext);
     const { closeModal } = rootStore.modalStore;
-    const { submitting } = rootStore.activityStore;
   return (
     <Fragment>
       <Container textAlign="left">
@@ -24,10 +23,10 @@ const ModalYesNo : React.FC<IProps> = ({handleConfirmation, content, icon}) => {
       </Container>
       <Divider />
       <Container textAlign="right">
-        <Button color="red" onClick={closeModal} disabled = {submitting}>
+        <Button color="red" onClick={closeModal}>
           <Icon name="remove" /> Ne
         </Button>
-        <Button color="green" loading={submitting} onClick={handleConfirmation}>
+        <Button color="green" loading={!rootStore.allowEvents} disabled={!rootStore.allowEvents} onClick={handleConfirmation}>
           <Icon name="checkmark" /> Da
         </Button>
       </Container>

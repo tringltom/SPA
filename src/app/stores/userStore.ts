@@ -23,6 +23,7 @@ export default class UserStore {
 
   login = async (values: IUserFormValues) => {
     try {
+      this.rootStore.frezeScreen();
       const user = await agent.User.login(values);
       runInAction(() => {
         this.user = user;
@@ -31,17 +32,22 @@ export default class UserStore {
       this.startRefreshTokenTimer(user);
       this.rootStore.modalStore.closeModal();
       history.push("/arena");
+      this.rootStore.unFrezeScreen();
     } catch (error) {
+      this.rootStore.unFrezeScreen();
       throw error;
     }
   };
 
   register = async (values: IUserFormValues) => {
     try {
+      this.rootStore.frezeScreen();
       await agent.User.register(values);
       this.rootStore.modalStore.closeModal();
       history.push(`/users/registerSuccess?email=${values.email}`);
+      this.rootStore.unFrezeScreen();
     } catch (error) {
+      this.rootStore.unFrezeScreen();
       throw error;
     }
   };
@@ -73,12 +79,16 @@ export default class UserStore {
 
   logout = async () => {
     try {
+      this.rootStore.frezeScreen();
       await agent.User.logout();
+      this.rootStore.unFrezeScreen();
     }
-    catch (error) {}
-      this.rootStore.commonStore.setToken(null);
-      this.user = null;
-      history.push("/");
+    catch (error) { 
+      this.rootStore.unFrezeScreen();
+    }   
+    this.rootStore.commonStore.setToken(null);
+    this.user = null;
+    history.push("/"); 
   };
 
   fbLogin = async (response: any) => {
