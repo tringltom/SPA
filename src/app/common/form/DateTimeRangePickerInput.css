@@ -1,0 +1,29 @@
+.react-datetimerange-picker__inputGroup__input {
+    padding: 0 !important;
+    cursor: pointer;
+}
+
+.react-datetimerange-picker__clear-button,
+.react-datetimerange-picker__calendar-button {
+    visibility: hidden !important;
+    position: absolute;
+      margin-top: -100px;
+      margin-left: -100px;
+}
+
+.react-datetime-picker__inputGroup__divider {
+    height: 100px !important;
+    position: relative !important;
+}
+
+.react-datetimerange-picker__inputGroup__input {
+    border: hidden !important;
+}
+
+.react-datetimerange-picker {
+    height: 22px;
+}
+
+.react-datetimerange-picker__wrapper{
+    border-radius: 7px !important;
+}

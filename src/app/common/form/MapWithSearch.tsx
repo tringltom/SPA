@@ -30,17 +30,15 @@ type LatLngLiteral = google.maps.LatLngLiteral;
 type MapMouseEvent = google.maps.MapMouseEvent;
 type MapType = google.maps.Map;
 
-const libs = ["places"];
-
 const center = {
-  lat: -3.745,
-  lng: -38.523
+  lat: 44.7470721,
+  lng: 20.4518071
 };
 
 const mapOptions = {
     center: center,
     disableDefaultUI: true,
-    zoom: 10,
+    zoom: 15,
     zoomControl: true
 };
 
@@ -51,38 +49,59 @@ const containerStyle = {
 
 export const MapWithSearch: React.FC<IProps> = ({props
   }) => {
-
     
     const mapRef = React.useRef<MapType>();
     const onMapLoad = React.useCallback((map: MapType) => {
       mapRef.current = map;
     }, []);
 
-    const [marker, setMarker] = useState<LatLngLiteral | null>(null);
-    const [coords, setLocation] = useState<ICoords | null>(null);
+    const panTo = React.useCallback(({ lat, lng }, address) => {
+      mapRef.current?.panTo({ lat, lng });
+      mapRef.current?.setZoom(14);
+      setMarker({
+        lat: lat,
+        lng: lng});
+      setCoords({
+        lat: lat,
+        lng: lng,
+        location: address
+        });
+    }, []);
 
-    const onMapClick = React.useCallback((e: MapMouseEvent) => {
+    const [marker, setMarker] = useState<LatLngLiteral | null>(null);
+    const [coords, setCoords] = useState<ICoords | null>(null);
+    const coordsRef = React.useRef<ICoords | null>();
+    coordsRef.current = coords;
+
+    const onMapClick = React.useCallback( async (e: MapMouseEvent) => {
+          const latLng: google.maps.LatLngLiteral
+          = ({lat: e.latLng!.lat(), lng: e.latLng!.lng()});
+          try {
+            const results = await getGeocode({location: latLng});
+            const address = results[0].formatted_address;
+            setCoords({
+              lat: (e.latLng!.lat()),
+              lng: (e.latLng!.lng()),
+              location: address
+              })
+          } catch(error){
+          console.log(error);
+          }
         setMarker({
             lat: (e.latLng!.lat()),
             lng: (e.latLng!.lng())})
-        setLocation({
-            lat: (e.latLng!.lat()),
-            lng: (e.latLng!.lng()),
-            location: ""
-            })
-        }, []);
+        }, [coords]);
 
     useEffect(() => {
         return () => {
-            props.onChange(coords);
+            props.onChange(coordsRef.current);
         };
-      });
+      }, [props, coords]);
 
     return (
             <LoadScript
-              //googleMapsApiKey="AIzaSyBpNUqI_P-ouHh0KR24n0gLRUD4VUfX5v0"
-              googleMapsApiKey="AIzaSyAGraVkB2T6hAEWpq7DefFBzn9YkkWgg7I"
-              libraries = {["places"]}
+              //googleMapsApiKey="AIzaSyBpNUqI_P-ouHh0KR24n0gLRUD4VUfX5v0&libraries=places"
+              googleMapsApiKey="AIzaSyAGraVkB2T6hAEWpq7DefFBzn9YkkWgg7I&libraries=places&sensor=false&region=SR&language=en"
             >
             <GoogleMap
             options={mapOptions}
@@ -90,7 +109,7 @@ export const MapWithSearch: React.FC<IProps> = ({props
             onClick={onMapClick}
             onLoad={onMapLoad}
             >
-            <Search />
+            <Search panTo={panTo}/>
             {marker !== null && 
                 (
                 <Marker position={{ lat: marker.lat, lng: marker.lng }}/>
@@ -100,23 +119,14 @@ export const MapWithSearch: React.FC<IProps> = ({props
     )
 }
 
-const Search: React.FC = () => {
-  const { ready, value, suggestions: {status, data},
-  setValue, clearSuggestions} = usePlacesAutocomplete({
-    requestOptions: {
-      // location: { lat: () => -3.745,
-      // lng: () => -38.523},
-      // radius: 200 * 1000,
-    },
-  });
+interface IPanToProps {
+  panTo: (latLng: LatLngLiteral, address: string) => void
+}
 
-  const mapRef = React.useRef<MapType>();
-  const Pan = React.useCallback(({ lat, lng }) => {
-    mapRef.current?.panTo({ lat, lng });
-    mapRef.current?.setZoom(14);
-    console.log(lat);
-  }, []);
-  
+const Search: React.FC<IPanToProps> = ({panTo}) => {
+  const { ready, value, suggestions: {status, data},
+  setValue, clearSuggestions} = usePlacesAutocomplete();
+
   return <div className="autoCompleteSearch">
     <Combobox
       onSelect={async (address) => {
@@ -126,7 +136,7 @@ const Search: React.FC = () => {
         try {
             const results = await getGeocode({address});
             const { lat , lng } = await getLatLng(results[0]);
-            Pan({lat, lng});
+            panTo({lat, lng}, address);
         } catch(error){
           console.log(error);
         }

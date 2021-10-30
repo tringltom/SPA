@@ -5,7 +5,9 @@ export interface IActivityFormValues {
     image?: Blob;
     answer?: string;
     location?: string;
-    latitude?: number;
-    longitude?: number;
+    latitude?: number | null;
+    longitude?: number | null;
+    startDate?: Date;
+    endDate?: Date;
     [key: string]: any;
   };

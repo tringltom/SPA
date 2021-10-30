@@ -11,6 +11,7 @@ import { TextAreaInput } from "../../app/common/form/TextAreaInput";
 import { FileInput } from "../../app/common/form/FileInput";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import { MapInput } from "../../app/common/form/MapInput";
+import { DateTimeRangePickerInput } from "../../app/common/form/DateTimeRangePickerInput";
 
 const validate = combineValidators({
   title: composeValidators(
@@ -32,14 +33,26 @@ const ChallengeForm = () => {
   const { create } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
+  const normaliseValues = (values: IActivityFormValues) => 
+  {
+    if(values.coords) 
+    {
+      values.latitude = values.coords?.lat;
+      values.longitude = values.coords?.lng;
+      values.location = values.coords?.location;
+    }
+    delete values.coords;
+    delete values.dates;
+  }
+
 const handleSubmit = (values: IActivityFormValues) =>(
-        values.latitude = values.coords?.lat,
-        values.longitude = values.coords?.lng,
+        values.startDate = (values.dates[0]).toUTCString(),
+        values.endDate = (values.dates[1]).toUTCString(),
         openModal(
           <ModalYesNo
             handleConfirmation={
-              () => (delete values.location, 
-                console.log(values),
+              () => (
+                normaliseValues(values),
                 create(values))}
             content="Novi Izazov"
             icon="hand rock"
@@ -69,7 +82,10 @@ const handleSubmit = (values: IActivityFormValues) =>(
             component={TextAreaInput}
             placeholder="Opis (nije potreban ukoliko priložite sliku)"
           />
-          <Field name="coords" component={MapInput}/>
+          <Form.Group>
+            <Field name="coords" component={MapInput}/>
+            <Field name="dates" component={DateTimeRangePickerInput} />
+          </Form.Group>
           <Divider horizontal></Divider>
           {submitError && !dirtySinceLastSubmit && (
             <ErrorMessage error={submitError} />
