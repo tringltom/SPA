@@ -71,7 +71,8 @@ export default class UserStore {
         this.user = user;
       });
       this.rootStore.commonStore.setToken(user.token);
-      this.startRefreshTokenTimer(user);
+      if (user.token != null) 
+        this.startRefreshTokenTimer(user);
     } catch (error) {
       console.log(error);
     }
@@ -82,13 +83,13 @@ export default class UserStore {
       this.rootStore.frezeScreen();
       await agent.User.logout();
       this.rootStore.unFrezeScreen();
-    }
-    catch (error) { 
+    } 
+    catch (error) {
       this.rootStore.unFrezeScreen();
-    }   
+    }
     this.rootStore.commonStore.setToken(null);
     this.user = null;
-    history.push("/"); 
+    history.push("/");
   };
 
   fbLogin = async (response: any) => {
@@ -126,7 +127,7 @@ export default class UserStore {
   };
 
   private startRefreshTokenTimer(user: IUser) {
-    
+
     const jwtToken = JSON.parse(atob(user.token.split('.')[1]));
     const expires = new Date(jwtToken.exp * 1000);
     const timeout = expires.getTime() - Date.now() - 60 * 1000;
