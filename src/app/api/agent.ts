@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { IUser, IUserFormValues } from "../models/user";
 import { toast } from "react-toastify";
 import { IActivityFormValues } from "../models/activity";
+import { history } from '../..';
 
 axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
 ? "https://localhost:4001"
@@ -17,11 +18,34 @@ axios.interceptors.request.use((config) => {
  })
 
  axios.interceptors.response.use(undefined, (error) => {
-  if (error.message === "Network Error" && !error.response)
-    toast.error("Mrežna Greška - Servis trenutno nije dostupan");
-
-  throw error.response;
-});
+   if (error.message === "Network Error" && !error.response) {
+     toast.error("Servis trenutno nije dostupan, molimo Vas pokušajte kasnije");
+   }
+   const { status, data, config, headers } = error.response;
+   if (status === 404) {
+     history.push("/notfound");
+   }
+   if (
+     status === 401 &&
+     headers["www-authenticate"] ===
+       'Bearer error="invalid_token",error_description="The token is expired""'
+   ) {
+     window.localStorage.removeItem("jwt");
+     history.push("/");
+     toast.info("Sesija Vam je istekla, Molimo Vas ulogujte se opet");
+   }
+   if (
+     status === 400 &&
+     config.method === "get" &&
+     data.errors.hasOwnProperty("id")
+   ) {
+     history.push("/notfound");
+   }
+   if (status === 500) {
+     toast.error("Mrežna greška - Problem na servisu, molimo Vas pokušajte kasnije");
+   }
+   throw error.response;
+ });
 
 const responseBody = (response: AxiosResponse) => response.data;
 
