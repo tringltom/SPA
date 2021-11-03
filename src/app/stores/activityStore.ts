@@ -11,20 +11,20 @@ export default class ActivityStore {
     this.rootStore = rootStore;
     makeAutoObservable(this);
   }
-  submitting = false;
+
 
   create = async (values: IActivityFormValues) => {
     try {
-      this.submitting = true;
+      this.rootStore.frezeScreen();
       const message = await agent.Activity.create(values);
       runInAction(() => {
-        this.submitting = false;
         history.push("/arena");
         toast.success(message);
         this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
       });
     } catch (error) {
-      this.submitting = false;
+      this.rootStore.unFrezeScreen();
       toast.error("Nažalost došlo je do greške, molimo Vas pokušajte ponovo ili kontaktirajte podršku");
     }
   };

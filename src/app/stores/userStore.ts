@@ -23,6 +23,7 @@ export default class UserStore {
 
   login = async (values: IUserFormValues) => {
     try {
+      this.rootStore.frezeScreen();
       const user = await agent.User.login(values);
       runInAction(() => {
         this.user = user;
@@ -31,17 +32,22 @@ export default class UserStore {
       this.startRefreshTokenTimer(user);
       this.rootStore.modalStore.closeModal();
       history.push("/arena");
+      this.rootStore.unFrezeScreen();
     } catch (error) {
+      this.rootStore.unFrezeScreen();
       throw error;
     }
   };
 
   register = async (values: IUserFormValues) => {
     try {
+      this.rootStore.frezeScreen();
       await agent.User.register(values);
       this.rootStore.modalStore.closeModal();
       history.push(`/users/registerSuccess?email=${values.email}`);
+      this.rootStore.unFrezeScreen();
     } catch (error) {
+      this.rootStore.unFrezeScreen();
       throw error;
     }
   };
@@ -65,7 +71,8 @@ export default class UserStore {
         this.user = user;
       });
       this.rootStore.commonStore.setToken(user.token);
-      this.startRefreshTokenTimer(user);
+      if (user.token != null) 
+        this.startRefreshTokenTimer(user);
     } catch (error) {
       console.log(error);
     }
@@ -73,12 +80,16 @@ export default class UserStore {
 
   logout = async () => {
     try {
+      this.rootStore.frezeScreen();
       await agent.User.logout();
+      this.rootStore.unFrezeScreen();
+    } 
+    catch (error) {
+      this.rootStore.unFrezeScreen();
     }
-    catch (error) {}
-      this.rootStore.commonStore.setToken(null);
-      this.user = null;
-      history.push("/");
+    this.rootStore.commonStore.setToken(null);
+    this.user = null;
+    history.push("/");
   };
 
   fbLogin = async (response: any) => {
@@ -116,7 +127,7 @@ export default class UserStore {
   };
 
   private startRefreshTokenTimer(user: IUser) {
-    
+
     const jwtToken = JSON.parse(atob(user.token.split('.')[1]));
     const expires = new Date(jwtToken.exp * 1000);
     const timeout = expires.getTime() - Date.now() - 60 * 1000;
