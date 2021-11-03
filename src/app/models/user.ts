@@ -8,4 +8,5 @@ export interface IUserFormValues {
   email: string;
   password: string;
   userName?: string;
+  stayLoggedIn? : boolean;
 };

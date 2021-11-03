@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { Fragment, useContext } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
 import { combineValidators, isRequired } from "revalidate";
-import { Button, Checkbox, Divider, Form, Header, Image } from "semantic-ui-react";
+import { Button, Divider, Form, Header, Image } from "semantic-ui-react";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import { TextInputIcons } from "../../app/common/form/TextInputIcons";
 import { EkvitiColors } from "../../app/layout/EkvitiColors";
@@ -20,7 +20,7 @@ const validate = combineValidators({
 });
 
 const ancorStyle = {
-  cursor: "pointer", paddingLeft: "5px", textDecoration: "underline"
+  cursor: "pointer", paddingLeft: 5, textDecoration: "underline"
 }
 
 const LoginForm = () => {
@@ -77,15 +77,19 @@ const LoginForm = () => {
             {submitError && !dirtySinceLastSubmit && (
               <ErrorMessage error={submitError} />
             )}
-            <div>
-              <Form.Field style={{ float: "left", widht: "90px" }}>
-                <Checkbox
-                  className="ekvitiPrimaryFont"
-                  label="Zapamti me"
-                  style={{ fontSize: 11 }}
-                />
-              </Form.Field>
-              <div style={{ marginLeft: "90px", textAlign: "right" }}>
+            <div style={{ fontSize: 11, marginBottom: 20, marginTop: 5}}>
+              <div style={{ float:"left", marginLeft: 5}}>
+              <Field
+                    name="stayLoggedIn"
+                    component="input"
+                    type="checkbox"
+                    style={{widht: 90}}
+                  />
+                  <label className="ekvitiPrimaryFont" style={{ marginLeft: 5 }}>
+                    Zapamti me
+                  </label>
+              </div>
+              <div style={{ marginLeft: 90, textAlign: "right" }}>
                 <p
                   className="ekvitiPrimaryFont"
                   style={{ fontSize: 11, display: "inline" }}
