@@ -11,9 +11,21 @@ import { TextAreaInput } from "../../app/common/form/TextAreaInput";
 import { FileInput } from "../../app/common/form/FileInput";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import { MapInput } from "../../app/common/form/MapInput";
-import { DateTimeRangePickerInput } from "../../app/common/form/DateTimeRangePickerInput";
+import DateInput from "../../app/common/form/DateInput";
+import { combineDateAndTime } from "../../app/common/form/utils/util";
+import { ValidationErrors } from "final-form";
 
-const validate = combineValidators({
+const validateDates = (values: IActivityFormValues): ValidationErrors =>{
+  if(!values.endDate || 
+    values.dateEnd > values.dateStart! ||
+    values.dateEnd === values.dateStart! && values.endTime! > values.startTime!)
+  {
+    return undefined;
+  }
+  return ['Krajnji datum mora biti veci nego pocetni']
+};
+
+const validate = (values: IActivityFormValues) => combineValidators({
   title: composeValidators(
     isRequired({ message: "Naziv je neophodan" }),
     hasLengthLessThan(50)({
@@ -26,7 +38,7 @@ const validate = combineValidators({
       message: "Za opis je dozvoljeno maksimalno 250 karaktera",
     })
   )(),
-});
+}) || validateDates(values);
 
 const ChallengeForm = () => {
   const rootStore = useContext(RootStoreContext);
@@ -46,8 +58,8 @@ const ChallengeForm = () => {
   }
 
 const handleSubmit = (values: IActivityFormValues) =>(
-        values.startDate = (values.dates[0]).toUTCString(),
-        values.endDate = (values.dates[1]).toUTCString(),
+        values.startDate = combineDateAndTime(values.dateStart, values.timeStart),
+        values.endDate = combineDateAndTime(values.dateEnd, values.timeStart),
         openModal(
           <ModalYesNo
             handleConfirmation={
@@ -58,6 +70,8 @@ const handleSubmit = (values: IActivityFormValues) =>(
             icon="hand rock"
           />, false
         ));
+
+
 
   return (
     <FinalForm
@@ -82,10 +96,37 @@ const handleSubmit = (values: IActivityFormValues) =>(
             component={TextAreaInput}
             placeholder="Opis (nije potreban ukoliko priložite sliku)"
           />
-          <Form.Group>
             <Field name="coords" component={MapInput}/>
-            <Field name="dates" component={DateTimeRangePickerInput} />
-          </Form.Group>
+            <Form.Group>
+                   <Field
+                     name="dateStart"
+                     placeholder="Datum"
+                     component={DateInput}
+                     date={true}
+                     />
+                   <Field
+                     name="timeStart"
+                     placeholder="Vreme"
+                     time={true}
+                     component={DateInput}
+                     />
+              </Form.Group>
+              <Divider horizontal>Početak Izazova</Divider>
+              <Form.Group>
+                   <Field
+                     name="dateEnd"
+                     placeholder="Datum"
+                     component={DateInput}
+                     date={true}
+                     />
+                   <Field
+                     name="timeEnd"
+                     placeholder="Vreme"
+                     time={true}
+                     component={DateInput}
+                     />
+                </Form.Group>
+              <Divider horizontal>Kraj Izazova</Divider>
           <Divider horizontal></Divider>
           {submitError && !dirtySinceLastSubmit && (
             <ErrorMessage error={submitError} />

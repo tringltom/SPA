@@ -7,7 +7,7 @@ export interface IActivityFormValues {
     location?: string;
     latitude?: number | null;
     longitude?: number | null;
-    startDate?: Date;
-    endDate?: Date;
+    startDate?: string;
+    endDate?: string;
     [key: string]: any;
   };
