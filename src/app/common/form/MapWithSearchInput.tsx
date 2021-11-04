@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { Input } from "semantic-ui-react";
-import { FieldInputProps } from "react-final-form";
+import { Form, FormFieldProps, Input, Label } from "semantic-ui-react";
+import { FieldRenderProps } from "react-final-form";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
@@ -16,9 +16,9 @@ import {
 import "@reach/combobox/styles.css";
 import { ICoords, LatLngLiteral, MapMouseEvent, MapType} from '../../models/googleMaps'
 
-interface IProps {
-    props : FieldInputProps<Input, HTMLElement>
-  }
+interface IProps
+  extends FieldRenderProps<Input, HTMLElement>,
+    FormFieldProps {}
 
 const center = {
   lat: 44.7470721,
@@ -37,7 +37,9 @@ const containerStyle = {
     height: '400px'
 };
 
-export const MapWithSearch: React.FC<IProps> = ({props
+export const MapWithSearchInput: React.FC<IProps> = ({input,
+  type,
+  meta: { touched, error },
   }) => {
     
     const mapRef = React.useRef<MapType>();
@@ -84,11 +86,12 @@ export const MapWithSearch: React.FC<IProps> = ({props
 
     useEffect(() => {
         return () => {
-            props.onChange(coordsRef.current);
+            input.onChange(coordsRef.current);
         };
-      }, [props, coords]);
+      }, [input, coords]);
 
     return (
+      <Form.Field error={touched && !!error} type={type}>
             <LoadScript
               //googleMapsApiKey="AIzaSyBpNUqI_P-ouHh0KR24n0gLRUD4VUfX5v0&libraries=places"
               googleMapsApiKey="AIzaSyAGraVkB2T6hAEWpq7DefFBzn9YkkWgg7I&libraries=places&language=sr-Latn"
@@ -106,7 +109,13 @@ export const MapWithSearch: React.FC<IProps> = ({props
                 )}
             </GoogleMap>
             </LoadScript>
-    )
+              {touched && error && (
+            <Label basic color="red">
+              {error}
+            </Label>
+      )}       
+      </Form.Field>
+    );
 }
 
 interface IPanToProps {

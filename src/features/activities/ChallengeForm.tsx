@@ -10,20 +10,10 @@ import { RootStoreContext } from "../../app/stores/rootStore";
 import { TextAreaInput } from "../../app/common/form/TextAreaInput";
 import { FileInput } from "../../app/common/form/FileInput";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
-import { MapInput } from "../../app/common/form/MapInput";
 import DateInput from "../../app/common/form/DateInput";
 import { combineDateAndTime } from "../../app/common/form/utils/util";
+import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
 import { ValidationErrors } from "final-form";
-
-const validateDates = (values: IActivityFormValues): ValidationErrors =>{
-  if(!values.endDate || 
-    values.dateEnd > values.dateStart! ||
-    values.dateEnd === values.dateStart! && values.endTime! > values.startTime!)
-  {
-    return undefined;
-  }
-  return ['Krajnji datum mora biti veci nego pocetni']
-};
 
 const validate = combineValidators({
   title: composeValidators(
@@ -39,6 +29,17 @@ const validate = combineValidators({
     })
   )()
 });
+
+const validateDates = (values: IActivityFormValues): ValidationErrors =>{
+  if(!values.endDate || 
+    values.dateEnd > values.dateStart! ||
+    values.dateEnd === values.dateStart! && values.endTime! > values.startTime!)
+  {
+    return undefined;
+  }
+  return ['Datum završetka izazova mora biti nakon datuma početka istog']
+};
+
 
 const ChallengeForm = () => {
   const rootStore = useContext(RootStoreContext);
@@ -97,7 +98,7 @@ const ChallengeForm = () => {
             component={TextAreaInput}
             placeholder="Opis (nije potreban ukoliko priložite sliku)"
           />
-            <Field name="coords" component={MapInput}/>
+            <Field name="coords" component={MapWithSearchInput}/>
             <Form.Group>
                    <Field
                      name="dateStart"
