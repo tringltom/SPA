@@ -14,21 +14,11 @@ import {
   ComboboxOption,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
-
-interface ICoords
-{
-    lat: number;
-    lng: number;
-    location: string;
-}
+import { ICoords, LatLngLiteral, MapMouseEvent, MapType} from '../../models/googleMaps'
 
 interface IProps {
     props : FieldInputProps<Input, HTMLElement>
   }
-
-type LatLngLiteral = google.maps.LatLngLiteral;
-type MapMouseEvent = google.maps.MapMouseEvent;
-type MapType = google.maps.Map;
 
 const center = {
   lat: 44.7470721,
@@ -131,8 +121,7 @@ const Search: React.FC<IPanToProps> = ({panTo}) => {
     <Combobox
       onSelect={async (address) => {
         setValue(address, false);
-        clearSuggestions(); 
-        console.log(address);
+        clearSuggestions();
         try {
             const results = await getGeocode({address});
             const { lat , lng } = await getLatLng(results[0]);

@@ -25,7 +25,7 @@ const validateDates = (values: IActivityFormValues): ValidationErrors =>{
   return ['Krajnji datum mora biti veci nego pocetni']
 };
 
-const validate = (values: IActivityFormValues) => combineValidators({
+const validate = combineValidators({
   title: composeValidators(
     isRequired({ message: "Naziv je neophodan" }),
     hasLengthLessThan(50)({
@@ -37,8 +37,8 @@ const validate = (values: IActivityFormValues) => combineValidators({
     hasLengthLessThan(250)({
       message: "Za opis je dozvoljeno maksimalno 250 karaktera",
     })
-  )(),
-}) || validateDates(values);
+  )()
+});
 
 const ChallengeForm = () => {
   const rootStore = useContext(RootStoreContext);
@@ -55,9 +55,15 @@ const ChallengeForm = () => {
     }
     delete values.coords;
     delete values.dates;
+    delete values.dateStart;
+    delete values.timeStart;
+    delete values.dateEnd;
+    delete values.timeStart;
   }
 
-const handleSubmit = (values: IActivityFormValues) =>(
+  return (
+    <FinalForm
+      onSubmit= {(values: IActivityFormValues) =>(
         values.startDate = combineDateAndTime(values.dateStart, values.timeStart),
         values.endDate = combineDateAndTime(values.dateEnd, values.timeStart),
         openModal(
@@ -69,13 +75,8 @@ const handleSubmit = (values: IActivityFormValues) =>(
             content="Novi Izazov"
             icon="hand rock"
           />, false
-        ));
-
-
-
-  return (
-    <FinalForm
-      onSubmit={handleSubmit}
+        ))
+      }
       validate={validate}
       render={({
         handleSubmit,
