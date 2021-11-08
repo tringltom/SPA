@@ -31,7 +31,7 @@ const DateInput: React.FC<IProps> = ({
             step={5}
             {...rest}
         />
-        {touched && error && (
+        { error && (
           <Label basic color='red'>
             {error}
           </Label>

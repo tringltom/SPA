@@ -15,26 +15,35 @@ import { combineDateAndTime } from "../../app/common/form/utils/util";
 import get from 'lodash/get';
 import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
 
+const isEndTimeInvalid = ( timeEnd: any, timeStart: any, dateEnd: any, dateStart: any) : boolean => {
+  return (timeStart && dateStart) && (timeEnd < timeStart && dateEnd === dateStart);
+}
+
+const isDateInvalid = (dateEnd: any, dateStart: any): boolean => {
+  return dateEnd < dateStart || (dateEnd && !dateStart);
+}
 
 const isDateGreater = (otherField: string)  => createValidator(
   message => (value: any, allValues: any) => {
-    const otherValue = get(allValues, otherField);
 
-    if (!allValues || value < otherValue) {
+    const otherValue = get(allValues, otherField)?.toISOString().split('T')[0];
+    const dateEndValue = value?.toISOString().split('T')[0];
+
+    if (!allValues || isDateInvalid(dateEndValue, otherValue)) {
       return message;
     }
   },
   field => ''
-)
+);
 
 const isTimeGreater = (otherField: string)  => createValidator(
   message => (value: any, allValues: any) => {
 
     const otherValue = get(allValues, otherField);
-    const dateEndValue = get(allValues, 'dateEnd')?.toISOString().split('T')[0];;
-    const dateStartValue = get(allValues, 'dateStart')?.toISOString().split('T')[0];;
+    const dateEndValue = get(allValues, 'dateEnd')?.toISOString().split('T')[0];
+    const dateStartValue = get(allValues, 'dateStart')?.toISOString().split('T')[0];
 
-    if (!allValues || (value < otherValue && dateEndValue === dateStartValue)) {
+    if (!allValues || isEndTimeInvalid(value, otherValue, dateEndValue, dateStartValue)) {
       return message;
     }
   },
@@ -49,13 +58,20 @@ const validate = combineValidators({
     })
   )(),
   description: composeValidators(
-    isRequiredIf()((values: { image: any; }) => values && !values.image)({message: 'Opis je obavezan ukoliko niste priložili sliku' }),
+    isRequiredIf()((values: { image: any; }) => values && !values.image)({message: "Opis je obavezan ukoliko niste priložili sliku" }),
     hasLengthLessThan(250)({
       message: "Za opis je dozvoljeno maksimalno 250 karaktera",
     })
   )(),
-  dateEnd: isDateGreater('dateStart')({message : "Datum završetka izazova mora biti nakon datuma početka istog"}),
-  timeEnd: isTimeGreater('timeStart')({message : "Datum završetka izazova mora biti nakon datuma početka istog"})
+  dateStart: isRequiredIf()((values: { timeStart: any, dateEnd: any, timeEnd: any}) => values && (values.timeStart || values.timeEnd || values.dateEnd))
+    ({message: "Datum početka izazova je potreban ukoliko je definisano vreme početka i/ili datum i vreme kraja istog"}),
+  timeStart: isRequiredIf()((values: { dateStart: any, timeEnd: any}) => values && (values.dateStart || values.timeEnd))
+    ({message: "Vreme početka izazova je potreban ukoliko je definisan datum početka i/ili datum i vreme kraja istog"}),
+  dateEnd: composeValidators(
+    isDateGreater('dateStart')({message : "Datum završetka izazova mora biti nakon datuma početka istog"}),
+    isRequiredIf()((values: { timeEnd: any; }) => values && values.timeEnd)
+      ({message: "Datum završetka izazova je potreban ukoliko je definisano vreme završetka istog" }))(), 
+  timeEnd: isTimeGreater('timeStart')({message : "Vreme završetka izazova mora biti nakon vremena početka istog"})
 });
 
 const ChallengeForm = () => {
