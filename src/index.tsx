@@ -5,6 +5,10 @@ import reportWebVitals from "./reportWebVitals";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.min.css";
 import { createBrowserHistory } from "history";
+import dateFnsLocalizer from 'react-widgets-date-fns';
+
+
+dateFnsLocalizer();
 
 export const history = createBrowserHistory();
 

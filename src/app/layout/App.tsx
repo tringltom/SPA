@@ -23,6 +23,7 @@ import WelcomeScreen from "../../features/home/WelcomeScreen";
 import PuzzleForm from "../../features/activities/PuzzleForm";
 import JokeForm from "../../features/activities/JokeForm";
 import QuoteForm from "../../features/activities/QuoteForm";
+import HappeningForm from "../../features/activities/HappeningForm";
 
 
 const App: React.FC<RouteComponentProps> = () => {
@@ -60,6 +61,7 @@ if (!appLoaded) return <LoadingComponent content='Momenat, aplikacija se ucitava
                 <PrivateRoute path="/puzzle" component={PuzzleForm} />
                 <PrivateRoute path="/joke" component={JokeForm} />
                 <PrivateRoute path="/quote" component={QuoteForm} />
+                <PrivateRoute path="/happening" component={HappeningForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>
