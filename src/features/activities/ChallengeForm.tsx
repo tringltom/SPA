@@ -15,21 +15,13 @@ import { combineDateAndTime } from "../../app/common/form/utils/util";
 import get from 'lodash/get';
 import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
 
-const isEndTimeInvalid = ( timeEnd: any, timeStart: any, dateEnd: any, dateStart: any) : boolean => {
-  return  (timeEnd < timeStart && dateEnd === dateStart)
-}
-
-const isDateInvalid = (dateEnd: any, dateStart: any): boolean => {
-  return dateEnd < dateStart;
-}
-
 const isDateGreater = (otherField: string)  => createValidator(
   message => (value: any, allValues: any) => {
 
     const otherValue = get(allValues, otherField)?.toISOString().split('T')[0];
     const dateEndValue = value?.toISOString().split('T')[0];
 
-    if (!allValues || isDateInvalid(dateEndValue, otherValue)) {
+    if (!allValues || dateEndValue < otherValue) {
       return message;
     }
   },
@@ -43,7 +35,7 @@ const isTimeGreater = (otherField: string)  => createValidator(
     const dateEndValue = get(allValues, 'dateEnd')?.toISOString().split('T')[0];
     const dateStartValue = get(allValues, 'dateStart')?.toISOString().split('T')[0];
 
-    if (!allValues || isEndTimeInvalid(value, otherValue, dateEndValue, dateStartValue)) {
+    if (!allValues || (value < otherValue && dateEndValue === dateStartValue)) {
       return message;
     }
   },
