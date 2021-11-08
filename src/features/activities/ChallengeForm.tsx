@@ -16,11 +16,11 @@ import get from 'lodash/get';
 import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
 
 const isEndTimeInvalid = ( timeEnd: any, timeStart: any, dateEnd: any, dateStart: any) : boolean => {
-  return (timeStart && dateStart) && (timeEnd < timeStart && dateEnd === dateStart);
+  return  (timeEnd < timeStart && dateEnd === dateStart)
 }
 
 const isDateInvalid = (dateEnd: any, dateStart: any): boolean => {
-  return dateEnd < dateStart || (dateEnd && !dateStart);
+  return dateEnd < dateStart;
 }
 
 const isDateGreater = (otherField: string)  => createValidator(
@@ -65,13 +65,16 @@ const validate = combineValidators({
   )(),
   dateStart: isRequiredIf()((values: { timeStart: any, dateEnd: any, timeEnd: any}) => values && (values.timeStart || values.timeEnd || values.dateEnd))
     ({message: "Datum početka izazova je potreban ukoliko je definisano vreme početka i/ili datum i vreme kraja istog"}),
-  timeStart: isRequiredIf()((values: { dateStart: any, timeEnd: any}) => values && (values.dateStart || values.timeEnd))
+  timeStart: isRequiredIf()((values: { dateStart: any, dateEnd: any, timeEnd: any}) => values && (values.dateStart || values.timeEnd || values.dateEnd))
     ({message: "Vreme početka izazova je potreban ukoliko je definisan datum početka i/ili datum i vreme kraja istog"}),
   dateEnd: composeValidators(
     isDateGreater('dateStart')({message : "Datum završetka izazova mora biti nakon datuma početka istog"}),
     isRequiredIf()((values: { timeEnd: any; }) => values && values.timeEnd)
       ({message: "Datum završetka izazova je potreban ukoliko je definisano vreme završetka istog" }))(), 
-  timeEnd: isTimeGreater('timeStart')({message : "Vreme završetka izazova mora biti nakon vremena početka istog"})
+  timeEnd: composeValidators(
+   isTimeGreater('timeStart')({message : "Vreme završetka izazova mora biti nakon vremena početka istog"}),
+   isRequiredIf()((values: { dateEnd: any; }) => values && values.dateEnd)
+      ({message: "Vreme završetka izazova je potreban ukoliko je definisan datum završetka istog" }))()
 });
 
 const ChallengeForm = () => {
