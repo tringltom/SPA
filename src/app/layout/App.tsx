@@ -5,6 +5,7 @@ import {
   Route,
   RouteComponentProps,
   Switch,
+  useLocation,
   withRouter,
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -28,46 +29,60 @@ import HappeningForm from "../../features/activities/HappeningForm";
 
 const App: React.FC<RouteComponentProps> = () => {
   const rootStore = useContext(RootStoreContext);
-  const {setAppLoaded, token, appLoaded} = rootStore.commonStore;
-  const {getUser, isLoggedIn} = rootStore.userStore;
+  const { setAppLoaded, token, appLoaded } = rootStore.commonStore;
+  const { getUser, isLoggedIn } = rootStore.userStore;
 
-useEffect(() => {
-  if(token ) {
-    getUser().finally(() => setAppLoaded())
-  } else {
-    setAppLoaded();
-  }
-}, [getUser, setAppLoaded, token])
+  useEffect(() => {
+    if (token && !appLoaded && !isLoggedIn) {
+      getUser().finally(() => setAppLoaded());
+    } else {
+      setAppLoaded();
+    }
+  }, [getUser, setAppLoaded, token, appLoaded, isLoggedIn]);
 
-if (!appLoaded) return <LoadingComponent content='Momenat, aplikacija se ucitava...'/>
+  const pathsWithNavBar = ["/arena", "/puzzle", "/joke", "/quote", "/happening"];
+  const location = useLocation();
+
+  const ShowNavBar = () => {
+    var secondSlashIndex = location.pathname.indexOf("/", location.pathname.indexOf("/") + 1);
+    if (secondSlashIndex > 0)
+      return pathsWithNavBar.indexOf(location.pathname.substr(0, secondSlashIndex)) > -1;
+      
+    return pathsWithNavBar.indexOf(location.pathname) > -1;
+  };
+
+  if (!appLoaded)
+    return <LoadingComponent content="Momenat, aplikacija se ucitava..." />;
   return (
     <Fragment>
-      <ModalContainer />
-      <ToastContainer position="bottom-right" />
-      <Route exact path="/" component={WelcomeScreen} />
-      <Route
-        path={"/(.+)"}
-        render={() => (
-          <Fragment>
-            {isLoggedIn && <Navbar />}
-            <Container style={{ marginTop: "7em" }}>
-              <Switch>
-                <Route
-                  path="/users/registerSuccess"
-                  component={RegisterSuccess}
-                />
-                <Route path="/users/verifyEmail" component={VerifyEmail} />
-                <PrivateRoute path="/arena" component={ArenaDashboard} />
-                <PrivateRoute path="/puzzle" component={PuzzleForm} />
-                <PrivateRoute path="/joke" component={JokeForm} />
-                <PrivateRoute path="/quote" component={QuoteForm} />
-                <PrivateRoute path="/happening" component={HappeningForm} />
-                <Route component={NotFound} />
-              </Switch>
-            </Container>
-          </Fragment>
-        )}
-      />
+      <div style={{pointerEvents: rootStore.allowEvents ? 'all' : 'none' }}>
+        <ModalContainer />
+        <ToastContainer position="bottom-right" />
+        <Route exact path="/" component={WelcomeScreen} />
+        <Route
+          path={"/(.+)"}
+          render={() => (
+            <Fragment>
+              {ShowNavBar() && <Navbar />}
+              <Container style={{ marginTop: "7em" }}>
+                <Switch>
+                  <Route
+                    path="/users/registerSuccess"
+                    component={RegisterSuccess}
+                  />
+                  <Route path="/users/verifyEmail" component={VerifyEmail} />
+                  <PrivateRoute path="/arena" component={ArenaDashboard} />
+                  <PrivateRoute path="/puzzle" component={PuzzleForm} />
+                  <PrivateRoute path="/joke" component={JokeForm} />
+                  <PrivateRoute path="/quote" component={QuoteForm} />
+                  <PrivateRoute path="/happening" component={HappeningForm} />
+                  <Route component={NotFound} />
+                </Switch>
+              </Container>
+            </Fragment>
+          )}
+        />
+      </div>
     </Fragment>
   );
 };
