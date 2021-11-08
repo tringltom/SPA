@@ -10,10 +10,11 @@ import { RootStoreContext } from "../../app/stores/rootStore";
 import { TextAreaInput } from "../../app/common/form/TextAreaInput";
 import { FileInput } from "../../app/common/form/FileInput";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
-import { MapInput } from "../../app/common/form/MapInput";
 import DateInput from "../../app/common/form/DateInput";
 import { combineDateAndTime } from "../../app/common/form/utils/util";
 import get from 'lodash/get';
+import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
+
 
 const isDateGreater = (otherField: string)  => createValidator(
   message => (value: any, allValues: any) => {
@@ -38,7 +39,7 @@ const isTimeGreater = (otherField: string)  => createValidator(
     }
   },
   field => ''
-)
+);
 
 const validate = combineValidators({
   title: composeValidators(
@@ -115,8 +116,7 @@ const ChallengeForm = () => {
             component={TextAreaInput}
             placeholder="Opis (nije potreban ukoliko priložite sliku)"
           />
-            <Field name="coords" component={MapInput}/>
-            <Divider horizontal>Početak Izazova</Divider>
+            <Field name="coords" component={MapWithSearchInput}/>
             <Form.Group>
                    <Field
                      name="dateStart"
