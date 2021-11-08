@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
-import { combineValidators, composeValidators, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
+import { combineValidators, composeValidators, createValidator, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
 import { Button, Divider, Form, Header } from "semantic-ui-react";
 import { TextInput } from "../../app/common/form/TextInput";
 import ModalYesNo from "../../app/common/modals/ModalYesNo";
@@ -13,17 +13,32 @@ import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import { MapInput } from "../../app/common/form/MapInput";
 import DateInput from "../../app/common/form/DateInput";
 import { combineDateAndTime } from "../../app/common/form/utils/util";
-import { ValidationErrors } from "final-form";
+import get from 'lodash/get';
 
-const validateDates = (values: IActivityFormValues): ValidationErrors =>{
-  if(!values.endDate || 
-    values.dateEnd > values.dateStart! ||
-    values.dateEnd === values.dateStart! && values.endTime! > values.startTime!)
-  {
-    return undefined;
-  }
-  return ['Krajnji datum mora biti veci nego pocetni']
-};
+const isDateGreater = (otherField: string)  => createValidator(
+  message => (value: any, allValues: any) => {
+    const otherValue = get(allValues, otherField);
+
+    if (!allValues || value < otherValue) {
+      return message;
+    }
+  },
+  field => ''
+)
+
+const isTimeGreater = (otherField: string)  => createValidator(
+  message => (value: any, allValues: any) => {
+
+    const otherValue = get(allValues, otherField);
+    const dateEndValue = get(allValues, 'dateEnd')?.toISOString().split('T')[0];;
+    const dateStartValue = get(allValues, 'dateStart')?.toISOString().split('T')[0];;
+
+    if (!allValues || (value < otherValue && dateEndValue === dateStartValue)) {
+      return message;
+    }
+  },
+  field => ''
+)
 
 const validate = combineValidators({
   title: composeValidators(
@@ -37,7 +52,9 @@ const validate = combineValidators({
     hasLengthLessThan(250)({
       message: "Za opis je dozvoljeno maksimalno 250 karaktera",
     })
-  )()
+  )(),
+  dateEnd: isDateGreater('dateStart')({message : "Datum završetka izazova mora biti nakon datuma početka istog"}),
+  timeEnd: isTimeGreater('timeStart')({message : "Datum završetka izazova mora biti nakon datuma početka istog"})
 });
 
 const ChallengeForm = () => {
@@ -63,19 +80,20 @@ const ChallengeForm = () => {
 
   return (
     <FinalForm
-      onSubmit= {(values: IActivityFormValues) =>(
-        values.startDate = combineDateAndTime(values.dateStart, values.timeStart),
-        values.endDate = combineDateAndTime(values.dateEnd, values.timeStart),
+      onSubmit= {(values: IActivityFormValues) => {
+        values.startDate = combineDateAndTime(values.dateStart, values.timeStart);
+        values.endDate = combineDateAndTime(values.dateEnd, values.timeStart);
         openModal(
           <ModalYesNo
             handleConfirmation={
               () => (
+                // eslint-disable-next-line
                 normaliseValues(values),
                 create(values))}
             content="Novi Izazov"
             icon="hand rock"
           />, false
-        ))
+              )}
       }
       validate={validate}
       render={({
@@ -98,6 +116,7 @@ const ChallengeForm = () => {
             placeholder="Opis (nije potreban ukoliko priložite sliku)"
           />
             <Field name="coords" component={MapInput}/>
+            <Divider horizontal>Početak Izazova</Divider>
             <Form.Group>
                    <Field
                      name="dateStart"
@@ -111,8 +130,8 @@ const ChallengeForm = () => {
                      time={true}
                      component={DateInput}
                      />
-              </Form.Group>
-              <Divider horizontal>Početak Izazova</Divider>
+              </Form.Group>      
+              <Divider horizontal>Kraj Izazova</Divider>    
               <Form.Group>
                    <Field
                      name="dateEnd"
@@ -127,7 +146,7 @@ const ChallengeForm = () => {
                      component={DateInput}
                      />
                 </Form.Group>
-              <Divider horizontal>Kraj Izazova</Divider>
+
           <Divider horizontal></Divider>
           {submitError && !dirtySinceLastSubmit && (
             <ErrorMessage error={submitError} />

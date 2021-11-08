@@ -80,7 +80,7 @@ export const MapWithSearch: React.FC<IProps> = ({props
         setMarker({
             lat: (e.latLng!.lat()),
             lng: (e.latLng!.lng())})
-        }, [coords]);
+        }, []);
 
     useEffect(() => {
         return () => {
