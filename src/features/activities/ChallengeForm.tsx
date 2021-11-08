@@ -82,19 +82,24 @@ const ChallengeForm = () => {
       values.longitude = values.coords?.lng;
       values.location = values.coords?.location;
     }
+    if (values.dateStart && values.timeStart)
+    {
+      values.startDate = combineDateAndTime(values.dateStart, values.timeStart);
+    }
+    if (values.dateEnd && values.timeEnd)
+    {
+      values.endDate = combineDateAndTime(values.dateEnd, values.timeEnd);
+    }
     delete values.coords;
-    delete values.dates;
     delete values.dateStart;
     delete values.timeStart;
     delete values.dateEnd;
-    delete values.timeStart;
+    delete values.timeEnd;
   }
 
   return (
     <FinalForm
       onSubmit= {(values: IActivityFormValues) => {
-        values.startDate = combineDateAndTime(values.dateStart, values.timeStart);
-        values.endDate = combineDateAndTime(values.dateEnd, values.timeStart);
         openModal(
           <ModalYesNo
             handleConfirmation={
