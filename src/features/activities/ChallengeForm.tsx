@@ -58,7 +58,7 @@ const validate = combineValidators({
   dateStart: isRequiredIf()((values: { timeStart: any, dateEnd: any, timeEnd: any}) => values && (values.timeStart || values.timeEnd || values.dateEnd))
     ({message: "Datum početka izazova je potreban ukoliko je definisano vreme početka i/ili datum i vreme kraja istog"}),
   timeStart: isRequiredIf()((values: { dateStart: any, dateEnd: any, timeEnd: any}) => values && (values.dateStart || values.timeEnd || values.dateEnd))
-    ({message: "Vreme početka izazova je potreban ukoliko je definisan datum početka i/ili datum i vreme kraja istog"}),
+    ({message: "Vreme početka izazova je potrebno ukoliko je definisan datum početka i/ili datum i vreme kraja istog"}),
   dateEnd: composeValidators(
     isDateGreater('dateStart')({message : "Datum završetka izazova mora biti nakon datuma početka istog"}),
     isRequiredIf()((values: { timeEnd: any; }) => values && values.timeEnd)
@@ -66,7 +66,7 @@ const validate = combineValidators({
   timeEnd: composeValidators(
    isTimeGreater('timeStart')({message : "Vreme završetka izazova mora biti nakon vremena početka istog"}),
    isRequiredIf()((values: { dateEnd: any; }) => values && values.dateEnd)
-      ({message: "Vreme završetka izazova je potreban ukoliko je definisan datum završetka istog" }))()
+      ({message: "Vreme završetka izazova je potrebno ukoliko je definisan datum završetka istog" }))()
 });
 
 const ChallengeForm = () => {
