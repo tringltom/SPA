@@ -1,4 +1,4 @@
-import { configure } from "mobx";
+import { configure, makeAutoObservable } from "mobx";
 import { createContext } from "react";
 import ActivityStore from "./activityStore";
 import CommonStore from "./commonStore";
@@ -18,7 +18,19 @@ export class RootStore {
     this.modalStore = new ModalStore(this);
     this.commonStore = new CommonStore(this);
     this.activityStore = new ActivityStore(this);
+    makeAutoObservable(this);
   };
+
+  allowEvents = true;
+  
+  frezeScreen = () => {
+    this.allowEvents =  false;
+  };
+
+  unFrezeScreen = () => {
+    this.allowEvents =  true;
+  };
+
 };
 
 export const RootStoreContext = createContext(new RootStore());

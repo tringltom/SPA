@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FieldRenderProps } from "react-final-form";
 import { Form, FormFieldProps, Icon, Label } from "semantic-ui-react";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
@@ -37,20 +37,31 @@ const inputStyle = {
     height: '50px',
     paddingTop: '25px',
     fontFamily: 'Comfortaa, cursive' 
-} 
+}
 
 export const TextInputIcons: React.FC<IProps> = ({
   input,
-  type,
-  placeholder,
   meta: { touched, error },
   iconName,
   labelName,
   password,
 }) => {
+  const [inputType, setInputType] = useState("input");
+  const [rightIcon, setRightIcon] = useState("eye slash" as SemanticICONS);
+
+
+  useEffect(() => {
+    setInputType(input.type!);
+  }, [input.type]);
+
+  const togleType = () => {
+    inputType === "password" ? setInputType("text") : setInputType("password");
+    rightIcon === "eye slash" ? setRightIcon("eye") : setRightIcon("eye slash");
+  }
+
   return (
     <div style={{ position: "relative", paddingBottom: "10px" }}>
-      <Form.Field error={touched && !!error} type={type}>
+      <Form.Field error={touched && !!error}>
         <Label className="ekvitiPrimaryFont" style={labelStyle}>
           {labelName}
         </Label>
@@ -58,12 +69,12 @@ export const TextInputIcons: React.FC<IProps> = ({
 
         {password && (
           <Icon
-            name="eye slash"
+            name={rightIcon!}
             style={righticonStyle}
-            onClick={() => console.log("invert type")}
+            onClick={togleType}
           ></Icon>
         )}
-        <input {...input} placeholder={placeholder} style={inputStyle}></input>
+        <input {...input} type={inputType} style={inputStyle}></input>
         {touched && error && (
           <Label basic color="red">
             {error}

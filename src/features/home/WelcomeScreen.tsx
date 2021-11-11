@@ -4,12 +4,14 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import LoginForm from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
 import { EkvitiColors } from '../../app/layout/EkvitiColors';
+import { Link } from 'react-router-dom';
 
 
 const WelcomeScreen = () => {
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
-
+  const { isLoggedIn, user } = rootStore.userStore;
+  const token = window.localStorage.getItem('jwt');
   const ButtonStyle = {
     borderRadius: 10,
     padding: "0",
@@ -88,40 +90,60 @@ const WelcomeScreen = () => {
                     }}
                   />
                 </GridColumn>
-                <GridColumn
-                  width={3}
-                  verticalAlign="middle"
-                  style={{ padding: "0 1vw 0 0" }}
-                >
-                  <Button
-                    className="ekvitiPrimaryFont"
-                    floated="right"
-                    size="massive"
-                    basic
-                    inverted
-                    style={ButtonStyle}
-                    onClick={() => openModal(<LoginForm />)}
+                {isLoggedIn && user && token ? (
+                  <GridColumn
+                    width={6}
+                    verticalAlign="middle"
+                    textAlign="center"
+                    style={{ padding: "0 1vw 0 0" }}
                   >
-                    <p style={{ padding: "7px" }}>Prijavi se</p>
-                  </Button>
-                </GridColumn>
-                <GridColumn
-                  width={3}
-                  verticalAlign="middle"
-                  style={{ padding: "0 0 0 1vw" }}
-                >
-                  <Button
-                    className="ekvitiPrimaryFont"
-                    floated="left"
-                    size="massive"
-                    style={ButtonStyle}
-                    basic
-                    inverted
-                    onClick={() => openModal(<RegisterForm />)}
-                  >
-                    <p style={{ padding: "1.5px" }}>Registruj se</p>
-                  </Button>
-                </GridColumn>
+                    <Button
+                      as={Link}
+                      to="/arena"
+                      size="huge"
+                      color="violet"
+                    >
+                      Ulogovan si, pravac arena!
+                    </Button>
+                  </GridColumn>
+                ) : (
+                  <Fragment>
+                    <GridColumn
+                      width={3}
+                      verticalAlign="middle"
+                      style={{ padding: "0 1vw 0 0" }}
+                    >
+                      <Button
+                        className="ekvitiPrimaryFont"
+                        floated="right"
+                        size="massive"
+                        basic
+                        inverted
+                        style={ButtonStyle}
+                        onClick={() => openModal(<LoginForm />)}
+                      >
+                        <p style={{ padding: "7px" }}>Prijavi se</p>
+                      </Button>
+                    </GridColumn>
+                    <GridColumn
+                      width={3}
+                      verticalAlign="middle"
+                      style={{ padding: "0 0 0 1vw" }}
+                    >
+                      <Button
+                        className="ekvitiPrimaryFont"
+                        floated="left"
+                        size="massive"
+                        style={ButtonStyle}
+                        basic
+                        inverted
+                        onClick={() => openModal(<RegisterForm />)}
+                      >
+                        <p style={{ padding: "1.5px" }}>Registruj se</p>
+                      </Button>
+                    </GridColumn>
+                  </Fragment>
+                )}
               </Grid>
             </Segment>
           </Grid.Column>
