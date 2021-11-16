@@ -1,11 +1,6 @@
 
 export const combineDateAndTime = (date: Date, time: Date) => {
-    if (!date || !time)
-    {
-       return null;
-    }
-    const dateString = date.toISOString().split('T')[0];
-    const timeString = time.toISOString().split('T')[1];
-    return new Date(dateString + ' ' + timeString).toJSON();
-  }
-  
+   const dateString = date?.toISOString().split('T')[0];
+   const timeString = time?.toISOString().split('T')[1];
+   return new Date(dateString + ' ' + timeString).toJSON();
+ }

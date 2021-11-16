@@ -16,24 +16,25 @@ import { combineDateAndTime } from "../../app/common/form/utils/util";
 import get from 'lodash/get';
 
 
-
 const isDateGreater = (otherField: string)  => createValidator(
   message => (value: any, allValues: any) => {
-    const otherValue = get(allValues, otherField);
 
-    if (!allValues || value <= otherValue) {
+    const otherValue = get(allValues, otherField)?.toISOString().split('T')[0];
+    const dateEndValue = value?.toISOString().split('T')[0];
+
+    if (!allValues || dateEndValue < otherValue) {
       return message;
     }
   },
   field => ''
-)
+);
 
 const isTimeGreater = (otherField: string)  => createValidator(
   message => (value: any, allValues: any) => {
 
     const otherValue = get(allValues, otherField);
-    const dateEndValue = get(allValues, 'dateEnd')?.toISOString().split('T')[0];;
-    const dateStartValue = get(allValues, 'dateStart')?.toISOString().split('T')[0];;
+    const dateEndValue = get(allValues, 'dateEnd')?.toISOString().split('T')[0];
+    const dateStartValue = get(allValues, 'dateStart')?.toISOString().split('T')[0];
 
     if (!allValues || (value < otherValue && dateEndValue === dateStartValue)) {
       return message;
@@ -42,6 +43,19 @@ const isTimeGreater = (otherField: string)  => createValidator(
   field => ''
 );
 
+const isValidCoords = ()  => createValidator(
+  message => (allValues: any) => {
+
+    const lng = get(allValues, 'lng');
+    const lat = get(allValues, 'lat');
+    const location = get(allValues, 'location');
+
+    if (!allValues || (!lng || !lat || !location)) {
+      return message;
+    }
+  },
+  field => ''
+);
 
 
 const validate = combineValidators({
@@ -51,14 +65,30 @@ const validate = combineValidators({
       message: "Za naziv je dozvoljeno maksimalno 50 karaktera",
     })
   )(),
+  coords: composeValidators(
+    isValidCoords()({ message: "Lokacija je neophodna za kreiranje događaja" }),
+    hasLengthLessThan(300) ({message:"Za naziv lokacije dozvoljeno je maksimalno 300 karaktera"})
+  )(),
   description: composeValidators(
-    isRequiredIf()((values: { image: any; }) => values && !values.image)({message: 'Opis je obavezan ukoliko niste priložili sliku' }),
+    isRequiredIf()((values: { image: any }) => values && !values.image)({
+      message: "Opis je obavezan ukoliko niste priložili sliku",
+    }),
     hasLengthLessThan(250)({
       message: "Za opis događaja je dozvoljeno maksimalno 250 karaktera",
     })
   )(),
-  dateEnd: isDateGreater('dateStart')({message : "Vreme završetka događaja mora biti nakon početka istog"}),
-  timeEnd: isTimeGreater('timeStart')({message : "Vreme završetka događaja mora biti nakon početka istog"})
+  dateStart: isRequiredIf()((values: { timeStart: any, dateEnd: any, timeEnd: any}) => values && (values.timeStart || values.timeEnd || values.dateEnd))
+    ({message: "Datum početka događaja je potreban ukoliko je definisano vreme početka i/ili datum i vreme kraja istog"}),
+  timeStart: isRequiredIf()((values: { dateStart: any, dateEnd: any, timeEnd: any}) => values && (values.dateStart || values.timeEnd || values.dateEnd))
+    ({message: "Vreme početka događaja je potrebno ukoliko je definisan datum početka i/ili datum i vreme kraja istog"}),
+  dateEnd: composeValidators(
+    isDateGreater('dateStart')({message : "Datum završetka događaja mora biti nakon datuma početka istog"}),
+    isRequiredIf()((values: { timeEnd: any; }) => values && values.timeEnd)
+      ({message: "Datum završetka događaja je potreban ukoliko je definisano vreme završetka istog" }))(), 
+  timeEnd: composeValidators(
+   isTimeGreater('timeStart')({message : "Vreme završetka događaja mora biti nakon vremena početka istog"}),
+   isRequiredIf()((values: { dateEnd: any; }) => values && values.dateEnd)
+      ({message: "Vreme završetka događaja je potrebno ukoliko je definisan datum završetka istog" }))()
 });
 
 const HappeningForm = () => {
@@ -74,8 +104,15 @@ const HappeningForm = () => {
       values.longitude = values.coords?.lng;
       values.location = values.coords?.location;
     }
+    if (values.dateStart && values.timeStart)
+    {
+      values.startDate = combineDateAndTime(values.dateStart, values.timeStart);
+    }
+    if (values.dateEnd && values.timeEnd)
+    {
+      values.endDate = combineDateAndTime(values.dateEnd, values.timeEnd);
+    }
     delete values.coords;
-    delete values.dates;
     delete values.dateStart;
     delete values.timeStart;
     delete values.dateEnd;
@@ -85,21 +122,20 @@ const HappeningForm = () => {
 
   return (
     <FinalForm
-      onSubmit={(values: IActivityFormValues) => (
-        (values.startDate = combineDateAndTime(
-          values.dateStart,
-          values.timeStart
-        )),
-        (values.endDate = combineDateAndTime(values.dateEnd, values.timeEnd)),
-        openModal(
-          <ModalYesNo
-            handleConfirmation={() => (normaliseValues(values), create(values))}
-            content="Novi događaj"
-            icon="address card outline"
-          />,
-          false
-        )
-      )}
+      onSubmit={(values: IActivityFormValues) => {
+          openModal(
+            <ModalYesNo
+              handleConfirmation={
+                () => (
+                  // eslint-disable-next-line
+                normaliseValues(values), 
+                create(values))}
+              content="Novi događaj"
+              icon="address card outline"
+            />,
+            false
+          )}
+      }
       validate={validate}
       render={({
         handleSubmit,
@@ -134,7 +170,7 @@ const HappeningForm = () => {
               time={true}
               component={DateInput}
             />
-          </Form.Group>
+          </Form.Group> 
           <Divider horizontal>Početak događaja</Divider>
           <Form.Group>
             <Field

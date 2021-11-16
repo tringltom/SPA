@@ -109,7 +109,7 @@ export const MapWithSearchInput: React.FC<IProps> = ({input,
                 )}
             </GoogleMap>
             </LoadScript>
-              {touched && error && (
+              {!marker && error && (
             <Label basic color="red">
               {error}
             </Label>
