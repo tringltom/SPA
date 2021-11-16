@@ -22,6 +22,7 @@ import { RootStoreContext } from "../stores/rootStore";
 import { LoadingComponent } from "./LoadingComponent";
 import WelcomeScreen from "../../features/home/WelcomeScreen";
 import PuzzleForm from "../../features/activities/PuzzleForm";
+import ChallengeForm from "../../features/activities/ChallengeForm";
 import JokeForm from "../../features/activities/JokeForm";
 import QuoteForm from "../../features/activities/QuoteForm";
 
@@ -39,7 +40,7 @@ const App: React.FC<RouteComponentProps> = () => {
     }
   }, [getUser, setAppLoaded, token, appLoaded, isLoggedIn]);
 
-  const pathsWithNavBar = ["/arena", "/puzzle", "/joke", "/quote"];
+  const pathsWithNavBar = ["/arena", "/puzzle", "/joke", "/quote", "/challenge"];
   const location = useLocation();
 
   const ShowNavBar = () => {
@@ -74,6 +75,7 @@ const App: React.FC<RouteComponentProps> = () => {
                   <PrivateRoute path="/puzzle" component={PuzzleForm} />
                   <PrivateRoute path="/joke" component={JokeForm} />
                   <PrivateRoute path="/quote" component={QuoteForm} />
+                  <PrivateRoute path="/challenge" component={ChallengeForm} />
                   <Route component={NotFound} />
                 </Switch>
               </Container>
