@@ -43,7 +43,7 @@ const isTimeGreater = (otherField: string)  => createValidator(
   field => ''
 );
 
-const IsCoordsRequired = ()  => createValidator(
+const isCoordsRequired = ()  => createValidator(
   message => (allValues: any) => {
 
     const lng = get(allValues, 'lng');
@@ -66,7 +66,7 @@ const validate = combineValidators({
     })
   )(),
   coords: composeValidators(
-    IsCoordsRequired()({ message: "Lokacija je neophodna za kreiranje događaja" }),
+    isCoordsRequired()({ message: "Lokacija je neophodna za kreiranje događaja" }),
     hasLengthLessThan(300) ({message:"Za naziv lokacije dozvoljeno je maksimalno 300 karaktera"})
   )(),
   description: composeValidators(
