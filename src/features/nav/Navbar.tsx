@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
 
             <GridColumn>
               <Menu.Item>
-                <Button positive content="Dogadjaj" inverted />
+                <Button icon="address card outline" onClick={() => history.push("/happening")} positive content="Dogadjaj" inverted />
               </Menu.Item>
             </GridColumn>
 

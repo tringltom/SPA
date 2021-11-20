@@ -82,7 +82,7 @@ export const MapWithSearchInput: React.FC<IProps> = ({input,
         setMarker({
             lat: (e.latLng!.lat()),
             lng: (e.latLng!.lng())})
-        }, []);
+        }, [coords]);
 
     useEffect(() => {
         return () => {
@@ -109,7 +109,7 @@ export const MapWithSearchInput: React.FC<IProps> = ({input,
                 )}
             </GoogleMap>
             </LoadScript>
-              {touched && error && (
+              {!marker && error && (
             <Label basic color="red">
               {error}
             </Label>

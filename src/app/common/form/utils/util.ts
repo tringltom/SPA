@@ -4,4 +4,3 @@ export const combineDateAndTime = (date: Date, time: Date) => {
     const timeString = time?.toISOString().split('T')[1];
     return new Date(dateString + ' ' + timeString).toJSON();
   }
-  
