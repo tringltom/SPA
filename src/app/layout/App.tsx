@@ -41,7 +41,7 @@ const App: React.FC<RouteComponentProps> = () => {
     }
   }, [getUser, setAppLoaded, token, appLoaded, isLoggedIn]);
 
-  const pathsWithNavBar = ["/arena", "/puzzle", "/joke", "/quote", "/challenge"];
+  const pathsWithNavBar = ["/arena", "/puzzle", "/joke", "/quote", "/challenge", "/gooddeed"];
   const location = useLocation();
 
   const ShowNavBar = () => {

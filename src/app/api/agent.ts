@@ -5,7 +5,7 @@ import { IActivityFormValues } from "../models/activity";
 import { history } from '../..';
 
 axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
-? "http://192.168.0.15:4001"
+? "https://localhost:4001"
 : "https://ekviti.rs/api";
 
 axios.interceptors.request.use((config) => {
@@ -83,7 +83,13 @@ const User = {
 const Activity = {
   create: (activity: IActivityFormValues): Promise<string> => {
     let formData = new FormData();
-    Object.keys(activity).forEach(key => formData.append(key, activity[key]));
+    Object.keys(activity).forEach((key) => {
+      if (key === "images") {
+        activity[key]?.map((image) => formData.append(key, image));
+      } else {
+        formData.append(key, activity[key]);
+      }
+    });
     return requests.postForm("/activities/create", formData);
   },
 };

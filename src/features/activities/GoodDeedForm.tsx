@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
-import { combineValidators, composeValidators, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
+import { combineValidators, composeValidators, hasLengthLessThan, isRequired } from "revalidate";
 import { Button, Divider, Form, Header } from "semantic-ui-react";
 import { TextInput } from "../../app/common/form/TextInput";
 import ModalYesNo from "../../app/common/modals/ModalYesNo";
@@ -19,18 +19,13 @@ const validate = combineValidators({
       message: "Za naziv je dozvoljeno maksimalno 50 karaktera",
     })
   )(),
-  answer: composeValidators(
-    isRequired({ message: "Odgovor je neophodan" }),
-    hasLengthLessThan(100)({
-      message: "Za odgovor je dozvoljeno maksimalno 100 karaktera",
-    })
-  )(),
   description: composeValidators(
-    isRequiredIf()((values: { image: any; }) => values && !values.image)({message: 'Opis je obavezan ukoliko niste priložili sliku' }),
+    isRequired({ message: "Opis je neophodan" }),
     hasLengthLessThan(250)({
       message: "Za opis je dozvoljeno maksimalno 250 karaktera",
     })
   )(),
+  images: isRequired({ message: "Slika je neophodna" })
 });
 
 const GoodDeedForm = () => {
@@ -40,14 +35,15 @@ const GoodDeedForm = () => {
 
   return (
     <FinalForm
-      onSubmit={(values: IActivityFormValues) =>
+      onSubmit={(values: IActivityFormValues) =>{
+        console.log(values)
         openModal(
           <ModalYesNo
             handleConfirmation={() => create(values)}
             content="Novo Dobro Delo"
             icon="heartbeat"
           />, false
-        )
+        )}
       }
       validate={validate}
       render={({
@@ -61,8 +57,8 @@ const GoodDeedForm = () => {
           <Field hidden name="type" component='input' initialValue={1}/>
           <Header as="h2" content="Dobro Delo" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
-          <Divider horizontal>Priložite sliku i opišite dobro delo</Divider>
-          <Field name="image" component={FileInput} placeholder="Odgovor" />
+          <Divider horizontal>Priložite do 3 slike i opišite dobro delo</Divider>
+          <Field name="images" component={FileInput} maxNumberofFiles={3}/>
           <Divider horizontal></Divider>
           <Field
             name="description"
@@ -70,7 +66,7 @@ const GoodDeedForm = () => {
             placeholder="Opis"
           />
           <Divider horizontal></Divider>
-          <Field name="answer" component={TextInput} placeholder="Lokacija" />
+          
           {submitError && !dirtySinceLastSubmit && (
             <ErrorMessage error={submitError} />
           )}
