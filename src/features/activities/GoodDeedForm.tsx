@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
 import { combineValidators, composeValidators, hasLengthLessThan, isRequired } from "revalidate";
 import { Button, Divider, Form, Header } from "semantic-ui-react";
@@ -10,6 +10,7 @@ import { RootStoreContext } from "../../app/stores/rootStore";
 import { TextAreaInput } from "../../app/common/form/TextAreaInput";
 import { FileInput } from "../../app/common/form/FileInput";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
+import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
 
 
 const validate = combineValidators({
@@ -33,45 +34,62 @@ const GoodDeedForm = () => {
   const { create } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
+  const [submitError, setsubmitError] = useState(null);
+
+  
+  const normaliseValues = (values: IActivityFormValues) => {
+    if (values.coords) {
+      values.latitude = values.coords?.lat;
+      values.longitude = values.coords?.lng;
+      values.location = values.coords?.location;
+    }
+    delete values.coords;
+  };
+
   return (
     <FinalForm
-      onSubmit={(values: IActivityFormValues) =>{
-        console.log(values)
+      onSubmit={(values: IActivityFormValues) => {
+        setsubmitError(null);
         openModal(
           <ModalYesNo
-            handleConfirmation={() => create(values)}
+            handleConfirmation={() => (
+              // eslint-disable-next-line
+              normaliseValues(values),
+              create(values).catch((error) => setsubmitError(error))
+            )}
             content="Novo Dobro Delo"
             icon="heartbeat"
-          />, false
-        )}
-      }
+          />,
+          false
+        );
+      }}
       validate={validate}
-      render={({
-        handleSubmit,
-        submitError,
-        invalid,
-        pristine,
-        dirtySinceLastSubmit,
-      }) => (
+      render={({ handleSubmit, invalid, pristine }) => (
         <Form autoComplete="off" onSubmit={handleSubmit} error>
-          <Field hidden name="type" component='input' initialValue={1}/>
-          <Header as="h2" content="Dobro Delo" color="teal" textAlign="center" />
+          <Field hidden name="type" component="input" initialValue={1} />
+          <Header
+            as="h2"
+            content="Dobro Delo"
+            color="teal"
+            textAlign="center"
+          />
           <Field name="title" component={TextInput} placeholder="Naziv" />
-          <Divider horizontal>Priložite do 3 slike i opišite dobro delo</Divider>
-          <Field name="images" component={FileInput} maxNumberofFiles={3}/>
+          <Divider horizontal>
+            Priložite do 3 slike i opišite dobro delo
+          </Divider>
+          <Field name="images" component={FileInput} maxNumberofFiles={3} />
           <Divider horizontal></Divider>
           <Field
             name="description"
             component={TextAreaInput}
             placeholder="Opis"
           />
+          <Divider horizontal>Lokacija dobrog dela</Divider>
+          <Field name="coords" component={MapWithSearchInput} />
           <Divider horizontal></Divider>
-          
-          {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage error={submitError} />
-          )}
+          {submitError && <ErrorMessage error={submitError} />}
           <Button
-            disabled={(invalid && !dirtySinceLastSubmit) || pristine}
+            disabled={invalid || pristine}
             color="teal"
             content="Kreiraj"
             fluid

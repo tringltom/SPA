@@ -76,7 +76,7 @@ const PhotoUploadWidget : React.FC<IProps> = ({props, error, maxNumberofFiles}) 
       }}
     >
       <div style={thumbInner}>
-        <img src={file.preview} style={img} />
+        <img src={file.preview} style={img} alt="slika" />
       </div>
     </div>
   ));
@@ -84,7 +84,7 @@ const PhotoUploadWidget : React.FC<IProps> = ({props, error, maxNumberofFiles}) 
   const croppedthumbs = images?.map((image) => (
     <div style={thumb} key={images.indexOf(image)}>
       <div style={thumbInner}>
-        <img src={URL.createObjectURL(image)} style={croppedImg} />
+        <img src={URL.createObjectURL(image)} style={croppedImg}  alt="spremna slika"/>
       </div>
     </div>
   ));
@@ -98,7 +98,7 @@ const PhotoUploadWidget : React.FC<IProps> = ({props, error, maxNumberofFiles}) 
         props.onChange(images);
       }
     };
-  }, [images]);
+  }, [images, props]);
 
   return (
     <Fragment>
