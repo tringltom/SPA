@@ -132,7 +132,7 @@ const Search: React.FC<IPanToProps> = ({panTo, addressCombo}) => {
   useEffect(() => {
     setValue(addressCombo, false)
 
-  }, [setValue, addressCombo])
+  }, [addressCombo])
 
   return <div className="autoCompleteSearch">
     <Combobox
