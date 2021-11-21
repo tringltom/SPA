@@ -98,7 +98,6 @@ export const MapWithSearchInput: React.FC<IProps> = ({input,
               //googleMapsApiKey="AIzaSyBpNUqI_P-ouHh0KR24n0gLRUD4VUfX5v0&libraries=places"
               googleMapsApiKey="AIzaSyAGraVkB2T6hAEWpq7DefFBzn9YkkWgg7I&libraries=places&language=sr-Latn"
             >
-            <Button icon="circle"></Button>
             <GoogleMap
             options={mapOptions}
             mapContainerStyle={containerStyle}
