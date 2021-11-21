@@ -55,7 +55,7 @@ const QuoteForm = () => {
           <Header as="h2" content="Izreka" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
           <Divider horizontal>Priložite sliku ili opišite izreku</Divider>
-          <Field name="image" component={FileInput} />
+          <Field name="images" component={FileInput} />
           <Divider horizontal></Divider>
           <Field
             name="description"
