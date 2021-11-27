@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useContext, useState } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
-import { combineValidators, composeValidators, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
+import { combineValidators, composeValidators, hasLengthLessThan, isRequired } from "revalidate";
 import { Button, Divider, Form, Header } from "semantic-ui-react";
 import { TextInput } from "../../app/common/form/TextInput";
 import ModalYesNo from "../../app/common/modals/ModalYesNo";
@@ -10,6 +10,8 @@ import { RootStoreContext } from "../../app/stores/rootStore";
 import { TextAreaInput } from "../../app/common/form/TextAreaInput";
 import { FileInput } from "../../app/common/form/FileInput";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
+import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
+
 
 const validate = combineValidators({
   title: composeValidators(
@@ -18,26 +20,31 @@ const validate = combineValidators({
       message: "Za naziv je dozvoljeno maksimalno 50 karaktera",
     })
   )(),
-  answer: composeValidators(
-    isRequired({ message: "Odgovor je neophodan" }),
-    hasLengthLessThan(100)({
-      message: "Za odgovor je dozvoljeno maksimalno 100 karaktera",
-    })
-  )(),
   description: composeValidators(
-    isRequiredIf()((values: { image: any; }) => values && !values.image)({message: 'Opis je obavezan ukoliko niste priložili sliku' }),
+    isRequired({ message: "Opis je neophodan" }),
     hasLengthLessThan(250)({
       message: "Za opis je dozvoljeno maksimalno 250 karaktera",
     })
   )(),
+  images: isRequired({ message: "Slika je neophodna" })
 });
 
-const PuzzleForm = () => {
+const GoodDeedForm = () => {
   const rootStore = useContext(RootStoreContext);
   const { create } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
   const [submitError, setsubmitError] = useState(null);
+
+  
+  const normaliseValues = (values: IActivityFormValues) => {
+    if (values.coords) {
+      values.latitude = values.coords?.lat;
+      values.longitude = values.coords?.lng;
+      values.location = values.coords?.location;
+    }
+    delete values.coords;
+  };
 
   return (
     <FinalForm
@@ -45,11 +52,13 @@ const PuzzleForm = () => {
         setsubmitError(null);
         openModal(
           <ModalYesNo
-            handleConfirmation={() =>
+            handleConfirmation={() => (
+              // eslint-disable-next-line
+              normaliseValues(values),
               create(values).catch((error) => setsubmitError(error))
-            }
-            content="Nova Zagonetka"
-            icon="puzzle piece"
+            )}
+            content="Novo Dobro Delo"
+            icon="heartbeat"
           />,
           false
         );
@@ -57,19 +66,26 @@ const PuzzleForm = () => {
       validate={validate}
       render={({ handleSubmit, invalid, pristine }) => (
         <Form autoComplete="off" onSubmit={handleSubmit} error>
-          <Field hidden name="type" component="input" initialValue={4} />
-          <Header as="h2" content="Zagonetka" color="teal" textAlign="center" />
+          <Field hidden name="type" component="input" initialValue={1} />
+          <Header
+            as="h2"
+            content="Dobro Delo"
+            color="teal"
+            textAlign="center"
+          />
           <Field name="title" component={TextInput} placeholder="Naziv" />
-          <Divider horizontal>Priložite sliku ili opišite zagonetku</Divider>
-          <Field name="images" component={FileInput} />
+          <Divider horizontal>
+            Priložite do 3 slike i opišite dobro delo
+          </Divider>
+          <Field name="images" component={FileInput} maxNumberofFiles={3} />
           <Divider horizontal></Divider>
           <Field
             name="description"
             component={TextAreaInput}
-            placeholder="Opis (nije potreban ukoliko priložite sliku)"
+            placeholder="Opis"
           />
-          <Divider horizontal></Divider>
-          <Field name="answer" component={TextInput} placeholder="Odgovor" />
+          <Divider horizontal>Lokacija dobrog dela</Divider>
+          <Field name="coords" component={MapWithSearchInput} />
           <Divider horizontal></Divider>
           {submitError && <ErrorMessage error={submitError} />}
           <Button
@@ -84,4 +100,4 @@ const PuzzleForm = () => {
   );
 };
 
-export default observer(PuzzleForm);
+export default observer(GoodDeedForm);

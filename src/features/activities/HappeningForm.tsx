@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
 import { combineValidators, composeValidators, createValidator, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
 import { Button, Divider, Form, Header } from "semantic-ui-react";
@@ -14,7 +14,6 @@ import DateInput from "../../app/common/form/DateInput";
 import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
 import { combineDateAndTime } from "../../app/common/form/utils/util";
 import get from 'lodash/get';
-
 
 const isDateGreater = (otherField: string)  => createValidator(
   message => (value: any, allValues: any) => {
@@ -57,7 +56,6 @@ const isCoordsRequired = ()  => createValidator(
   field => ''
 );
 
-
 const validate = combineValidators({
   title: composeValidators(
     isRequired({ message: "Naziv je neophodan" }),
@@ -65,10 +63,7 @@ const validate = combineValidators({
       message: "Za naziv je dozvoljeno maksimalno 50 karaktera",
     })
   )(),
-  coords: composeValidators(
-    isCoordsRequired()({ message: "Lokacija je neophodna za kreiranje događaja" }),
-    hasLengthLessThan(300) ({message:"Za naziv lokacije dozvoljeno je maksimalno 300 karaktera"})
-  )(),
+  coords: isCoordsRequired()({ message: "Lokacija je neophodna za kreiranje događaja" }),
   description: composeValidators(
     isRequiredIf()((values: { image: any }) => values && !values.image)({
       message: "Opis je obavezan ukoliko niste priložili sliku",
@@ -96,20 +91,18 @@ const HappeningForm = () => {
   const { create } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
-  const normaliseValues = (values: IActivityFormValues) => 
-  {
-    if(values.coords) 
-    {
+  const [submitError, setsubmitError] = useState(null);
+
+  const normaliseValues = (values: IActivityFormValues) => {
+    if (values.coords) {
       values.latitude = values.coords?.lat;
       values.longitude = values.coords?.lng;
       values.location = values.coords?.location;
     }
-    if (values.dateStart && values.timeStart)
-    {
+    if (values.dateStart && values.timeStart) {
       values.startDate = combineDateAndTime(values.dateStart, values.timeStart);
     }
-    if (values.dateEnd && values.timeEnd)
-    {
+    if (values.dateEnd && values.timeEnd) {
       values.endDate = combineDateAndTime(values.dateEnd, values.timeEnd);
     }
     delete values.coords;
@@ -117,46 +110,43 @@ const HappeningForm = () => {
     delete values.timeStart;
     delete values.dateEnd;
     delete values.timeEnd;
-  }
-
+  };
 
   return (
     <FinalForm
       onSubmit={(values: IActivityFormValues) => {
-          openModal(
-            <ModalYesNo
-              handleConfirmation={
-                () => (
-                  // eslint-disable-next-line
-                normaliseValues(values), 
-                create(values))}
-              content="Novi događaj"
-              icon="address card outline"
-            />,
-            false
-          )}
-      }
+        console.log(values);
+        setsubmitError(null);
+        openModal(
+          <ModalYesNo
+            handleConfirmation={() => (
+              // eslint-disable-next-line
+              normaliseValues(values),
+              create(values).catch((error) => setsubmitError(error))
+            )}
+            content="Novi događaj"
+            icon="address card outline"
+          />,
+          false
+        );
+      }}
       validate={validate}
-      render={({
-        handleSubmit,
-        submitError,
-        invalid,
-        pristine,
-        dirtySinceLastSubmit,
-      }) => (
+      render={({ handleSubmit, invalid, pristine }) => (
         <Form autoComplete="off" onSubmit={handleSubmit} error>
           <Field hidden name="type" component="input" initialValue={5} />
           <Header as="h2" content="Događaj" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
           <Divider horizontal>Priložite sliku ili opišite događaj</Divider>
-          <Field name="image" component={FileInput} />
+          <Field name="images" component={FileInput} />
           <Divider horizontal></Divider>
           <Field
             name="description"
             component={TextAreaInput}
             placeholder="Opis događaja (nije potreban ukoliko priložite sliku)"
           />
+          <Divider horizontal>Lokacija događaja</Divider>
           <Field name="coords" component={MapWithSearchInput} />
+          <Divider horizontal>Početak događaja</Divider>
           <Form.Group>
             <Field
               name="dateStart"
@@ -170,8 +160,8 @@ const HappeningForm = () => {
               time={true}
               component={DateInput}
             />
-          </Form.Group> 
-          <Divider horizontal>Početak događaja</Divider>
+          </Form.Group>
+          <Divider horizontal>Kraj događaja</Divider>
           <Form.Group>
             <Field
               name="dateEnd"
@@ -186,13 +176,10 @@ const HappeningForm = () => {
               component={DateInput}
             />
           </Form.Group>
-          <Divider horizontal>Kraj događaja</Divider>
           <Divider horizontal></Divider>
-          {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage error={submitError} />
-          )}
+          {submitError && <ErrorMessage error={submitError} />}
           <Button
-            disabled={(invalid && !dirtySinceLastSubmit) || pristine}
+            disabled={invalid || pristine}
             color="teal"
             content="Kreiraj"
             fluid

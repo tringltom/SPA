@@ -83,7 +83,13 @@ const User = {
 const Activity = {
   create: (activity: IActivityFormValues): Promise<string> => {
     let formData = new FormData();
-    Object.keys(activity).forEach(key => formData.append(key, activity[key]));
+    Object.keys(activity).forEach((key) => {
+      if (key === "images") {
+        activity[key]?.map((image) => formData.append(key, image));
+      } else {
+        formData.append(key, activity[key]);
+      }
+    });
     return requests.postForm("/activities/create", formData);
   },
 };

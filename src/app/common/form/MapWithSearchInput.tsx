@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { Form, FormFieldProps, Input, Label } from "semantic-ui-react";
+import { Button, Form, FormFieldProps, Input, Label } from "semantic-ui-react";
 import { FieldRenderProps } from "react-final-form";
 import usePlacesAutocomplete, {
   getGeocode,
@@ -42,6 +42,7 @@ export const MapWithSearchInput: React.FC<IProps> = ({input,
   meta: { touched, error },
   }) => {
     
+    const [addressCombo, setaddressCombo] = useState("");
     const mapRef = React.useRef<MapType>();
     const onMapLoad = React.useCallback((map: MapType) => {
       mapRef.current = map;
@@ -71,6 +72,7 @@ export const MapWithSearchInput: React.FC<IProps> = ({input,
           try {
             const results = await getGeocode({location: latLng});
             const address = results[0].formatted_address;
+            setaddressCombo(address);
             setCoords({
               lat: (e.latLng!.lat()),
               lng: (e.latLng!.lng()),
@@ -82,13 +84,13 @@ export const MapWithSearchInput: React.FC<IProps> = ({input,
         setMarker({
             lat: (e.latLng!.lat()),
             lng: (e.latLng!.lng())})
-        }, [coords]);
+        }, [setCoords]);
 
     useEffect(() => {
         return () => {
             input.onChange(coordsRef.current);
         };
-      }, [input, coords]);
+      }, [input]);
 
     return (
       <Form.Field error={touched && !!error} type={type}>
@@ -102,14 +104,14 @@ export const MapWithSearchInput: React.FC<IProps> = ({input,
             onClick={onMapClick}
             onLoad={onMapLoad}
             >
-            <Search panTo={panTo}/>
+            <Search panTo={panTo} addressCombo={addressCombo}/>
             {marker !== null && 
                 (
                 <Marker position={{ lat: marker.lat, lng: marker.lng }}/>
                 )}
             </GoogleMap>
             </LoadScript>
-              {!marker && error && (
+              {touched && !marker && error && (
             <Label basic color="red">
               {error}
             </Label>
@@ -119,12 +121,18 @@ export const MapWithSearchInput: React.FC<IProps> = ({input,
 }
 
 interface IPanToProps {
-  panTo: (latLng: LatLngLiteral, address: string) => void
+  panTo: (latLng: LatLngLiteral, address: string) => void,
+  addressCombo : string
 }
 
-const Search: React.FC<IPanToProps> = ({panTo}) => {
+const Search: React.FC<IPanToProps> = ({panTo, addressCombo}) => {
   const { ready, value, suggestions: {status, data},
   setValue, clearSuggestions} = usePlacesAutocomplete();
+
+  useEffect(() => {
+    setValue(addressCombo, false)
+
+  }, [addressCombo])
 
   return <div className="autoCompleteSearch">
     <Combobox

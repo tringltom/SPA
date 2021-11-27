@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
             </GridColumn>
             <GridColumn>
               <Menu.Item>
-                <Button positive content="Delo" inverted />
+                <Button icon="heartbeat" onClick={() => history.push("/gooddeed")} positive content="Delo" inverted />
               </Menu.Item>
             </GridColumn>
             <GridColumn>

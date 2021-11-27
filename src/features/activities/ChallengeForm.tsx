@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
 import { combineValidators, composeValidators, createValidator, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
 import { Button, Divider, Form, Header } from "semantic-ui-react";
@@ -74,20 +74,18 @@ const ChallengeForm = () => {
   const { create } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
-  const normaliseValues = (values: IActivityFormValues) => 
-  {
-    if(values.coords) 
-    {
+  const [submitError, setsubmitError] = useState(null);
+
+  const normaliseValues = (values: IActivityFormValues) => {
+    if (values.coords) {
       values.latitude = values.coords?.lat;
       values.longitude = values.coords?.lng;
       values.location = values.coords?.location;
     }
-    if (values.dateStart && values.timeStart)
-    {
+    if (values.dateStart && values.timeStart) {
       values.startDate = combineDateAndTime(values.dateStart, values.timeStart);
     }
-    if (values.dateEnd && values.timeEnd)
-    {
+    if (values.dateEnd && values.timeEnd) {
       values.endDate = combineDateAndTime(values.dateEnd, values.timeEnd);
     }
     delete values.coords;
@@ -95,80 +93,75 @@ const ChallengeForm = () => {
     delete values.timeStart;
     delete values.dateEnd;
     delete values.timeEnd;
-  }
+  };
 
   return (
     <FinalForm
-      onSubmit= {(values: IActivityFormValues) => {
+      onSubmit={(values: IActivityFormValues) => {
+        setsubmitError(null);
         openModal(
           <ModalYesNo
-            handleConfirmation={
-              () => (
-                // eslint-disable-next-line
-                normaliseValues(values),
-                create(values))}
+            handleConfirmation={() => (
+              // eslint-disable-next-line
+              normaliseValues(values),
+              create(values).catch((error) => setsubmitError(error))
+            )}
             content="Novi Izazov"
             icon="hand rock"
-          />, false
-              )}
-      }
+          />,
+          false
+        );
+      }}
       validate={validate}
-      render={({
-        handleSubmit,
-        submitError,
-        invalid,
-        pristine,
-        dirtySinceLastSubmit,
-      }) => (
+      render={({ handleSubmit, invalid, pristine }) => (
         <Form autoComplete="off" onSubmit={handleSubmit} error>
-          <Field hidden name="type" component='input' initialValue={6}/>
+          <Field hidden name="type" component="input" initialValue={6} />
           <Header as="h2" content="Izazov" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
           <Divider horizontal>Priložite sliku ili opišite izazov</Divider>
-          <Field name="image" component={FileInput}/>
+          <Field name="images" component={FileInput} />
           <Divider horizontal></Divider>
           <Field
             name="description"
             component={TextAreaInput}
             placeholder="Opis (nije potreban ukoliko priložite sliku)"
           />
-            <Field name="coords" component={MapWithSearchInput}/>
-            <Form.Group>
-                   <Field
-                     name="dateStart"
-                     placeholder="Datum"
-                     component={DateInput}
-                     date={true}
-                     />
-                   <Field
-                     name="timeStart"
-                     placeholder="Vreme"
-                     time={true}
-                     component={DateInput}
-                     />
-              </Form.Group>      
-              <Divider horizontal>Kraj Izazova</Divider>    
-              <Form.Group>
-                   <Field
-                     name="dateEnd"
-                     placeholder="Datum"
-                     component={DateInput}
-                     date={true}
-                     />
-                   <Field
-                     name="timeEnd"
-                     placeholder="Vreme"
-                     time={true}
-                     component={DateInput}
-                     />
-                </Form.Group>
-
+          <Divider horizontal>Lokacija izazova</Divider>
+          <Field name="coords" component={MapWithSearchInput} />
+          <Divider horizontal>Početak Izazova</Divider>
+          <Form.Group>
+            <Field
+              name="dateStart"
+              placeholder="Datum"
+              component={DateInput}
+              date={true}
+            />
+            <Field
+              name="timeStart"
+              placeholder="Vreme"
+              time={true}
+              component={DateInput}
+            />
+          </Form.Group>
+          <Divider horizontal>Kraj Izazova</Divider>
+          <Form.Group>
+            <Field
+              name="dateEnd"
+              placeholder="Datum"
+              component={DateInput}
+              date={true}
+            />
+            <Field
+              name="timeEnd"
+              placeholder="Vreme"
+              time={true}
+              component={DateInput}
+            />
+          </Form.Group>
           <Divider horizontal></Divider>
-          {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage error={submitError} />
-          )}
+          {submitError && <ErrorMessage error={submitError} />}
           <Button
-            disabled={(invalid && !dirtySinceLastSubmit) || pristine}
+            disabled={invalid || pristine}
             color="teal"
             content="Kreiraj"
             fluid

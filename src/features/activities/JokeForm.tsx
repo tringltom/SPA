@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
 import { combineValidators, composeValidators, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
 import { Button, Divider, Form, Header } from "semantic-ui-react";
@@ -10,7 +10,6 @@ import { RootStoreContext } from "../../app/stores/rootStore";
 import { TextAreaInput } from "../../app/common/form/TextAreaInput";
 import { FileInput } from "../../app/common/form/FileInput";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
-
 
 const validate = combineValidators({
   title: composeValidators(
@@ -32,44 +31,41 @@ const JokeForm = () => {
   const { create } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
+  const [submitError, setsubmitError] = useState(null);
+
   return (
     <FinalForm
-      onSubmit={(values: IActivityFormValues) =>
+      onSubmit={(values: IActivityFormValues) => {
+        setsubmitError(null);
         openModal(
           <ModalYesNo
-            handleConfirmation={() => create(values)}
+            handleConfirmation={() =>
+              create(values).catch((error) => setsubmitError(error))
+            }
             content="Novi vic"
             icon="smile outline"
           />,
           false
-        )
-      }
+        );
+      }}
       validate={validate}
-      render={({
-        handleSubmit,
-        submitError,
-        invalid,
-        pristine,
-        dirtySinceLastSubmit,
-      }) => (
+      render={({ handleSubmit, invalid, pristine }) => (
         <Form autoComplete="off" onSubmit={handleSubmit} error>
           <Field hidden name="type" component="input" initialValue={2} />
           <Header as="h2" content="Vic" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
           <Divider horizontal>Priložite sliku ili napišite vic</Divider>
-          <Field name="image" component={FileInput} />
+          <Field name="images" component={FileInput} />
           <Divider horizontal></Divider>
           <Field
             name="description"
             component={TextAreaInput}
             placeholder="Tekst (nije potreban ukoliko priložite sliku)"
           />
-
-          {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage error={submitError} />
-          )}
+          <Divider horizontal></Divider>
+          {submitError && <ErrorMessage error={submitError} />}
           <Button
-            disabled={(invalid && !dirtySinceLastSubmit) || pristine}
+            disabled={invalid || pristine}
             color="teal"
             content="Kreiraj"
             fluid
