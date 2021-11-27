@@ -22,8 +22,11 @@ import { RootStoreContext } from "../stores/rootStore";
 import { LoadingComponent } from "./LoadingComponent";
 import WelcomeScreen from "../../features/home/WelcomeScreen";
 import PuzzleForm from "../../features/activities/PuzzleForm";
+import GoodDeedForm from "../../features/activities/GoodDeedForm";
+import ChallengeForm from "../../features/activities/ChallengeForm";
 import JokeForm from "../../features/activities/JokeForm";
 import QuoteForm from "../../features/activities/QuoteForm";
+import HappeningForm from "../../features/activities/HappeningForm";
 
 
 const App: React.FC<RouteComponentProps> = () => {
@@ -39,7 +42,7 @@ const App: React.FC<RouteComponentProps> = () => {
     }
   }, [getUser, setAppLoaded, token, appLoaded, isLoggedIn]);
 
-  const pathsWithNavBar = ["/arena", "/puzzle", "/joke", "/quote"];
+  const pathsWithNavBar = ["/arena", "/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed"];
   const location = useLocation();
 
   const ShowNavBar = () => {
@@ -74,6 +77,9 @@ const App: React.FC<RouteComponentProps> = () => {
                   <PrivateRoute path="/puzzle" component={PuzzleForm} />
                   <PrivateRoute path="/joke" component={JokeForm} />
                   <PrivateRoute path="/quote" component={QuoteForm} />
+                  <PrivateRoute path="/happening" component={HappeningForm} />
+                  <PrivateRoute path="/challenge" component={ChallengeForm} />
+                  <PrivateRoute path="/gooddeed" component={GoodDeedForm} />
                   <Route component={NotFound} />
                 </Switch>
               </Container>

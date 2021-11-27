@@ -25,7 +25,8 @@ export default class ActivityStore {
       });
     } catch (error) {
       this.rootStore.unFrezeScreen();
-      toast.error("Nažalost došlo je do greške, molimo Vas pokušajte ponovo ili kontaktirajte podršku");
+      this.rootStore.modalStore.closeModal();
+      throw error;
     }
   };
 }

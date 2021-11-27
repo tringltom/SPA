@@ -1,43 +1,64 @@
-import React, { useRef } from 'react'
+import React, { Fragment, useRef, useState } from 'react'
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
+import { Button } from 'semantic-ui-react';
 
 interface IProps {
-    setImage: (file: Blob) => void;
-    imagePreview: string;
+  images: Blob[] | null;
+  activeFile: any;
+  files : any[];
+  setImages: (file: Blob[]) => void;
 }
 
-export const PhotoWidgetCropper: React.FC<IProps> = ({setImage, imagePreview}) => {
-    const cropperRef  = useRef<HTMLImageElement>(null);
-    
-    const cropImage = () => {
-        const imageElement: any = cropperRef?.current;
-        const cropper: any = imageElement?.cropper;
-        if (imageElement && typeof cropper.getCroppedCanvas() === 'undefined') {
-            return;
-        }
-        cropper &&
-        imageElement &&
-          cropper.getCroppedCanvas().toBlob((blob: any) => {
-            setImage(blob);
-          }, "image/jpeg");
-    }
+export const PhotoWidgetCropper: React.FC<IProps> = ({setImages, images, activeFile, files}) => {
+  const [croppedImages, setCroppedImages] = useState<Blob[] | null>([]);
+  const cropperRef = useRef<HTMLImageElement>(null);
 
-    return (
+  const confirmCropping = (activeFile: any) => {
+    const imageElement: any = cropperRef?.current;
+    const cropper: any = imageElement?.cropper;
+    if (imageElement && typeof cropper.getCroppedCanvas() === "undefined") 
+      return;
+    cropper &&
+      imageElement &&
+      cropper.getCroppedCanvas().toBlob((blob: Blob) => {
+        var imageIndex = files.findIndex(
+          (file) => file.name === activeFile.name
+        );
+
+        if (images === null)
+         setCroppedImages(images);
+
+        if (croppedImages != null) {
+          croppedImages[imageIndex] = blob;
+          setCroppedImages(croppedImages);
+          setImages([...croppedImages]);
+        }
+      }, "image/jpeg");
+  };
+
+  return (
+    <Fragment>
       <Cropper
-        src={imagePreview}
+        src={activeFile?.preview}
         style={{ height: 200, width: "100%" }}
-        // Cropper.js options
-        initialAspectRatio={1 / 1}
-        preview='.img-preview'
+        preview=".img-preview"
         guides={false}
         viewMode={1}
-        dragMode='move'
+        dragMode="move"
         scalable={true}
         cropBoxMovable={true}
         cropBoxResizable={true}
-        crop={cropImage}
         ref={cropperRef}
       />
-    );
+      <Button
+        icon="share"
+        color="green"
+        onClick={(e) => {
+          e.preventDefault();
+          confirmCropping(activeFile);
+        }}
+      />
+    </Fragment>
+  );
 }

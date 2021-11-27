@@ -5,17 +5,20 @@ import PhotoUploadWidget from "../photoUpload/PhotoUploadWidget";
 
 interface IProps
   extends FieldRenderProps<Input, HTMLElement>,
-    FormFieldProps {}
+    FormFieldProps {
+      maxNumberofFiles: number
+    }
 
 export const FileInput: React.FC<IProps> = ({
   input,
-  type,
-  meta: { touched, error },
+  meta: { touched, error},
+  maxNumberofFiles
 }) => {
+
   return (
-    <Form.Field error={touched && !!error} type={type}>
+    <Form.Field error={touched && !!error}>
       <div>
-        <PhotoUploadWidget props={input}/>
+        <PhotoUploadWidget props={input} error={touched && !!error} maxNumberofFiles = {maxNumberofFiles}/>
       </div>
       {touched && error && (
         <Label basic color="red">
