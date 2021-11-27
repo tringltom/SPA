@@ -59,17 +59,18 @@ export default class ActivityStore {
 
   create = async (values: IActivityFormValues) => {
     try {
-      this.submitting = true;
+      this.rootStore.frezeScreen();
       const message = await agent.Activity.create(values);
       runInAction(() => {
-        this.submitting = false;
         history.push("/arena");
         toast.success(message);
         this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
       });
     } catch (error) {
-      this.submitting = false;
-      toast.error("Nažalost došlo je do greške, molimo Vas pokušajte ponovo ili kontaktirajte podršku");
+      this.rootStore.unFrezeScreen();
+      this.rootStore.modalStore.closeModal();
+      throw error;
     }
   };
 

@@ -11,8 +11,8 @@ const ModalContainer = () => {
   } = rootStore.modalStore;
 
   return (
-    <Modal open={open} onClose={closeModal} closeOnDimmerClick= {closeOnDimmerClick} size="mini">
-      <Modal.Content>{body}</Modal.Content>
+    <Modal open={open} onClose={closeModal} closeOnDimmerClick= {closeOnDimmerClick && rootStore.allowEvents} size="mini">
+      <Modal.Content style={{pointerEvents: rootStore.allowEvents ? 'all' : 'none' }} >{body}</Modal.Content>
     </Modal>
   );
 };

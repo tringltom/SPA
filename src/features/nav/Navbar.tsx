@@ -28,18 +28,19 @@ const Navbar: React.FC = () => {
             </GridColumn>
             <GridColumn>
               <Menu.Item>
-                <Button positive content="Delo" inverted />
+                <Button icon="heartbeat" onClick={() => history.push("/gooddeed")} positive content="Delo" inverted />
               </Menu.Item>
             </GridColumn>
             <GridColumn>
               <Menu.Item>
-                <Button positive content="Vic" inverted />
+              <Button icon="smile outline" onClick={() => history.push("/joke")} positive content="Vic" inverted />
               </Menu.Item>
             </GridColumn>
+            
 
             <GridColumn>
               <Menu.Item>
-                <Button positive content="Izreka" inverted />
+                <Button icon="comment alternate" onClick={() => history.push("/quote")} positive content="Izreka" inverted />
               </Menu.Item>
             </GridColumn>
 
@@ -51,13 +52,13 @@ const Navbar: React.FC = () => {
 
             <GridColumn>
               <Menu.Item>
-                <Button positive content="Dogadjaj" inverted />
+                <Button icon="address card outline" onClick={() => history.push("/happening")} positive content="Dogadjaj" inverted />
               </Menu.Item>
             </GridColumn>
 
             <GridColumn>
               <Menu.Item>
-                <Button positive content="Izazov" inverted />
+                <Button icon="hand rock" onClick={() => history.push("/challenge")} positive content="Izazov" inverted />
               </Menu.Item>
             </GridColumn>
 
