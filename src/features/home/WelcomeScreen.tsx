@@ -31,7 +31,7 @@ const WelcomeScreen = () => {
     marginTop: "0px",
     marginLeft: "0px",
     position: "fixed",
-    top: "0"
+    top: "0",
   };
 
   return (
