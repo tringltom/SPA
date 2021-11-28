@@ -2,7 +2,6 @@ import axios, { AxiosResponse } from "axios";
 import { IUser, IUserFormValues } from "../models/user";
 import { toast } from "react-toastify";
 import { IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
-import { IActivityFormValues } from "../models/activity";
 import { history } from '../..';
 
 axios.defaults.baseURL = process.env.NODE_ENV !== 'production'

@@ -81,6 +81,7 @@ const App: React.FC<RouteComponentProps> = () => {
                   <PrivateRoute path="/happening" component={HappeningForm} />
                   <PrivateRoute path="/challenge" component={ChallengeForm} />
                   <PrivateRoute path="/gooddeed" component={GoodDeedForm} />
+                  <PrivateRoute path="/approvals" component={Approvals} />
                   <Route component={NotFound} />
                 </Switch>
               </Container>
