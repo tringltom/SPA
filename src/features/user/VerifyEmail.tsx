@@ -72,7 +72,7 @@ const VerifyEmail: React.FC<RouteComponentProps> = ({ location }) => {
   return (
     <Container>
       <Grid style={GridStyle} verticalAlign="middle" columns={4} centered>
-        <GridColumn mobile={12} style={ColumnStyle} textAlign="center">
+        <GridColumn mobile={14} style={ColumnStyle} textAlign="center">
           <Image
             size="large"
             src="/assets/LogInEkvitiLogo.png"
