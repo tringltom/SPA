@@ -5,7 +5,7 @@ import { EkvitiColors } from "./EkvitiColors";
 const NotFound = () => {
   return (
       <Grid style={GridStyle} verticalAlign='middle' columns={4} centered>
-        <GridColumn mobile={13} style={ColumnStyle} textAlign="center">
+        <GridColumn mobile={14} style={ColumnStyle} textAlign="center">
             <Image src="/assets/LogoForNotFound.png" centered style={LogoStyle}></Image> 
             <Image src="/assets/ConfusedKnight.png" centered></Image> 
             <span className="ekvitiPrimaryFont" style={OopsStyle}>Oops!</span>
