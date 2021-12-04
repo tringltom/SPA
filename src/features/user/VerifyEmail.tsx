@@ -72,7 +72,7 @@ const VerifyEmail: React.FC<RouteComponentProps> = ({ location }) => {
   return (
     <Container>
       <Grid style={GridStyle} verticalAlign="middle" columns={4} centered>
-        <GridColumn largeScreen={12} mobile={12} tablet={12} widescreen={12} style={ColumnStyle} textAlign="center">
+        <GridColumn mobile={12} style={ColumnStyle} textAlign="center">
           <Image
             size="large"
             src="/assets/LogInEkvitiLogo.png"
@@ -153,6 +153,4 @@ const ColumnStyle = {
   backgroundColor: EkvitiColors.white,
   borderRadius: "15px",
   maxWidth:"650px",
-  width:"50vmin"
-  
 };
