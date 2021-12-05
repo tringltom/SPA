@@ -26,10 +26,10 @@ const NotFound = () => {
 export default NotFound;
 
 const ColumnStyle = {
-  minHeight: "60%",
+  minHeight: "62%",
   backgroundColor: EkvitiColors.white,
-  borderRadius: "15px",
-  maxWidth: "700px"
+  borderRadius: "10px",
+  maxWidth: "650px"
 };
 
 const GridStyle = {
@@ -44,24 +44,25 @@ const GridStyle = {
 };
 
 const LogoStyle = {
-  paddingTop: "9%",
-  paddingBottom: "3%",
+  paddingTop: "10%",
+  paddingBottom: "4%",
   height: "auto",
-  width: "55%"
+  width: "57.5%"
 };
 
 const OopsStyle = {
-  paddingTop: "4%",
+  paddingTop: "5%",
   paddingBottom: "3%",
   display: "inline-block",
-  fontSize: 26
+  fontSize: 25
 };
 
 const ButtonStyle = {
-  marginTop: "6%",
-  minWidth: "75%",
+  marginRight: "0em", 
+  marginTop: "7%",
+  minWidth: "77%",
   display: "inline-block",
-  fontSize: "20px",
+  fontSize: "19px",
   paddingTop: "23px",
   paddingBottom: "23px",
   borderRadius: "10px",
@@ -75,5 +76,5 @@ const TextStyle = {
   display: "inline-block", 
   fontSize: 19, 
   color: EkvitiColors.primary,
-  letterSpacing: "1px"
+  letterSpacing: "0.6px"
 };
