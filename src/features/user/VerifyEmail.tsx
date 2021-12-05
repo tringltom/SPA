@@ -101,14 +101,15 @@ const VerifyEmail: React.FC<RouteComponentProps> = ({ location }) => {
 export default VerifyEmail;
 
 const LogoStyle = {
-  height: "70%",
-  width: "70%",
-  marginTop: "30px",
+  height: "55%",
+  width: "55%",
+  marginTop: "80px",
 };
 
 const SecondaryImageStyle ={
-  height: "30%",
-  width: "30%",
+  height: "25%",
+  width: "25%",
+  marginTop: "5%",
 };
 
 const ButtonStyle ={
@@ -122,7 +123,7 @@ const ButtonStyle ={
   boxShadow: `00 8px 10px -6px ${EkvitiColors.primary}`,
   backgroundColor: EkvitiColors.primary,
   color: "white",
-  marginBottom: "5%"
+  marginBottom: "15%"
 };
 
 const TextStyle = {
@@ -135,6 +136,8 @@ const HeaderTextStyle = {
   display: "inline-block", 
   fontSize: 25, 
   color: "#000000",
+  marginTop: "5%",
+  marginBottom: "3%"
 };
 
 const GridStyle = {
