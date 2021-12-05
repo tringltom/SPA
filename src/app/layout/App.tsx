@@ -66,7 +66,7 @@ const App: React.FC<RouteComponentProps> = () => {
           render={() => (
             <Fragment>
               {ShowNavBar() && <Navbar />}
-              <Container style={{ marginTop: "7em" }}>
+              <Container style={ ShowNavBar() ? { marginTop: "7em" } : {}}>
                 <Switch>
                   <Route
                     path="/users/registerSuccess"
