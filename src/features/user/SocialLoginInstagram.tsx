@@ -27,7 +27,7 @@ const SocialLoginInstagram: React.FC<IProps> = ({ fbCallback, loading }) => {
           >
             <img
               alt="ins"
-              src={"./assets/InstagramIcon.png"}
+              src={"/assets/InstagramIcon.png"}
               style={{ paddingRight: "10px" }}
             />
             <Button.Content
