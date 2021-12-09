@@ -2,9 +2,9 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite';
 import { Button, Container, Dropdown, Grid, GridColumn, Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { RootStoreContext } from '../../app/stores/rootStore';
-import  '../../app/layout/styles.css';
-import { history } from "../..";
+import { RootStoreContext } from '../app/stores/rootStore';
+import  '../app/layout/styles.css';
+import { history } from "..";
 
 const Navbar: React.FC = () => {
 
@@ -36,26 +36,21 @@ const Navbar: React.FC = () => {
               <Button icon="smile outline" onClick={() => history.push("/joke")} positive content="Vic" inverted />
               </Menu.Item>
             </GridColumn>
-            
-
             <GridColumn>
               <Menu.Item>
                 <Button icon="comment alternate" onClick={() => history.push("/quote")} positive content="Izreka" inverted />
               </Menu.Item>
             </GridColumn>
-
             <GridColumn>
               <Menu.Item>
                 <Button icon="puzzle piece" onClick={() => history.push("/puzzle")} positive content="Zagonetka" inverted />
               </Menu.Item>
             </GridColumn>
-
             <GridColumn>
               <Menu.Item>
                 <Button icon="address card outline" onClick={() => history.push("/happening")} positive content="Dogadjaj" inverted />
               </Menu.Item>
             </GridColumn>
-
             <GridColumn>
               <Menu.Item>
                 <Button icon="hand rock" onClick={() => history.push("/challenge")} positive content="Izazov" inverted />

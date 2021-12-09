@@ -92,7 +92,8 @@ const Activity = {
     });
     return requests.postForm("/activities/create", formData);
   },
-  getPendingActivities: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get('/activities',{params: params}).then(responseBody),
+  getPendingActivities: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get("/activities",{params: params}).then(responseBody),
+  resolvePendingActivity : (id: string, approve: boolean): Promise<boolean> => requests.post(`/activities/resolve/${id}`, {approve})
 };
 
 const sites = {

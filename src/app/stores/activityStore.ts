@@ -4,6 +4,7 @@ import { IActivityFormValues } from "../models/activity";
 import { RootStore } from "./rootStore";
 import { history } from "../..";
 import { toast } from "react-toastify";
+import { setActivityProps } from "../common/utils/util";
 
 const LIMIT = 5;
 
@@ -16,11 +17,11 @@ export default class ActivityStore {
     reaction(
       () => this.predicate.keys(),
       () => {
-          this.page = 0;
-          this.activityRegistry.clear();
-          this.loadActivities();
+        this.page = 0;
+        this.activityRegistry.clear();
+        this.loadPendingActivities();
       }
-  )
+    );
   }
   submitting = false;
   activityRegistry = new Map();
@@ -31,7 +32,7 @@ export default class ActivityStore {
 
   get activitiesArray() {
     return Array.from(this.activityRegistry.values());
-  };
+  }
 
   setPage = (page: number) => {
     this.page = page;
@@ -39,7 +40,7 @@ export default class ActivityStore {
 
   get totalPages() {
     return Math.ceil(this.activityCount / LIMIT);
-  };
+  }
 
   get axiosParams() {
     const params = new URLSearchParams();
@@ -47,15 +48,13 @@ export default class ActivityStore {
     params.append("offset", `${this.page ? this.page * LIMIT : 0}`);
     this.predicate.forEach((value, key) => {
       if (key === "startDate") {
-        console.log(key, value);
         params.append(key, value.toISOString());
       } else {
-        console.log(key, value);
         params.append(key, value);
       }
     });
     return params;
-  };
+  }
 
   create = async (values: IActivityFormValues) => {
     try {
@@ -74,23 +73,48 @@ export default class ActivityStore {
     }
   };
 
-  loadActivities = async () => {
+  loadPendingActivities = async () => {
     this.loadingInitial = true;
     try {
-        const activitiesEnvelope = await agent.Activity.getPendingActivities(this.axiosParams);
-        const {activities, activityCount} = activitiesEnvelope
-        runInAction(() => {
-            activities.forEach((activity) => {
-                this.activityRegistry.set(activity.id, activity);
-            });
-            this.activityCount = activityCount;
-            this.loadingInitial = false
-        })
+      const activitiesEnvelope = await agent.Activity.getPendingActivities(
+        this.axiosParams
+      );
+      console.log(activitiesEnvelope);
+      const { activities, activityCount } = activitiesEnvelope;
+      runInAction(() => {
+        activities.forEach((activity) => {
+          setActivityProps(activity, this.rootStore.userStore.user!);
+          this.activityRegistry.set(activity.id, activity);
+        });
+        this.activityCount = activityCount;
+        this.loadingInitial = false;
+      });
     } catch (error) {
-        runInAction(() => {
-            console.log(error);
-            this.loadingInitial = false
-        })
+      runInAction(() => {
+        console.log(error);
+        this.loadingInitial = false;
+      });
     }
-};
+  };
+
+  approvePendingActivity = async (activityId : string, approve : boolean) => {
+    try {
+      this.rootStore.frezeScreen();
+      console.log(approve);
+      const success = await agent.Activity.resolvePendingActivity(activityId, approve);
+      if (success){
+        toast.success("Uspešno ste odobrili/odbili aktivnost");
+        this.activityRegistry.delete(activityId);
+      } else{
+        toast.error("Neuspešno ste odobrili/odbili aktivnost");
+      }      
+      this.rootStore.modalStore.closeModal();
+      this.rootStore.unFrezeScreen();
+    } catch (error) {
+      this.rootStore.unFrezeScreen();
+      this.rootStore.modalStore.closeModal();
+      console.log(error);
+      toast.error("Neuspešno, proverite konzolu");
+    }
+  }
 }

@@ -1,26 +1,26 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react'
 import { Grid, Loader } from 'semantic-ui-react'
-import  ActivityList from './ActivityList';
+import  ActivityList from './activities/ActivityList';
 import InfiniteScroll from 'react-infinite-scroller'
-import ActivityListItemPlaceholder from './ActivityListItemPlaceholder';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import ActivityListItemPlaceholder from './activities/ActivityListItemPlaceholder';
+import { RootStoreContext } from '../app/stores/rootStore';
 
 const Approvals: React.FC = () => {
 
     const rootStore = useContext(RootStoreContext);
-    const {loadActivities, loadingInitial, setPage, page, totalPages} = rootStore.activityStore;
+    const {loadPendingActivities, loadingInitial, setPage, page, totalPages} = rootStore.activityStore;
     const [loadingNext, setLoadingNext] = useState(false);
   
     const handleGetNext = () => {
       setLoadingNext(true);
       setPage(page + 1);
-      loadActivities().then(() => setLoadingNext(false));
+      loadPendingActivities().then(() => setLoadingNext(false));
     }
   
     useEffect(() => {
-      loadActivities();
-    }, [loadActivities]);
+      loadPendingActivities();
+    }, [loadPendingActivities]);
     
     return (
       <Grid>
@@ -38,7 +38,7 @@ const Approvals: React.FC = () => {
             </InfiniteScroll>
           )}
         </Grid.Column>
-        <Grid.Column width={6}>
+        <Grid.Column width={16}>
           <Loader active={loadingNext} />
         </Grid.Column>
       </Grid>

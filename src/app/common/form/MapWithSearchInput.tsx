@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { Button, Form, FormFieldProps, Input, Label } from "semantic-ui-react";
+import { Form, FormFieldProps, Input, Label } from "semantic-ui-react";
 import { FieldRenderProps } from "react-final-form";
 import usePlacesAutocomplete, {
   getGeocode,
@@ -67,7 +67,7 @@ export const MapWithSearchInput: React.FC<IProps> = ({input,
     coordsRef.current = coords;
 
     const onMapClick = React.useCallback( async (e: MapMouseEvent) => {
-          const latLng: google.maps.LatLngLiteral
+          const latLng: LatLngLiteral
           = ({lat: e.latLng!.lat(), lng: e.latLng!.lng()});
           try {
             const results = await getGeocode({location: latLng});
@@ -132,7 +132,7 @@ const Search: React.FC<IPanToProps> = ({panTo, addressCombo}) => {
   useEffect(() => {
     setValue(addressCombo, false)
 
-  }, [addressCombo])
+  }, [addressCombo, setValue])
 
   return <div className="autoCompleteSearch">
     <Combobox

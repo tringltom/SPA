@@ -8,10 +8,8 @@ import { ActivityListItem } from './ActivityListItem';
 const ActivityList: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
   const {activitiesArray} = rootStore.activityStore;
-  console.log(activitiesArray[0]);
     return (
       <Fragment>
-        
           <Item.Group divided>
             {activitiesArray.map((activity: IActivity) => (
               <ActivityListItem key={activity.id} activity={activity} />
