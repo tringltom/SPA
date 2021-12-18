@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Segment, Item, Header, Button, Grid, Statistic } from 'semantic-ui-react';
 import { IUser } from '../../app/models/user';
@@ -27,8 +28,8 @@ const ProfileHeader:React.FC<IProps> = ({user}) => {
         </Grid.Column>
         <Grid.Column width={4}>
           <Statistic.Group widths={2}>
-            <Statistic label='Xp' value='1001'/>
-            <Statistic label='Level' value='1'/>
+            <Statistic label='Xp' value={user.currentXp}/>
+            <Statistic label='Level' value={user.currentLevel}/>
           </Statistic.Group>
         </Grid.Column>
       </Grid>
@@ -36,4 +37,4 @@ const ProfileHeader:React.FC<IProps> = ({user}) => {
   );
 };
 
-export default ProfileHeader;
+export default observer(ProfileHeader) ;
