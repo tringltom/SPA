@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite';
-import { Button, Container, Dropdown, Grid, GridColumn, Menu } from 'semantic-ui-react';
+import { Button, Container, Dropdown, Grid, GridColumn, Menu, Image} from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../app/stores/rootStore';
 import  '../app/layout/styles.css';
@@ -9,7 +9,7 @@ import { history } from "..";
 const Navbar: React.FC = () => {
 
   const rootStore = useContext(RootStoreContext);
-  const {logout} = rootStore.userStore;
+  const {logout, user} = rootStore.userStore;
 
     return (
       <Grid>
@@ -56,15 +56,22 @@ const Navbar: React.FC = () => {
                 <Button icon="hand rock" onClick={() => history.push("/challenge")} positive content="Izazov" inverted />
               </Menu.Item>
             </GridColumn>
-
+        
             <GridColumn floated="right" className="navUserDropDown">
-              <Dropdown pointing="top" inline button text="Nalog">
+            <Image avatar spaced='right' src={user?.image || '/assets/user.png'} />
+              <Dropdown pointing="top left" inline button text={user?.username}>
                 <Dropdown.Menu direction={"left"}>
+                <Dropdown.Item
+                    as={Link}
+                    to={`/profile/${user?.username}`}
+                    text="Profil"
+                    icon="user"
+                  />
                   <Dropdown.Item
                     as={Link}
                     to={`/settings`}
                     text="Podešavanja"
-                    icon="user"
+                    icon="cog"
                   />
                   <Dropdown.Item as={Link} to={`/approvals`} text="Odobrenja" icon="check" />
                   <Dropdown.Item onClick={logout} text="Odjava" icon="power" />

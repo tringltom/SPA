@@ -28,6 +28,7 @@ import ChallengeForm from "../../features/activities/ChallengeForm";
 import JokeForm from "../../features/activities/JokeForm";
 import QuoteForm from "../../features/activities/QuoteForm";
 import HappeningForm from "../../features/activities/HappeningForm";
+import ProfilePage from "../../features/profile/ProfilePage";
 
 
 const App: React.FC<RouteComponentProps> = () => {
@@ -43,7 +44,7 @@ const App: React.FC<RouteComponentProps> = () => {
     }
   }, [getUser, setAppLoaded, token, appLoaded, isLoggedIn]);
 
-  const pathsWithNavBar = ["/arena", "/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/approvals"];
+  const pathsWithNavBar = ["/arena", "/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/profile", "/approvals"];
   const location = useLocation();
 
   const ShowNavBar = () => {
@@ -81,6 +82,7 @@ const App: React.FC<RouteComponentProps> = () => {
                   <PrivateRoute path="/happening" component={HappeningForm} />
                   <PrivateRoute path="/challenge" component={ChallengeForm} />
                   <PrivateRoute path="/gooddeed" component={GoodDeedForm} />
+                  <PrivateRoute path="/profile/:username" component={ProfilePage} />
                   <PrivateRoute path="/approvals" component={Approvals} />
                   <Route component={NotFound} />
                 </Switch>
