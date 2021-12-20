@@ -1,4 +1,4 @@
-import { makeAutoObservable, observable, runInAction } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import agent from "../api/agent";

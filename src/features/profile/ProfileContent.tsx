@@ -5,12 +5,8 @@ import {Tab} from 'semantic-ui-react';
 const panes = [
     {menuItem: 'Detalji', render: () => <Tab.Pane>Detalji</Tab.Pane>},
     {menuItem: 'Veštine', render: () => <Tab.Pane>Veštine</Tab.Pane>},
-    {menuItem: 'Dobra dela', render: () => <Tab.Pane>Dobra dela</Tab.Pane>},
-    {menuItem: 'Vicevi', render: () => <Tab.Pane>Vicevi</Tab.Pane>},
-    {menuItem: 'Izreke', render: () => <Tab.Pane>Izreke</Tab.Pane>},
-    {menuItem: 'Zagonetke', render: () => <Tab.Pane>Zagonetke</Tab.Pane>},
-    {menuItem: 'Događaji', render: () => <Tab.Pane>Događaji</Tab.Pane>},
-
+    {menuItem: 'Aktivnosti na čekanju', render: () => <Tab.Pane>Aktivnosti koje čekaju odobrenje</Tab.Pane>},
+    {menuItem: 'Odobrene aktivnosti', render: () => <Tab.Pane>Odobrene aktivnosti</Tab.Pane>},
 ]
 const ProfileContent = () => {
     return (

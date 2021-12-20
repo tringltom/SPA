@@ -17,7 +17,7 @@ const ProfilePage = () => {
 
         <Grid>
             <GridColumn width={16}>
-                <ProfileHeader user = {user!}/>
+                <ProfileHeader user = {user}/>
                 <ProfileContent/>
             </GridColumn>
         </Grid>
