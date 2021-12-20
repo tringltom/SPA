@@ -63,12 +63,12 @@ const Navbar: React.FC = () => {
             </GridColumn>
         
             <GridColumn floated="right" className="navUserDropDown">
-            <Image avatar spaced='right' src={user!.image || '/assets/user.png'} />
-              <Dropdown pointing="top left" inline button text={user!.username}>
+            <Image avatar spaced='right' src={user?.image || '/assets/user.png'} />
+              <Dropdown pointing="top left" inline button text={user?.username}>
                 <Dropdown.Menu direction={"left"}>
                 <Dropdown.Item
                     as={Link}
-                    to={`/profile/${user!.username}`}
+                    to={`/profile/${user?.username}`}
                     text="Profil"
                     icon="user"
                   />
