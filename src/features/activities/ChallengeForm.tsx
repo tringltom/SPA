@@ -5,7 +5,7 @@ import { combineValidators, composeValidators, createValidator, hasLengthLessTha
 import { Button, Divider, Form, Header } from "semantic-ui-react";
 import { TextInput } from "../../app/common/form/TextInput";
 import ModalYesNo from "../../app/common/modals/ModalYesNo";
-import { IActivityFormValues } from "../../app/models/activity";
+import { ActivityTypes, IActivityFormValues } from "../../app/models/activity";
 import { RootStoreContext } from "../../app/stores/rootStore";
 import { TextAreaInput } from "../../app/common/form/TextAreaInput";
 import { FileInput } from "../../app/common/form/FileInput";
@@ -115,7 +115,7 @@ const ChallengeForm = () => {
       validate={validate}
       render={({ handleSubmit, invalid, pristine }) => (
         <Form autoComplete="off" onSubmit={handleSubmit} error>
-          <Field hidden name="type" component="input" initialValue={6} />
+          <Field hidden name="type" component="input" initialValue={ActivityTypes.Challenge} />
           <Header as="h2" content="Izazov" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
           <Divider horizontal>Priložite sliku ili opišite izazov</Divider>

@@ -1,9 +1,9 @@
 import { Fragment, useContext } from 'react';
 import { Button, Grid, GridColumn, Image, Segment } from 'semantic-ui-react';
-import { RootStoreContext } from '../../app/stores/rootStore';
-import LoginForm from '../user/LoginForm';
-import { RegisterForm } from '../user/RegisterForm';
-import { EkvitiColors } from '../../app/layout/EkvitiColors';
+import { RootStoreContext } from '../app/stores/rootStore';
+import LoginForm from './user/LoginForm';
+import { RegisterForm } from './user/RegisterForm';
+import { EkvitiColors } from '../app/layout/EkvitiColors';
 import { Link } from 'react-router-dom';
 
 

@@ -13,15 +13,16 @@ import { Container } from "semantic-ui-react";
 import RegisterSuccess from "../../features/user/RegisterSuccess";
 import VerifyEmail from "../../features/user/VerifyEmail";
 import NotFound from "./NotFound";
-import Navbar from "../../features/nav/Navbar";
+import Navbar from "../../features/Navbar";
 import  './styles.css';
-import ArenaDashboard from "../../features/arena/dashboard/ArenaDashboard";
+import ArenaDashboard from "../../features/arena/ArenaDashboard";
 import PrivateRoute from "./PrivateRoute";
 import { useContext } from "react";
 import { RootStoreContext } from "../stores/rootStore";
 import { LoadingComponent } from "./LoadingComponent";
-import WelcomeScreen from "../../features/home/WelcomeScreen";
+import WelcomeScreen from "../../features/WelcomeScreen";
 import PuzzleForm from "../../features/activities/PuzzleForm";
+import Approvals from "../../features/Approvals";
 import GoodDeedForm from "../../features/activities/GoodDeedForm";
 import ChallengeForm from "../../features/activities/ChallengeForm";
 import JokeForm from "../../features/activities/JokeForm";
@@ -43,7 +44,7 @@ const App: React.FC<RouteComponentProps> = () => {
     }
   }, [getUser, setAppLoaded, token, appLoaded, isLoggedIn]);
 
-  const pathsWithNavBar = ["/arena", "/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/profile"];
+  const pathsWithNavBar = ["/arena", "/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/profile", "/approvals"];
   const location = useLocation();
 
   const ShowNavBar = () => {
@@ -67,7 +68,7 @@ const App: React.FC<RouteComponentProps> = () => {
           render={() => (
             <Fragment>
               {ShowNavBar() && <Navbar />}
-              <Container style={{ marginTop: "7em" }}>
+              <Container style={ ShowNavBar() ? { marginTop: "7em" } : {}}>
                 <Switch>
                   <Route
                     path="/users/registerSuccess"
@@ -82,6 +83,7 @@ const App: React.FC<RouteComponentProps> = () => {
                   <PrivateRoute path="/challenge" component={ChallengeForm} />
                   <PrivateRoute path="/gooddeed" component={GoodDeedForm} />
                   <PrivateRoute path="/profile/:username" component={ProfilePage} />
+                  <PrivateRoute path="/approvals" component={Approvals} />
                   <Route component={NotFound} />
                 </Switch>
               </Container>
