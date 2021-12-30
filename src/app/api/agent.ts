@@ -3,6 +3,7 @@ import { IUser, IUserFormValues } from "../models/user";
 import { toast } from "react-toastify";
 import { IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
 import { history } from '../..';
+import { IDiceResult } from "../models/diceResult";
 
 axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
 ? "https://localhost:4001"
@@ -96,9 +97,14 @@ const Activity = {
   resolvePendingActivity : (id: string, approve: boolean): Promise<boolean> => requests.post(`/activities/resolve/${id}`, {approve})
 };
 
+const Dice = {
+  roll: () : Promise<IDiceResult> => requests.get("/dice/rollTheDice")
+}
+
 const sites = {
   User,
-  Activity
+  Activity,
+  Dice,
 };
 
 export default sites;

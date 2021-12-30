@@ -4,6 +4,7 @@ export interface IUser {
   image?: string;
   currentLevel: string;
   currentXp: string;
+  isDiceRollAllowed: boolean;
 };
 
 export interface IUserFormValues {

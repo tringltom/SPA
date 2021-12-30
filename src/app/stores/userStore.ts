@@ -27,6 +27,7 @@ export default class UserStore {
       const user = await agent.User.login(values);
       runInAction(() => {
         this.user = user;
+        this.rootStore.showDice = user.isDiceRollAllowed;
       });
       this.rootStore.commonStore.setToken(user.token);
       this.startRefreshTokenTimer(user);
@@ -69,6 +70,7 @@ export default class UserStore {
       const user = await agent.User.current();
       runInAction(() => {
         this.user = user;
+        this.rootStore.showDice = user.isDiceRollAllowed;
       });
       this.rootStore.commonStore.setToken(user.token);
       if (user.token != null) 

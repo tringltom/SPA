@@ -58,3 +58,16 @@ button.ui.orange.inverted.button {
   font-size: 1.5rem;
   width: 100%;
 }
+
+.shake{
+  animation: rotation 0.5s infinite linear;
+}
+
+@keyframes rotation {
+ from {
+   transform: rotate(0deg);
+ }
+ to {
+   transform: rotate(359deg);
+ }
+}

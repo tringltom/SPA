@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Segment, Item, Header, Button, Grid, Statistic } from 'semantic-ui-react';
+import { Segment, Item, Header, Grid, Statistic } from 'semantic-ui-react';
 import { IUser } from '../../app/models/user';
 
 interface IProps {
