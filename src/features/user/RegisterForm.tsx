@@ -1,22 +1,33 @@
 import { FORM_ERROR } from "final-form";
-import { useContext } from "react";
+import { Fragment, useContext } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
-import { combineValidators, isRequired } from "revalidate";
-import { Button, Form, Header } from "semantic-ui-react";
+import { combineValidators, composeValidators, isRequired, matchesField } from "revalidate";
+import { Button, Container, Form, Grid, Header, Image, Message } from "semantic-ui-react";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import { TextInput } from "../../app/common/form/TextInput";
+import { TextInputIcons } from "../../app/common/form/TextInputIcons";
+import { EkvitiColors } from "../../app/layout/EkvitiColors";
+import { styles } from "../../app/layout/TextStyle";
 import { IUserFormValues } from "../../app/models/user";
 import { RootStoreContext } from "../../app/stores/rootStore";
+import LoginForm from "./LoginForm";
 
 const validate = combineValidators({
-  email: isRequired({ message: "Email adresa je neophodna" }),
-  password: isRequired({ message: "Šifra je neophodna" }),
+  email: isRequired({ message: "E-mail adresa je neophodna" }),
+  password: isRequired({ message: "Lozinka je neophodna" }),
   username: isRequired({ message: "Korisničko ime je neophodno" }),
+  passwordConfirm: composeValidators(
+    isRequired({ message: "Potvrda lozinke je neophodna" }),
+    matchesField('password','Lozinka')({
+      message: "Niste dobro ponovili lozinku",
+    })
+  )()
 });
 
 export const RegisterForm = () => {
   const rootStore = useContext(RootStoreContext);
   const { register } = rootStore.userStore;
+  const { openModal } = rootStore.modalStore;
   return (
     <FinalForm
       onSubmit={(values: IUserFormValues) =>
@@ -33,40 +44,79 @@ export const RegisterForm = () => {
         pristine,
         dirtySinceLastSubmit,
       }) => (
-        <Form onSubmit={handleSubmit} error>
-          <Header
-            as="h2"
-            content="Dobrodošli"
-            color="teal"
-            textAlign="center"
-          />
-          <Field
-            name="username"
-            component={TextInput}
-            placeholder="Korisničko ime"
-          />
-          <Field
-            name="email"
-            component={TextInput}
-            placeholder="Email adresa"
-          />
-          <Field
-            name="password"
-            component={TextInput}
-            placeholder="Šifra"
-            type="password"
-          />
-          {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage error={submitError} />
-          )}
-          <Button
-            disabled={(invalid && !dirtySinceLastSubmit) || pristine}
-            loading={submitting}
-            color="teal"
-            content="Potvrdi"
-            fluid
-          />
-        </Form>
+        <Fragment>
+          <Form autoComplete="off" onSubmit={handleSubmit} error>
+            <Image size="small" centered src="/assets/LogInEkvitiLogo.png" />
+            <Header
+              size="medium"
+              content="Napravite novi nalog."
+              textAlign="center"
+              color="black"
+              className="ekvitiPrimaryFont"
+            />
+
+            <Field
+              name="username"
+              component={TextInputIcons}
+              labelName="Korisničko ime"
+              iconName="user"
+            />
+            <Field
+              name="email"
+              component={TextInputIcons}
+              labelName="E-mail"
+              iconName="envelope"
+            />
+            <Field
+              name="password"
+              type="password"
+              labelName="Lozinka"
+              iconName="lock"
+              password={true}
+              component={TextInputIcons}
+            />
+            <Field
+              name="passwordConfirm"
+              type="password"
+              labelName="Ponovi lozinku"
+              iconName="lock"
+              password={true}
+              component={TextInputIcons}
+              
+            />
+            {submitError && !dirtySinceLastSubmit && (
+              <ErrorMessage error={submitError} />
+            )}
+            <Button
+              className="ekvitiPrimaryFont"
+              disabled={(invalid && !dirtySinceLastSubmit) || pristine}
+              loading={submitting}
+              content="Registruj se"
+              fluid
+              style={{
+                backgroundColor: EkvitiColors.primary,
+                color: "white",
+                height: "50px",
+                borderRadius: "7px"
+              }}
+            />
+          </Form>
+          <Container style={{ marginTop: "5px", textAlign:"center"}}>
+            <p
+              className="ekvitiPrimaryFont"
+              style={{ fontSize: 11, display: "inline" }}
+            >
+              Već imaš nalog?
+              {/*eslint-disable-next-line*/}
+              <a
+                style={styles.Ancor}
+                onClick={() => openModal(<LoginForm />)}
+              >
+                Prijava.
+              </a>
+            </p>
+          </Container>
+        </Fragment>
       )}
     />
   );

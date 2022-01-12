@@ -28,13 +28,13 @@ const SocialLoginInstagram: React.FC<IProps> = ({ fbCallback, loading }) => {
             <img
               alt="ins"
               src={"/assets/InstagramIcon.png"}
-              style={{ paddingRight: "10px" }}
+              style={{ paddingRight: "10px",  width: "28px" }}
             />
             <Button.Content
               style={{
                 display: "inline-block",
                 position: "absolute",
-                top: "40%",
+                top: "35%",
               }}
             >
               Prijava putem Instagrama
