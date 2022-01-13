@@ -83,7 +83,7 @@ const VerifyEmail: React.FC<RouteComponentProps> = ({ location }) => {
           <br />
           <Image
             size="medium"
-            src="/assets/RegistrationKnight.png"
+            src="/assets/KnightRegistration.png"
             style={SecondaryImageStyle}
             centered
           ></Image>

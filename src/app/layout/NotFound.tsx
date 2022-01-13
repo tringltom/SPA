@@ -7,7 +7,7 @@ const NotFound = () => {
       <Grid style={GridStyle} verticalAlign='middle' columns={4} centered>
         <GridColumn mobile={14} style={ColumnStyle} textAlign="center">
             <Image src="/assets/LogoForNotFound.png" centered style={LogoStyle}></Image> 
-            <Image src="/assets/ConfusedKnight.png" centered></Image> 
+            <Image src="/assets/KnightConfused.png" centered></Image> 
             <span className="ekvitiPrimaryFont" style={OopsStyle}>Oops!</span>
             <br/>
             <span className="ekvitiPrimaryFont" style={TextStyle}>Sve smo pretražili, ali ovu putanju nismo pronašli.</span>

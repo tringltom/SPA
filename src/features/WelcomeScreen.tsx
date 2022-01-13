@@ -83,7 +83,7 @@ const WelcomeScreen = () => {
               <Grid style={{ height: "100%" }}>
                 <GridColumn width={5}>
                   <Image
-                    src="/assets/RegistrationKnight.png"
+                    src="/assets/KnightRegistration.png"
                     style={{
                       float: "right",
                       top: "-1.5vw",
