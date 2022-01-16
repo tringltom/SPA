@@ -9,7 +9,6 @@ interface IProps
     FormFieldProps {}
 
 export const CheckBoxInput: React.FC<IProps> = ({ label, input }) => {
-  console.log(input);
   return (
     <Form.Field>
       <Checkbox
