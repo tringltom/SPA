@@ -6,13 +6,26 @@ import { RootStoreContext } from "../../stores/rootStore";
 const ModalContainer = () => {
   const rootStore = useContext(RootStoreContext);
   const {
-    modal: { open, body, closeOnDimmerClick},
-    closeModal
+    modal: { open, body, closeOnDimmerClick },
+    closeModal,
   } = rootStore.modalStore;
 
   return (
-    <Modal open={open} onClose={closeModal} closeOnDimmerClick= {closeOnDimmerClick && rootStore.allowEvents} size="mini">
-      <Modal.Content style={{pointerEvents: rootStore.allowEvents ? 'all' : 'none' }} >{body}</Modal.Content>
+    <Modal
+      open={open}
+      onClose={closeModal}
+      closeOnDimmerClick={closeOnDimmerClick && rootStore.allowEvents}
+      style={{ width: "36vh", borderRadius: "7px" }}
+    >
+      <Modal.Content
+        style={{
+          pointerEvents: rootStore.allowEvents ? "all" : "none",
+          padding: "3vh 5vh 2vh 5vh",
+          borderRadius: "7px",
+        }}
+      >
+        {body}
+      </Modal.Content>
     </Modal>
   );
 };

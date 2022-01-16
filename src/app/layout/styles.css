@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
 
+* {
+  font-family: 'Comfortaa', cursive !important;
+}
+
 .ekvitiPrimaryFont {
   font-family: 'Comfortaa', cursive !important; 
 }
@@ -34,7 +38,7 @@ button.ui.orange.inverted.button {
 }
 
 .socialButtonSimpleOverride {
-  box-shadow: 0px 2px 2px 2px rgba(184,184,184,0.75)!important;
+  box-shadow: 0px 0px 10px 1px rgba(226, 225, 225, 0.75)!important;
   color: #767676!important;
   background: transparent none!important;
   font-weight: 500;
