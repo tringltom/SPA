@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
 
+* {
+  font-family: 'Comfortaa', cursive !important;
+}
+
 .ekvitiPrimaryFont {
   font-family: 'Comfortaa', cursive !important; 
 }
