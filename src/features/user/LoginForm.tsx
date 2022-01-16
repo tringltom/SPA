@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { Fragment, useContext } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
 import { combineValidators, isRequired } from "revalidate";
-import { Button, Divider, Form, Header, Image } from "semantic-ui-react";
+import { Button, Container, Divider, Form, Header, Image } from "semantic-ui-react";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import { TextInputIcons } from "../../app/common/form/TextInputIcons";
 import { EkvitiColors } from "../../app/layout/EkvitiColors";
@@ -13,15 +13,13 @@ import ForgotPasswordForm from "./ForgotPasswordForm";
 import { RegisterForm } from "./RegisterForm";
 import SocialLoginFacebook from "./SocialLoginFacebook";
 import SocialLoginInstagram from "./SocialLoginInstagram";
+import { styles } from "../../app/layout/TextStyle";
+import { CheckBoxInput } from "../../app/common/form/CheckBoxInput";
 
 const validate = combineValidators({
   email: isRequired({ message: "Email adresa je neophodna" }),
   password: isRequired({ message: "Lozinka je neophodna" }),
 });
-
-const ancorStyle = {
-  cursor: "pointer", paddingLeft: 5, textDecoration: "underline"
-}
 
 const LoginForm = () => {
   const rootStore = useContext(RootStoreContext);
@@ -77,17 +75,14 @@ const LoginForm = () => {
             {submitError && !dirtySinceLastSubmit && (
               <ErrorMessage error={submitError} />
             )}
-            <div style={{ fontSize: 11, marginBottom: 20, marginTop: 5}}>
-              <div style={{ float:"left", marginLeft: 5}}>
-              <Field
-                    name="stayLoggedIn"
-                    component="input"
-                    type="checkbox"
-                    style={{widht: 90}}
-                  />
-                  <label className="ekvitiPrimaryFont" style={{ marginLeft: 5 }}>
-                    Zapamti me
-                  </label>
+            <div style={{ fontSize: 11, marginBottom: 20, marginTop: 5 }}>
+              <div style={{ float: "left", marginLeft: 0 }}>
+                <Field
+                  name="stayLoggedIn"
+                  component={CheckBoxInput}
+                  type="checkbox"
+                  label="Zapamti me"
+                />
               </div>
               <div style={{ marginLeft: 90, textAlign: "right" }}>
                 <p
@@ -97,7 +92,7 @@ const LoginForm = () => {
                   Zaboravljena lozinka?
                   {/*eslint-disable-next-line*/}
                   <a
-                    style={ancorStyle}
+                    style={styles.Ancor}
                     onClick={() => openModal(<ForgotPasswordForm />)}
                   >
                     Resetuj je
@@ -112,26 +107,36 @@ const LoginForm = () => {
               loading={submitting}
               content="Prijavi se"
               fluid
-              style={{ backgroundColor: EkvitiColors.primary, color: "white" }}
+              style={{
+                backgroundColor: EkvitiColors.primary,
+                color: "white",
+                height: "50px",
+                borderRadius: "7px",
+              }}
             />
           </Form>
-          <Divider horizontal>ili</Divider>
+          <Divider horizontal>
+            <Header as="h4" className="ekvitiPrimaryFont">ili</Header>
+          </Divider>
           <SocialLoginFacebook loading={loading} fbCallback={fbLogin} />
           <div style={{ padding: "5px" }} />
           <SocialLoginInstagram loading={loading} fbCallback={fbLogin} />
 
-          <div style={{ textAlign: "center", paddingTop: "10px" }}>
+          <Container style={{ marginTop: "10px", textAlign: "center" }}>
             <p
               className="ekvitiPrimaryFont"
               style={{ fontSize: 11, display: "inline" }}
             >
               Nemaš nalog?
               {/*eslint-disable-next-line*/}
-              <a style={ancorStyle} onClick={() => openModal(<RegisterForm />)}>
-                Registracija
+              <a
+                style={styles.Ancor}
+                onClick={() => openModal(<RegisterForm />)}
+              >
+                Registracija.
               </a>
             </p>
-          </div>
+          </Container>
         </Fragment>
       )}
     />
