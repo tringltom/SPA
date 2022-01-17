@@ -51,7 +51,6 @@ export const RegisterForm = () => {
               content="Napravite novi nalog."
               textAlign="center"
               color="black"
-              className="ekvitiPrimaryFont"
             />
 
             <Field
@@ -87,7 +86,6 @@ export const RegisterForm = () => {
               <ErrorMessage error={submitError} />
             )}
             <Button
-              className="ekvitiPrimaryFont"
               disabled={(invalid && !dirtySinceLastSubmit) || pristine}
               loading={submitting}
               content="Registruj se"
@@ -102,7 +100,6 @@ export const RegisterForm = () => {
           </Form>
           <Container style={{ marginTop: "5px", textAlign:"center"}}>
             <p
-              className="ekvitiPrimaryFont"
               style={{ fontSize: 11, display: "inline" }}
             >
               Već imaš nalog?

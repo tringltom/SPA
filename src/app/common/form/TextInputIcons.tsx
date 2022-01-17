@@ -66,7 +66,7 @@ export const TextInputIcons: React.FC<IProps> = ({
   return (
     <div style={{ position: "relative", paddingBottom: "10px" }}>
       <Form.Field error={touched && !!error}>
-        <Label className="ekvitiPrimaryFont" style={labelStyle}>
+        <Label style={labelStyle}>
           {labelName}
         </Label>
         <Icon name={iconName} style={lefticonStyle}></Icon>
