@@ -22,7 +22,7 @@ const SocialLoginFacebook: React.FC<IProps> = ({ fbCallback, loading }) => {
             onClick={renderProps.onClick}
             type="button"
             fluid
-            className="ekvitiPrimaryFont socialButtonSimpleOverride"
+            className="socialButtonSimpleOverride"
           >
             <img
               alt="fcb"

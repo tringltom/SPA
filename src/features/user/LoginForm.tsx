@@ -54,7 +54,6 @@ const LoginForm = () => {
             content="Dobrodošli nazad."
             color="black"
             textAlign="center"
-            className="ekvitiPrimaryFont"
           />
 
           <Form autoComplete="off" onSubmit={handleSubmit} error>
@@ -86,7 +85,6 @@ const LoginForm = () => {
               </div>
               <div style={{ marginLeft: 90, textAlign: "right" }}>
                 <p
-                  className="ekvitiPrimaryFont"
                   style={{ fontSize: 11, display: "inline" }}
                 >
                   Zaboravljena lozinka?
@@ -102,7 +100,6 @@ const LoginForm = () => {
             </div>
 
             <Button
-              className="ekvitiPrimaryFont"
               disabled={(invalid && !dirtySinceLastSubmit) || pristine}
               loading={submitting}
               content="Prijavi se"
@@ -116,7 +113,7 @@ const LoginForm = () => {
             />
           </Form>
           <Divider horizontal>
-            <Header as="h4" className="ekvitiPrimaryFont">ili</Header>
+            <Header as="h4">ili</Header>
           </Divider>
           <SocialLoginFacebook loading={loading} fbCallback={fbLogin} />
           <div style={{ padding: "5px" }} />
@@ -124,7 +121,6 @@ const LoginForm = () => {
 
           <Container style={{ marginTop: "10px", textAlign: "center" }}>
             <p
-              className="ekvitiPrimaryFont"
               style={{ fontSize: 11, display: "inline" }}
             >
               Nemaš nalog?

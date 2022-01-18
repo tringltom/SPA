@@ -25,7 +25,6 @@ export const CheckBoxInput: React.FC<IProps> = ({ label, input }) => {
         borderStyle="none"
         size={18}
         label={label}
-        labelClassName="ekvitiPrimaryFont"
         labelStyle={{ marginLeft: 5, fontSize: 10 }}
       />
     </Form.Field>

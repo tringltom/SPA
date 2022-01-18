@@ -60,7 +60,6 @@ const WelcomeScreen = () => {
               }}
             >
               <h1
-                className="ekvitiPrimaryFont"
                 style={{
                   fontSize: 60,
                   color: EkvitiColors.primary,
@@ -114,7 +113,6 @@ const WelcomeScreen = () => {
                       style={{ padding: "0 1vw 0 0" }}
                     >
                       <Button
-                        className="ekvitiPrimaryFont"
                         floated="right"
                         size="massive"
                         basic
@@ -131,7 +129,6 @@ const WelcomeScreen = () => {
                       style={{ padding: "0 0 0 1vw" }}
                     >
                       <Button
-                        className="ekvitiPrimaryFont"
                         floated="left"
                         size="massive"
                         style={ButtonStyle}

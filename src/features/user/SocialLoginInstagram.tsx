@@ -23,7 +23,7 @@ const SocialLoginInstagram: React.FC<IProps> = ({ fbCallback, loading }) => {
             type="button"
             fluid
             color="grey"
-            className="ekvitiPrimaryFont socialButtonSimpleOverride"
+            className="socialButtonSimpleOverride"
           >
             <img
               alt="ins"
