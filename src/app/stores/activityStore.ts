@@ -152,7 +152,7 @@ export default class ActivityStore {
     this.loadingInitial = true;
     try {
       const activitiesEnvelope = await agent.Activity.loadApprovedActivitiesExcludingUser(
-        3,
+        userId,
         this.approvedActivityAxiosParams
       );
       const { activities, activityCount } = activitiesEnvelope;

@@ -38,7 +38,6 @@ export default class ReviewStore {
             });
           }
         );
-        
       }
       catch(error){
           console.log(error);
