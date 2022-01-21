@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Segment, Button, Placeholder } from 'semantic-ui-react';
 
-const ActivityListItemPlaceholder = () => {
+const PendingActivityListItemPlaceholder = () => {
   return (
     <Fragment>
       {[...Array(4)].map((el, i) => (
@@ -46,4 +46,4 @@ const ActivityListItemPlaceholder = () => {
   );
 };
 
-export default ActivityListItemPlaceholder;
+export default PendingActivityListItemPlaceholder;

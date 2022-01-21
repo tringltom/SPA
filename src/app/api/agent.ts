@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
 import { history } from '../..';
 import { IDiceResult } from "../models/diceResult";
+import { IReview, ReviewTypes } from "../models/review";
 
 axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
 ? "https://localhost:4001"
@@ -94,17 +95,31 @@ const Activity = {
     return requests.postForm("/activities/create", formData);
   },
   getPendingActivities: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get("/activities",{params: params}).then(responseBody),
-  resolvePendingActivity : (id: string, approve: boolean): Promise<boolean> => requests.post(`/activities/resolve/${id}`, {approve})
+  resolvePendingActivity : (id: string, approve: boolean): Promise<boolean> => requests.post(`/activities/resolve/${id}`, {approve}),
+  loadApprovedActivitiesExcludingUser: (userId: number, params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get(`/activities/approvedActivitiesExcludeUser/${userId}`,{params: params}).then(responseBody)
 };
 
 const Dice = {
   roll: () : Promise<IDiceResult> => requests.get("/dice/rollTheDice")
 }
 
+const Review = {
+  getReviewsForUser: (userId: number) : Promise<IReview[]> => requests.get(`reviews/getReviewsForUser?userId=${userId}`),
+  reviewActivity: (userId: number, activityId: number, reviewTypeId: ReviewTypes) : Promise<void> => requests.post("reviews/reviewActivity", {userId, activityId, reviewTypeId})
+}
+
+const Favorite = {
+  getFavoritesForUser: (userId: number) : Promise<number[]> => requests.get(`favorites/${userId}`),
+  createFavoriteForUser: (userId: number, activityId: number ) : Promise<void> => requests.post("favorites/createFavorite", {userId, activityId}),
+  removeFavoriteForUser: (userId: number, activityId: number ) : Promise<void> => requests.post("favorites/removeFavorite", {userId, activityId}),
+}
+
 const sites = {
   User,
   Activity,
   Dice,
+  Review,
+  Favorite,
 };
 
 export default sites;

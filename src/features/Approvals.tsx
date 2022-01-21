@@ -3,18 +3,18 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Grid, Loader } from 'semantic-ui-react'
 import  ActivityList from './activities/ActivityList';
 import InfiniteScroll from 'react-infinite-scroller'
-import ActivityListItemPlaceholder from './activities/ActivityListItemPlaceholder';
+import PendingActivityListItemPlaceholder from './activities/PendingActivityListItemPlaceholder';
 import { RootStoreContext } from '../app/stores/rootStore';
 
 const Approvals: React.FC = () => {
 
     const rootStore = useContext(RootStoreContext);
-    const {loadPendingActivities, loadingInitial, setPage, page, totalPages} = rootStore.activityStore;
+    const {loadPendingActivities, loadingInitial, setPendingActivitiesPage, pendingActivitiesPage, totalPendingActivityPages} = rootStore.activityStore;
     const [loadingNext, setLoadingNext] = useState(false);
   
     const handleGetNext = () => {
       setLoadingNext(true);
-      setPage(page + 1);
+      setPendingActivitiesPage(pendingActivitiesPage + 1);
       loadPendingActivities().then(() => setLoadingNext(false));
     }
   
@@ -25,16 +25,16 @@ const Approvals: React.FC = () => {
     return (
       <Grid>
         <Grid.Column width={16}>
-          {loadingInitial && page === 0 ? (
-            <ActivityListItemPlaceholder />
+          {loadingInitial && pendingActivitiesPage === 0 ? (
+            <PendingActivityListItemPlaceholder />
           ) : (
             <InfiniteScroll
               pageStart={0}
               loadMore={handleGetNext}
-              hasMore={!loadingNext && page + 1 < totalPages}
+              hasMore={!loadingNext && pendingActivitiesPage + 1 < totalPendingActivityPages}
               initialLoad={false}
             >
-              <ActivityList />
+              <ActivityList approved={false} />
             </InfiniteScroll>
           )}
         </Grid.Column>

@@ -21,6 +21,10 @@ export default class UserStore {
     return !!this.user;
   };
 
+  get userId() {
+    return this.user?.id;
+  }
+
   login = async (values: IUserFormValues) => {
     try {
       this.rootStore.frezeScreen();

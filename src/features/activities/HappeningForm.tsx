@@ -12,7 +12,7 @@ import { FileInput } from "../../app/common/form/FileInput";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import DateInput from "../../app/common/form/DateInput";
 import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
-import { combineDateAndTime } from "../../app/common/form/utils/util";
+import { combineDateAndTime } from "../../app/common/form/utils/formUtil";
 import get from 'lodash/get';
 
 const isDateGreater = (otherField: string)  => createValidator(
