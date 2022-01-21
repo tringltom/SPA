@@ -1,9 +1,10 @@
 import React from "react";
 import { RouteComponentProps } from "react-router";
 import queryString from "query-string";
-import { Button, Header, Icon, Segment } from "semantic-ui-react";
+import { Button, Grid, Header, Image } from "semantic-ui-react";
 import agent from "../../app/api/agent";
 import { toast } from "react-toastify";
+import { styles } from "../../app/layout/FullScreenCardStyle";
 
 const RegisterSuccess: React.FC<RouteComponentProps> = ({ location }) => {
   const { email } = queryString.parse(location.search);
@@ -17,34 +18,36 @@ const RegisterSuccess: React.FC<RouteComponentProps> = ({ location }) => {
   };
 
   return (
-    <Segment>
-      <Header icon>
-        <Icon name="check" />
-        Uspešno registrovani!
-      </Header>
-      <Segment.Inline>
-        <div className="center">
-          <p>
-            Molimo Vas proverite poštu (uključujući junk fasciklu), stigla Vam
-            je potvrda.
-          </p>
-          {email && (
-            <>
-              <p>
-                Niste dobili potvrdu? Molimo Vas zatražite opet klikom na dugme
-                ispod.
-              </p>
-              <Button
-                onClick={handleConfirmEmailResend}
-                primary
-                content="Pošalji potvrdu"
-                size="huge"
-              />
-            </>
-          )}
-        </div>
-      </Segment.Inline>
-    </Segment>
+    <Grid style={styles.GridStyle} verticalAlign="middle" centered>
+      <Grid.Column mobile={14} style={styles.ColumnStyle} textAlign="center">
+        <Image
+          src="/assets/LogInEkvitiLogo.png"
+          style={styles.LogoStyle}
+          centered
+        />
+        <Image src="/assets/KnightSuccessfullRegistration.png" centered />
+        <Header as="h2" content="Uspešna registracija!" />
+        <p style={styles.TextStyle}>
+          Uspešno ste se registrovali, potvrdite putem linka koji
+          <br />
+          smo poslali na vašu mejl adresu.
+        </p>
+        <p
+          style={{
+            ...styles.TextStyle,
+            marginTop: "20px",
+            marginBottom: "20px",
+          }}
+        >
+          Niste dobili verifikacioni mejl?
+        </p>
+        <Button
+          style={styles.ButtonStyle}
+          onClick={handleConfirmEmailResend}
+          content="Ponovo pošalji potvrdu"
+        />
+      </Grid.Column>
+    </Grid>
   );
 };
 

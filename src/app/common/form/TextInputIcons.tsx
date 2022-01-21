@@ -12,33 +12,6 @@ interface IProps
         password : boolean
     }
 
-const labelStyle = {
-    position: "absolute",
-    left: "21px",
-    top: "1px",
-    background: "transparent",
-    color: EkvitiColors.primary,
-    };
-
-const lefticonStyle = {
-    position: "absolute",
-    left: "5px",
-    top: "15px",
-    };
-
-const righticonStyle = {
-    position: "absolute",
-    right: "5px",
-    top: "15px",
-    };
-
-const inputStyle = {
-    textIndent: '16px',
-    height: '50px',
-    paddingTop: '25px',
-    fontFamily: 'Comfortaa, cursive' 
-}
-
 export const TextInputIcons: React.FC<IProps> = ({
   input,
   meta: { touched, error },
@@ -48,7 +21,38 @@ export const TextInputIcons: React.FC<IProps> = ({
 }) => {
   const [inputType, setInputType] = useState("input");
   const [rightIcon, setRightIcon] = useState("eye slash" as SemanticICONS);
+  const [hovered, setHovered] = useState(false);
 
+  const labelStyle = {
+    position: "absolute",
+    left: "40px",
+    top: "5px",
+    background: "transparent",
+    color: EkvitiColors.primary,
+  };
+
+  const inputStyle = {
+    textIndent: "35px",
+    height: "50px",
+    paddingTop: "25px",
+    fontFamily: "Comfortaa, cursive",
+    backgroundColor: "#f0eff5",
+    borderStyle: "none",
+    borderRadius: "7px",
+  };
+
+  const lefticonStyle = {
+    position: "absolute",
+    left: "18px",
+    top: "15px",
+  };
+
+  const righticonStyle = {
+    position: "absolute",
+    right: "15px",
+    top: "15px",
+    color: hovered ? "black" : "#e4e3ed",
+  };
 
   useEffect(() => {
     setInputType(input.type!);
@@ -57,12 +61,12 @@ export const TextInputIcons: React.FC<IProps> = ({
   const togleType = () => {
     inputType === "password" ? setInputType("text") : setInputType("password");
     rightIcon === "eye slash" ? setRightIcon("eye") : setRightIcon("eye slash");
-  }
+  };
 
   return (
     <div style={{ position: "relative", paddingBottom: "10px" }}>
       <Form.Field error={touched && !!error}>
-        <Label className="ekvitiPrimaryFont" style={labelStyle}>
+        <Label style={labelStyle}>
           {labelName}
         </Label>
         <Icon name={iconName} style={lefticonStyle}></Icon>
@@ -72,6 +76,8 @@ export const TextInputIcons: React.FC<IProps> = ({
             name={rightIcon!}
             style={righticonStyle}
             onClick={togleType}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
           ></Icon>
         )}
         <input {...input} type={inputType} style={inputStyle}></input>
