@@ -75,9 +75,7 @@ export default class UserStore {
       this.rootStore.commonStore.setToken(user.token);
       if (user.token != null) 
         this.startRefreshTokenTimer(user);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   logout = async () => {

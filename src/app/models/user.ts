@@ -1,3 +1,5 @@
+import { ActivityTypes } from "./activity";
+
 export interface IUser {
   username: string;
   token: string;
@@ -5,6 +7,7 @@ export interface IUser {
   currentLevel: string;
   currentXp: string;
   isDiceRollAllowed: boolean;
+  activityCounts: Array<IUserActivityCount>;
 };
 
 export interface IUserFormValues {
@@ -13,3 +16,9 @@ export interface IUserFormValues {
   userName?: string;
   stayLoggedIn? : boolean;
 };
+
+export interface IUserActivityCount {
+  type: ActivityTypes;
+  max: number;
+  available: number;
+}
