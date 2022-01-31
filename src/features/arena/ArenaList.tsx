@@ -8,8 +8,8 @@ interface IProps {
 }
 
 const ArenaList: React.FC<IProps> = ({users}) => {
+  console.log("Test");
     return (
-      
       <Segment clearing>
         <Item.Group divided>
           {users?.length! > 0 &&
