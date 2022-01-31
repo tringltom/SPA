@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { IUser, IUserFormValues } from "../models/user";
+import { IUser, IUserEnvelope, IUserFormValues } from "../models/user";
 import { toast } from "react-toastify";
 import { IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
 import { history } from '../..';
@@ -63,6 +63,8 @@ const requests = {
 
 const User = {
   current: (): Promise<IUser> => requests.get("/users"),
+  list: (params: URLSearchParams): Promise<IUserEnvelope> =>
+  axios.get('/users/getTopXpUsers', {params: params}).then(responseBody),
   login: (user: IUserFormValues): Promise<IUser> =>
     requests.post("/users/login", user),
   logout: (): Promise<void> =>
@@ -92,7 +94,7 @@ const Activity = {
     });
     return requests.postForm("/activities/create", formData);
   },
-  getPendingActivities: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get("/activities",{params: params}).then(responseBody),
+  getPendingActivities: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get("/activities", {params: params}).then(responseBody),
   resolvePendingActivity : (id: string, approve: boolean): Promise<boolean> => requests.post(`/activities/resolve/${id}`, {approve})
 };
 

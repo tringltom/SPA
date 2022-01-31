@@ -4,6 +4,12 @@ export interface IUser {
   image?: string;
   currentLevel: string;
   currentXp: string;
+  numberOfGoodDeeds: string;
+  numberOfJokes: string;
+  numberOfQuotes: string;
+  numberOfPuzzles: string;
+  numberOfHappenings: string;
+  numberOfChallenges: string;
 };
 
 export interface IUserFormValues {
@@ -11,4 +17,9 @@ export interface IUserFormValues {
   password: string;
   userName?: string;
   stayLoggedIn? : boolean;
+};
+
+export interface IUserEnvelope {
+  users: IUser[] | null;
+  userCount: number;
 };

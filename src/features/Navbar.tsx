@@ -18,10 +18,11 @@ const Navbar: React.FC = () => {
           <Container>
             <GridColumn>
               <Menu.Item header>
-                <img
+                <img 
+                  onClick={() => history.push("/arena")}
                   src="/assets/littleOne.png"
                   alt=""
-                  style={{ marginRight: 10 }}
+                  style={{ marginRight: 10,cursor:'pointer'}}
                 />
                 Ekviti
               </Menu.Item>

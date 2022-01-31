@@ -79,7 +79,6 @@ export default class ActivityStore {
       const activitiesEnvelope = await agent.Activity.getPendingActivities(
         this.axiosParams
       );
-      console.log(activitiesEnvelope);
       const { activities, activityCount } = activitiesEnvelope;
       runInAction(() => {
         activities.forEach((activity) => {
