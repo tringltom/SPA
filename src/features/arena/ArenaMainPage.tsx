@@ -14,9 +14,12 @@ const ArenaMainPage = () => {
     const { userId } = rootStore.userStore;
 
     useEffect(() => {
-      loadReviewedActivities(userId ? userId : -1);
-      loadApprovedActivitiesExcludingUser(userId ? userId : -1);
-      loadFavoriteActivitiesForUser(userId ? userId : -1);
+      if (userId)
+      {
+        loadReviewedActivities(userId);
+        loadApprovedActivitiesExcludingUser(userId);
+        loadFavoriteActivitiesForUser(userId);
+      }
     }, [loadApprovedActivitiesExcludingUser, loadReviewedActivities, loadFavoriteActivitiesForUser, userId]);
 
     const [loadingNext, setLoadingNext] = useState(false);

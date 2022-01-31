@@ -21,7 +21,7 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
   const [isFavorite, setFavorite] = React.useState<boolean>(favorite);
 
   const toggleFavorite = () => {
-    if (!!userId)
+    if (userId)
     {
       setFavorite(!isFavorite);
       isFavorite ? removeFavoriteForUser(userId, +activity.id) : createFavoriteForUser(userId, +activity.id);
