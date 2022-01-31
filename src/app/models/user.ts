@@ -10,6 +10,7 @@ export interface IUser {
   numberOfPuzzles: string;
   numberOfHappenings: string;
   numberOfChallenges: string;
+  isDiceRollAllowed: boolean;
 };
 
 export interface IUserFormValues {

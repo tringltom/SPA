@@ -13,7 +13,7 @@ import { Container } from "semantic-ui-react";
 import RegisterSuccess from "../../features/user/RegisterSuccess";
 import VerifyEmail from "../../features/user/VerifyEmail";
 import NotFound from "./NotFound";
-import Navbar from "../../features/Navbar";
+import Navbar from "../../features/navbar/Navbar";
 import  './styles.css';
 import ArenaDashboard from "../../features/arena/ArenaDashboard";
 import PrivateRoute from "./PrivateRoute";
