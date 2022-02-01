@@ -16,16 +16,15 @@ export const ReviewButtonsComponent: React.FC<IProps> = ({buttonData, activeButt
                 const className = activeButton === btn.name ? "active" : "";
                 return (
                     <div key={btn.value}>
-                    <Button
-                    disabled={!!disabled ? disabled : false}
-                    icon={{name: btn.icon, style: {pointerEvents: "none"}}}
-                    className={`${className}`}
-                    name={btn.name}
-                    value={btn.value}
-                    onClick={handleReviewClick}
-                    >
-                    </Button>
-                </div>
+                        <Button
+                        disabled={!!disabled ? disabled : false}
+                        icon={{name: btn.icon, style: {pointerEvents: "none"}}}
+                        className={`${className}`}
+                        name={btn.name}
+                        value={btn.value}
+                        onClick={handleReviewClick}
+                        />
+                    </div>
                 );
             })}
         </ButtonGroup>

@@ -96,7 +96,7 @@ const Activity = {
   },
   getPendingActivities: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get("/activities",{params: params}).then(responseBody),
   resolvePendingActivity : (id: string, approve: boolean): Promise<boolean> => requests.post(`/activities/resolve/${id}`, {approve}),
-  loadApprovedActivitiesExcludingUser: (userId: number, params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get(`/activities/approvedActivitiesExcludeUser/${userId}`,{params: params}).then(responseBody)
+  getApprovedActivitiesFromOtherUsers: (userId: number, params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get(`/activities/approvedActivitiesExcludeUser/${userId}`,{params: params}).then(responseBody)
 };
 
 const Dice = {

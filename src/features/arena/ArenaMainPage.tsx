@@ -9,7 +9,7 @@ import ApprovedActivityListItemPlaceholder from '../activities/ApprovedActivityL
 const ArenaMainPage = () => {
     const rootStore = useContext(RootStoreContext);
     const {loadReviewedActivities} = rootStore.reviewStore;
-    const {loadApprovedActivitiesExcludingUser, loadingInitial, setApprovedActivitiesPage, approvedActivitiesPage, totalApprovedActivityPages} = rootStore.activityStore;
+    const {getApprovedActivitiesFromOtherUsers, loadingInitial, setApprovedActivitiesPage, approvedActivitiesPage, totalApprovedActivityPages} = rootStore.activityStore;
     const {loadFavoriteActivitiesForUser} = rootStore.favoriteStore;
     const { userId } = rootStore.userStore;
 
@@ -17,17 +17,17 @@ const ArenaMainPage = () => {
       if (userId)
       {
         loadReviewedActivities(userId);
-        loadApprovedActivitiesExcludingUser(userId);
+        getApprovedActivitiesFromOtherUsers(userId);
         loadFavoriteActivitiesForUser(userId);
       }
-    }, [loadApprovedActivitiesExcludingUser, loadReviewedActivities, loadFavoriteActivitiesForUser, userId]);
+    }, [getApprovedActivitiesFromOtherUsers, loadReviewedActivities, loadFavoriteActivitiesForUser, userId]);
 
     const [loadingNext, setLoadingNext] = useState(false);
   
     const handleGetNext = () => {
       setLoadingNext(true);
       setApprovedActivitiesPage(approvedActivitiesPage + 1);
-      loadApprovedActivitiesExcludingUser(userId ? userId : -1).then(() => setLoadingNext(false));
+      getApprovedActivitiesFromOtherUsers(userId ? userId : -1).then(() => setLoadingNext(false));
     }
 
     return (

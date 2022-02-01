@@ -148,10 +148,10 @@ export default class ActivityStore {
     }
   }
 
-  loadApprovedActivitiesExcludingUser = async (userId: number) => {
+  getApprovedActivitiesFromOtherUsers = async (userId: number) => {
     this.loadingInitial = true;
     try {
-      const activitiesEnvelope = await agent.Activity.loadApprovedActivitiesExcludingUser(
+      const activitiesEnvelope = await agent.Activity.getApprovedActivitiesFromOtherUsers(
         userId,
         this.approvedActivityAxiosParams
       );
