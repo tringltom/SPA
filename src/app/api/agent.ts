@@ -65,7 +65,7 @@ const requests = {
 const User = {
   current: (): Promise<IUser> => requests.get("/users"),
   list: (params: URLSearchParams): Promise<IUserEnvelope> =>
-  axios.get('/users/getTopXpUsers', {params: params}).then(responseBody),
+    axios.get('/users/getTopXpUsers', {params: params}).then(responseBody),
   login: (user: IUserFormValues): Promise<IUser> =>
     requests.post("/users/login", user),
   logout: (): Promise<void> =>

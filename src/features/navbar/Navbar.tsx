@@ -5,7 +5,7 @@ import  '../../app/layout/styles.css';
 import { history } from "../..";
 import { createMedia } from "@artsy/fresnel";
 import { NavbarMobile } from './NavbarMobile';
-import { NavbarDesktop } from './NavbarDesktop';
+import NavbarDesktop  from './NavbarDesktop';
 import { NavbarRighItems } from './NavbarRighItems';
 
 const AppMedia = createMedia({

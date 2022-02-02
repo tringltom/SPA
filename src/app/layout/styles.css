@@ -1,9 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
 
-*:not(i) {
+/* *:not(i) {
+  font-family: 'Comfortaa', cursive !important;
+} */
+
+.ekvityPrimaryFont {
   font-family: 'Comfortaa', cursive !important;
 }
-
 .textIndentedField input{
   text-indent: 20px;
 }
