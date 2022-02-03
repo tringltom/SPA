@@ -1,6 +1,5 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite';
-import { Container} from 'semantic-ui-react';
 import  '../../app/layout/styles.css';
 import { history } from "../..";
 import { createMedia } from "@artsy/fresnel";
@@ -35,9 +34,7 @@ const Navbar: React.FC = () => {
   return (
     <>
       <style>{mediaStyles}</style>
-
       <MediaContextProvider>
-        <Container>
           <Media at="mobile">
             <NavbarMobile
               leftItems={leftItems}
@@ -50,7 +47,6 @@ const Navbar: React.FC = () => {
               rightItems={<NavbarRighItems />}
             />
           </Media>
-        </Container>
       </MediaContextProvider>
     </>
   );
