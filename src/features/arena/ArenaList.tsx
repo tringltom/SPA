@@ -8,7 +8,6 @@ interface IProps {
 }
 
 const ArenaList: React.FC<IProps> = ({users}) => {
-  console.log("Test");
     return (
       <Segment clearing>
         <Item.Group divided>
@@ -29,13 +28,11 @@ const ArenaList: React.FC<IProps> = ({users}) => {
                   <Item.Meta>
                     Trenutni broj iskustvenih poena : {user?.currentXp}
                   </Item.Meta>
-                  <Item.Meta>
-                    Nivo korisnika : {user?.currentLevel}
-                  </Item.Meta>
+                  <Item.Meta>Nivo korisnika : {user?.currentLevel}</Item.Meta>
                   <Item.Description>
                     <StatisticGroup widths={6}>
                       <Statistic>
-                        <Statistic.Value >
+                        <Statistic.Value>
                           <Icon name="heartbeat" />
                           {user?.numberOfGoodDeeds}
                         </Statistic.Value>
@@ -80,7 +77,6 @@ const ArenaList: React.FC<IProps> = ({users}) => {
                   </Item.Description>
                   <Item.Extra>
                     <Button floated="right" content="Pogledaj" color="blue" />
-                    
                   </Item.Extra>
                 </Item.Content>
               </Item>

@@ -60,20 +60,20 @@ export default class UserStore {
     return params;
   }
 
-loadUsers =  async () => {
-  try {
-    const usersEnvelope = await agent.User.list(this.axiosParams);
-    const { users, userCount } = usersEnvelope;
-    runInAction(() => {
-      users?.forEach((user) => {
-        this.userRegistry.set(user.username, user);
-      })
-      this.userCount = userCount;
-    });
-  } catch (error) {
-    console.log(error);
+  loadUsers =  async () => {
+    try {
+      const usersEnvelope = await agent.User.list(this.axiosParams);
+      const { users, userCount } = usersEnvelope;
+      runInAction(() => {
+        users?.forEach((user) => {
+          this.userRegistry.set(user.username, user);
+        });
+        this.userCount = userCount;
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
-}
 
   get isLoggedIn() {
     return !!this.user;
