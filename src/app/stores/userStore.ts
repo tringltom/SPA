@@ -32,7 +32,7 @@ export default class UserStore {
       this.rootStore.commonStore.setToken(user.token);
       this.startRefreshTokenTimer(user);
       this.rootStore.modalStore.closeModal();
-      history.push("/arena");
+      history.push("/arena", "/");
       this.rootStore.unFrezeScreen();
     } catch (error) {
       this.rootStore.unFrezeScreen();

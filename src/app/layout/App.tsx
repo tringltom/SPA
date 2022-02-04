@@ -1,7 +1,7 @@
 import { Fragment, useEffect } from "react";
 import ModalContainer from "../common/modals/ModalContainer";
 import { observer } from "mobx-react-lite";
-import { Route, RouteComponentProps, Switch, useLocation, withRouter } from "react-router-dom";
+import { Redirect, Route, RouteComponentProps, Switch, useLocation, withRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { Container } from "semantic-ui-react";
 import RegisterSuccess from "../../features/user/RegisterSuccess";
@@ -39,7 +39,7 @@ const App: React.FC<RouteComponentProps> = () => {
     }
   }, [getUser, setAppLoaded, token, appLoaded, isLoggedIn]);
 
-  const pathsWithNavBar = ["/arena", "/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/profile", "/approvals"];
+  const pathsWithNavBar = ["/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/profile", "/approvals"];
   const location = useLocation();
 
   const ShowNavBar = () => {
@@ -57,18 +57,15 @@ const App: React.FC<RouteComponentProps> = () => {
       <div style={{pointerEvents: rootStore.allowEvents ? 'all' : 'none' }}>
         <ModalContainer />
         <ToastContainer position="bottom-right" />
-        <Route exact path="/" component={WelcomeScreen} />
+        <Route exact path="/"> {isLoggedIn ? <Redirect to={{pathname: '/arena', state: '/'}}/> : <WelcomeScreen />}</Route>
         <Route
           path={"/(.+)"}
           render={() => (
             <Fragment>
               {ShowNavBar() && <Navbar />}
-              <Container style={ ShowNavBar() ? { marginTop: "7em" } : {}}>
+              <Container style={ ShowNavBar() ? { marginTop: "7em" } : {}} fluid>
                 <Switch>
-                  <Route
-                    path="/users/registerSuccess"
-                    component={RegisterSuccess}
-                  />
+                  <Route path="/users/registerSuccess" component={RegisterSuccess} />
                   <Route path="/users/verifyEmail" component={VerifyEmail} />
                   <PrivateRoute path="/arena" component={ArenaDashboard} />
                   <PrivateRoute path="/gooddeed" component={GoodDeedForm} type={ActivityTypes.GoodDeed} />
