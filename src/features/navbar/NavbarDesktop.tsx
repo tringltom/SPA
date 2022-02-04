@@ -1,6 +1,6 @@
 import React from 'react'
-import { Menu, Container, Grid, GridColumn, Button} from 'semantic-ui-react'
 import { history } from "../../index";
+import { Menu, Grid, GridColumn, Button} from 'semantic-ui-react'
 
 interface IProps {
     leftItems: any,
@@ -10,8 +10,7 @@ interface IProps {
 export const NavbarDesktop: React.FC<IProps> = ({ leftItems, rightItems }) => {
     return (
       <Grid>
-        <Menu fixed="top" inverted>
-          <Container>
+        <Menu color='blue' inverted fixed='top'>
             <GridColumn>
               <Menu.Item header>
                 <img
@@ -26,7 +25,7 @@ export const NavbarDesktop: React.FC<IProps> = ({ leftItems, rightItems }) => {
             {leftItems.map((item: any) => (
               <GridColumn key={item.key + "gc"}>
                 <Menu.Item key={item.key + "mi"}>
-                  <Button positive inverted {...item} />
+                  <Button positive inverted {...item} labelPosition='left'/>
                 </Menu.Item>
               </GridColumn>
             ))}
@@ -35,7 +34,6 @@ export const NavbarDesktop: React.FC<IProps> = ({ leftItems, rightItems }) => {
                 {rightItems}
               </Menu.Menu>
             </GridColumn>
-          </Container>
         </Menu>
       </Grid>
     );

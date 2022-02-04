@@ -1,3 +1,5 @@
+import { ActivityTypes } from "./activity";
+
 export interface IUser {
   username: string;
   token: string;
@@ -11,6 +13,7 @@ export interface IUser {
   numberOfHappenings: string;
   numberOfChallenges: string;
   isDiceRollAllowed: boolean;
+  activityCounts: Array<IUserActivityCount>;
 };
 
 export interface IUserFormValues {
@@ -24,3 +27,8 @@ export interface IUserEnvelope {
   users: IUser[] | null;
   userCount: number;
 };
+export interface IUserActivityCount {
+  type: ActivityTypes;
+  max: number;
+  available: number;
+}

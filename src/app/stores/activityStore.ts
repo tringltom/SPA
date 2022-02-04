@@ -61,6 +61,7 @@ export default class ActivityStore {
       this.rootStore.frezeScreen();
       const message = await agent.Activity.create(values);
       runInAction(() => {
+        this.rootStore.userStore.user?.activityCounts.map(ac => (ac.type === values.type ? ac.available-- : ac));
         history.push("/arena");
         toast.success(message);
         this.rootStore.modalStore.closeModal();

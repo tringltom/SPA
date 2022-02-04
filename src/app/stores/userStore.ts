@@ -90,7 +90,7 @@ export default class UserStore {
       this.rootStore.commonStore.setToken(user.token);
       this.startRefreshTokenTimer(user);
       this.rootStore.modalStore.closeModal();
-      history.push("/arena");
+      history.push("/arena", "/");
       this.rootStore.unFrezeScreen();
     } catch (error) {
       this.rootStore.unFrezeScreen();
@@ -133,9 +133,7 @@ export default class UserStore {
       this.rootStore.commonStore.setToken(user.token);
       if (user.token != null) 
         this.startRefreshTokenTimer(user);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   logout = async () => {

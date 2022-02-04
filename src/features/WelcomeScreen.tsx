@@ -4,14 +4,13 @@ import { RootStoreContext } from '../app/stores/rootStore';
 import LoginForm from './user/LoginForm';
 import { RegisterForm } from './user/RegisterForm';
 import { EkvitiColors } from '../app/layout/EkvitiColors';
-import { Link } from 'react-router-dom';
-
 
 const WelcomeScreen = () => {
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
   const { isLoggedIn, user } = rootStore.userStore;
   const token = window.localStorage.getItem('jwt');
+
   const ButtonStyle = {
     borderRadius: 10,
     padding: "0",
@@ -96,14 +95,14 @@ const WelcomeScreen = () => {
                     textAlign="center"
                     style={{ padding: "0 1vw 0 0" }}
                   >
-                    <Button
-                      as={Link}
-                      to="/arena"
-                      size="huge"
-                      color="violet"
+                    <h1
+                      style={{
+                        fontSize: 50,
+                        color: EkvitiColors.white,
+                      }}
                     >
-                      Ulogovan si, pravac arena!
-                    </Button>
+                      Već ste prijavljeni
+                    </h1>
                   </GridColumn>
                 ) : (
                   <Fragment>
