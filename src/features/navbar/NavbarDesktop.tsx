@@ -23,7 +23,7 @@ export const NavbarDesktop: React.FC<IProps> = ({ leftItems, rightItems }) => {
             {leftItems.map((item: any) => (
               <GridColumn key={item.key + "gc"}>
                 <Menu.Item key={item.key + "mi"}>
-                  <Button positive inverted {...item} />
+                  <Button positive inverted {...item} labelPosition='left'/>
                 </Menu.Item>
               </GridColumn>
             ))}
