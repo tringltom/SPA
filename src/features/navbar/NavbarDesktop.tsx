@@ -1,4 +1,5 @@
 import React from 'react'
+import { history } from "../../index";
 import { Menu, Grid, GridColumn, Button} from 'semantic-ui-react'
 
 interface IProps {
@@ -13,9 +14,10 @@ export const NavbarDesktop: React.FC<IProps> = ({ leftItems, rightItems }) => {
             <GridColumn>
               <Menu.Item header>
                 <img
+                  onClick={() => history.push("/arena")}
                   src="/assets/littleOne.png"
                   alt=""
-                  style={{ marginRight: 10 }}
+                  style={{ marginRight: 10, cursor:'pointer'}}
                 />
                 Ekviti
               </Menu.Item>
@@ -36,4 +38,3 @@ export const NavbarDesktop: React.FC<IProps> = ({ leftItems, rightItems }) => {
       </Grid>
     );
 }
-        

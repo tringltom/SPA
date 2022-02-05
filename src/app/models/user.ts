@@ -6,6 +6,12 @@ export interface IUser {
   image?: string;
   currentLevel: string;
   currentXp: string;
+  numberOfGoodDeeds: string;
+  numberOfJokes: string;
+  numberOfQuotes: string;
+  numberOfPuzzles: string;
+  numberOfHappenings: string;
+  numberOfChallenges: string;
   isDiceRollAllowed: boolean;
   activityCounts: Array<IUserActivityCount>;
 };
@@ -17,6 +23,10 @@ export interface IUserFormValues {
   stayLoggedIn? : boolean;
 };
 
+export interface IUserEnvelope {
+  users: IUser[] | null;
+  userCount: number;
+};
 export interface IUserActivityCount {
   type: ActivityTypes;
   max: number;
