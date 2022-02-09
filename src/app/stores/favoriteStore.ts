@@ -10,51 +10,43 @@ export default class FavoriteStore {
   }
 
   favoriteRegistry = new Map();
+  loading = false;
   
   get favoritesArray() {
     return Array.from(this.favoriteRegistry.values());
   }
 
-  createFavoriteForUser = async (userId: number, activityId: number) => {
+  resolveFavoriteActivity = async (activityId: number, favorite : boolean) => {
+    this.loading = true;
     try {
-        await agent.Favorite.createFavoriteForUser(userId, activityId).then(() => 
+        await agent.Favorite.resolveFavoriteActivity(activityId).then(() => 
             runInAction(() => {
-                this.favoriteRegistry.set(activityId, activityId);
-            })
-        );
-      } catch (error) {
-        runInAction(() => {
-          console.log(error);
-        });
-      }
-  };
+              favorite ?
+                this.favoriteRegistry.set(activityId, activityId)
+                : this.favoriteRegistry.delete(activityId);
 
-  removeFavoriteForUser = async (userId: number, activityId: number) => {
-    try {
-        await agent.Favorite.removeFavoriteForUser(userId, activityId).then(()=>
-            runInAction(() => {
-                this.favoriteRegistry.delete(activityId);
+                this.loading = false;
             })
         );
       } catch (error) {
-        runInAction(() => {
           console.log(error);
-        });
+          this.loading = false;
       }
   };
 
   loadFavoriteActivitiesForUser = async (userId: number) => {
+    this.loading = true;
     try {
       const favorites = await agent.Favorite.getFavoritesForUser(userId);
       runInAction(() => {
         favorites.forEach((favorite) => {
             this.favoriteRegistry.set(favorite, favorite);
         });
+        this.loading = false;
       });
     } catch (error) {
-      runInAction(() => {
         console.log(error);
-      });
+        this.loading = false;
     }
   };
 }

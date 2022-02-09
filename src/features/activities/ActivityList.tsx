@@ -9,16 +9,16 @@ import { PendingActivityListItem } from './PendingActivityListItem';
 const ActivityList: React.FC<{approved: boolean}> = ({approved}) => {
   const rootStore = useContext(RootStoreContext);
   
-  const {pendingActivitiesArray, approvedActivitiesArray} = rootStore.activityStore;
-  const { reviewsForCurrentUserArray } = rootStore.reviewStore;
-  const { favoritesArray } = rootStore.favoriteStore;
+  const {pendingActivitiesArray, approvedActivitiesArray, loadingInitial} = rootStore.activityStore;
+  const { reviewsForCurrentUserArray, loading: loadingReviews } = rootStore.reviewStore;
+  const { favoritesArray, loading: loadingFavorites } = rootStore.favoriteStore;
 
   const [review, setReview] = useState<any>(null);
 
     return (
       <Fragment>
           <Item.Group divided>
-            { approved ? 
+            { approved && !loadingInitial && !loadingReviews && !loadingFavorites ? 
               approvedActivitiesArray.map((activity: IActivity) => (
                 // eslint-disable-next-line
                 setReview(reviewsForCurrentUserArray.find((ra) => ra.activityId === +activity.id)),

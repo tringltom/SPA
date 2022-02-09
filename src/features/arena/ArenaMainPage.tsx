@@ -6,11 +6,11 @@ import ActivityList from '../activities/ActivityList';
 import { observer } from 'mobx-react-lite';
 import ApprovedActivityListItemPlaceholder from '../activities/ApprovedActivityListItemPlaceholder';
 
-const ArenaMainPage = () => {
+const ArenaMainPage: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
-    const {loadReviewedActivities} = rootStore.reviewStore;
+    const {loadReviewedActivities, loading: loadingReviews} = rootStore.reviewStore;
     const {getApprovedActivitiesFromOtherUsers, loadingInitial, setApprovedActivitiesPage, approvedActivitiesPage, totalApprovedActivityPages} = rootStore.activityStore;
-    const {loadFavoriteActivitiesForUser} = rootStore.favoriteStore;
+    const {loadFavoriteActivitiesForUser, loading: loadingFavorites} = rootStore.favoriteStore;
     const { userId } = rootStore.userStore;
 
     useEffect(() => {
@@ -33,7 +33,7 @@ const ArenaMainPage = () => {
     return (
         <Grid>
           <Grid.Column width={16}>
-            {loadingInitial && approvedActivitiesPage === 0 ? (
+            {(loadingInitial && approvedActivitiesPage === 0) || loadingReviews || loadingFavorites ? (
               <ApprovedActivityListItemPlaceholder />
             ) : (
               <InfiniteScroll

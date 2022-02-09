@@ -11,27 +11,31 @@ export default class ReviewStore {
   }
 
   reviewsForCurrentUserRegistry = new Map();
+  loading = false;
   
   get reviewsForCurrentUserArray() {
     return Array.from(this.reviewsForCurrentUserRegistry.values());
   }
 
   loadReviewedActivities = async (userId: number) => {
+    this.loading = true;
     try {
       const reviews =  await agent.Review.getReviewsForUser(userId);
       runInAction(() => {
           reviews.forEach((review) => {
           this.reviewsForCurrentUserRegistry.set(review.activityId, review);
         });
+        this.loading = false;
       });
     } catch (error) {
         console.log(error);
+        this.loading = false;
     }
   };
 
-  reviewActivity = async (userId: number, activityId: number, reviewType: ReviewTypes) => {
+  reviewActivity = async (activityId: number, reviewType: ReviewTypes) => {
       try {
-        await agent.Review.reviewActivity(userId, activityId, reviewType).then(() =>
+        await agent.Review.reviewActivity(activityId, reviewType).then(() =>
           {
             runInAction(() => {
               this.reviewsForCurrentUserRegistry.set(activityId, {activityId: activityId, reviewTypeId: reviewType});

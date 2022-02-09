@@ -13,7 +13,7 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
 
   const rootStore = useContext(RootStoreContext);
   const { reviewActivity } = rootStore.reviewStore;
-  const { createFavoriteForUser, removeFavoriteForUser } = rootStore.favoriteStore;
+  const { resolveFavoriteActivity } = rootStore.favoriteStore;
   const { userId } = rootStore.userStore;
 
   const buttonData = getButtonData(activity.type);
@@ -21,11 +21,8 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
   const [isFavorite, setFavorite] = React.useState<boolean>(favorite);
 
   const toggleFavorite = () => {
-    if (userId)
-    {
       setFavorite(!isFavorite);
-      isFavorite ? removeFavoriteForUser(userId, +activity.id) : createFavoriteForUser(userId, +activity.id);
-    }
+      resolveFavoriteActivity(+activity.id, isFavorite);
   }
 
   const handleReviewClick = (e: any) => {
@@ -36,7 +33,7 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
 
     setActiveButton(e.target.name);
     const reviewType = e.target.value;
-    reviewActivity(userId, +activity.id, reviewType);
+    reviewActivity(+activity.id, reviewType);
   }
 
   const center = {

@@ -105,13 +105,12 @@ const Dice = {
 
 const Review = {
   getReviewsForUser: (userId: number) : Promise<IReview[]> => requests.get(`reviews/getReviewsForUser?userId=${userId}`),
-  reviewActivity: (userId: number, activityId: number, reviewTypeId: ReviewTypes) : Promise<void> => requests.post("reviews/reviewActivity", {userId, activityId, reviewTypeId})
+  reviewActivity: (activityId: number, reviewTypeId: ReviewTypes) : Promise<void> => requests.post("reviews/reviewActivity", {activityId, reviewTypeId})
 }
 
 const Favorite = {
   getFavoritesForUser: (userId: number) : Promise<number[]> => requests.get(`favorites/${userId}`),
-  createFavoriteForUser: (userId: number, activityId: number ) : Promise<void> => requests.post("favorites/createFavorite", {userId, activityId}),
-  removeFavoriteForUser: (userId: number, activityId: number ) : Promise<void> => requests.post("favorites/removeFavorite", {userId, activityId}),
+  resolveFavoriteActivity: (activityId: number ) : Promise<void> => requests.post("favorites/createFavorite", {activityId})
 }
 
 const sites = {
