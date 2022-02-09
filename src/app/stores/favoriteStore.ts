@@ -19,7 +19,7 @@ export default class FavoriteStore {
   resolveFavoriteActivity = async (activityId: number, favorite : boolean) => {
     this.loading = true;
     try {
-        await agent.Favorite.resolveFavoriteActivity(activityId).then(() => 
+        await agent.Favorite.resolveFavoriteActivity(activityId, favorite).then(() => 
             runInAction(() => {
               favorite ?
                 this.favoriteRegistry.set(activityId, activityId)
