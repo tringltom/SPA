@@ -110,7 +110,7 @@ const Review = {
 
 const Favorite = {
   getFavoritesForUser: (userId: number) : Promise<number[]> => requests.get(`favorites/${userId}`),
-  resolveFavoriteActivity: (activityId: number ) : Promise<void> => requests.post("favorites/createFavorite", {activityId})
+  resolveFavoriteActivity: (activityId: number ) : Promise<void> => requests.post("favorites/resolveFavorite", {activityId})
 }
 
 const sites = {
