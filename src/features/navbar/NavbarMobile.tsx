@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Grid, Container, GridColumn, Dropdown } from 'semantic-ui-react';
+import { Menu, Grid, GridColumn, Dropdown } from 'semantic-ui-react';
 
 interface IProps {
     leftItems: any,
@@ -9,8 +9,7 @@ interface IProps {
 export const NavbarMobile: React.FC<IProps> = ({leftItems,rightItems,}) => {
   return (
     <Grid>
-      <Menu fixed="top" inverted>
-        <Container>
+      <Menu fixed='top' inverted color='blue'>
           <GridColumn>
             <Menu.Item>
               <img
@@ -35,7 +34,6 @@ export const NavbarMobile: React.FC<IProps> = ({leftItems,rightItems,}) => {
               {rightItems}
             </Menu.Menu>
           </GridColumn>
-        </Container>
       </Menu>
     </Grid>
   );

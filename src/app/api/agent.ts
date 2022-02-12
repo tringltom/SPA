@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { IUser, IUserFormValues } from "../models/user";
+import { IUser, IUserEnvelope, IUserFormValues } from "../models/user";
 import { toast } from "react-toastify";
 import { ActivityTypes, IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
 import { history } from '../..';
@@ -65,6 +65,8 @@ const requests = {
 
 const User = {
   current: (): Promise<IUser> => requests.get("/users"),
+  list: (params: URLSearchParams): Promise<IUserEnvelope> =>
+    axios.get('/users/getTopXpUsers', {params: params}).then(responseBody),
   login: (user: IUserFormValues): Promise<IUser> =>
     requests.post("/users/login", user),
   logout: (): Promise<void> =>

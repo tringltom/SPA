@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import agent from "../api/agent";
@@ -6,16 +6,74 @@ import { IUser, IUserFormValues } from "../models/user";
 
 import { RootStore } from "./rootStore";
 
+const LIMIT = 3;
+
 export default class UserStore {
   refreshTokenTimeout: any;
   rootStore: RootStore;
   user: IUser | null = null;
+  users: IUser[] | null = null;
   loading = false;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
+
+    reaction(
+      () => this.predicate.keys(),
+      () => {
+        this.page = 0;
+        this.userRegistry.clear();
+        this.loadUsers();
+      }
+    );
   };
+
+  page = 0;
+  userCount = 0;
+  predicate = new Map();
+  userRegistry = new Map();
+
+  get usersArray() {
+    return Array.from(this.userRegistry.values());
+  }
+
+  setPage = (page: number) => {
+    this.page = page;
+  };
+
+  get totalPages() {
+    return Math.ceil(this.userCount / LIMIT);
+  }
+
+  get axiosParams() {
+    const params = new URLSearchParams();
+    params.append("limit", String(LIMIT));
+    params.append("offset", `${this.page ? this.page * LIMIT : 0}`);
+    this.predicate.forEach((value, key) => {
+      if (key === "startDate") {
+        params.append(key, value.toISOString());
+      } else {
+        params.append(key, value);
+      }
+    });
+    return params;
+  }
+
+  loadUsers =  async () => {
+    try {
+      const usersEnvelope = await agent.User.list(this.axiosParams);
+      const { users, userCount } = usersEnvelope;
+      runInAction(() => {
+        users?.forEach((user) => {
+          this.userRegistry.set(user.username, user);
+        });
+        this.userCount = userCount;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   get isLoggedIn() {
     return !!this.user;
@@ -36,7 +94,7 @@ export default class UserStore {
       this.rootStore.commonStore.setToken(user.token);
       this.startRefreshTokenTimer(user);
       this.rootStore.modalStore.closeModal();
-      history.push("/arena");
+      history.push("/arena", "/");
       this.rootStore.unFrezeScreen();
     } catch (error) {
       this.rootStore.unFrezeScreen();
@@ -79,9 +137,7 @@ export default class UserStore {
       this.rootStore.commonStore.setToken(user.token);
       if (user.token != null) 
         this.startRefreshTokenTimer(user);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   logout = async () => {

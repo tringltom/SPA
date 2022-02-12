@@ -12,14 +12,6 @@
   background-color: rgb(234,234,234) !important;
 }
 
-.ui.inverted.top.fixed.menu {
-  background-image: linear-gradient(
-    135deg,
-    rgb(162 145 251) 0%,
-    rgb(163 51 200) 69%,
-    rgb(100 53 201) 89%
-  ) !important;
-}
 
 button.ui.orange.inverted.button {
   border-radius: 20px !important;

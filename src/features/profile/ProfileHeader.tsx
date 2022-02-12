@@ -1,14 +1,14 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
+import { useContext } from 'react';
 import { Segment, Item, Header, Grid, Statistic } from 'semantic-ui-react';
-import { IUser } from '../../app/models/user';
-
-interface IProps {
-    user: IUser | null;
-}
+import { RootStoreContext } from '../../app/stores/rootStore';
 
 
-const ProfileHeader:React.FC<IProps> = ({user}) => {
+
+const ProfileHeader = () => {
+  const rootStore = useContext(RootStoreContext);
+    const {user} = rootStore.userStore;
+
   return (
     <Segment>
       <Grid>
