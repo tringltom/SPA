@@ -1,6 +1,7 @@
 import { ActivityTypes } from "./activity";
 
 export interface IUser {
+  id?: number;
   username: string;
   token: string;
   image?: string;

@@ -1,9 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 import { IUser, IUserEnvelope, IUserFormValues } from "../models/user";
 import { toast } from "react-toastify";
-import { IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
+import { ActivityTypes, IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
 import { history } from '../..';
 import { IDiceResult } from "../models/diceResult";
+import { IReview, ReviewTypes } from "../models/review";
 
 axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
 ? "https://localhost:4001"
@@ -95,18 +96,31 @@ const Activity = {
     });
     return requests.postForm("/activities/create", formData);
   },
-  getPendingActivities: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get("/activities", {params: params}).then(responseBody),
-  resolvePendingActivity : (id: string, approve: boolean): Promise<boolean> => requests.post(`/activities/resolve/${id}`, {approve})
+  getPendingActivities: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get("/activities",{params: params}).then(responseBody),
+  resolvePendingActivity : (id: string, approve: boolean): Promise<boolean> => requests.post(`/activities/resolve/${id}`, {approve}),
+  getApprovedActivitiesFromOtherUsers: (userId: number, params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get(`/activities/approvedActivitiesExcludeUser/${userId}`,{params: params}).then(responseBody)
 };
 
 const Dice = {
   roll: () : Promise<IDiceResult> => requests.get("/dice/rollTheDice")
 }
 
+const Review = {
+  getReviewsForUser: (userId: number) : Promise<IReview[]> => requests.get(`reviews/getReviewsForUser?userId=${userId}`),
+  reviewActivity: (activityId: number, activityTypeId:ActivityTypes, reviewTypeId: ReviewTypes) : Promise<void> => requests.post("reviews/reviewActivity", {activityId, activityTypeId, reviewTypeId})
+}
+
+const Favorite = {
+  getFavoritesForUser: (userId: number) : Promise<number[]> => requests.get(`favorites/${userId}`),
+  resolveFavoriteActivity: (activityId: number, favorite: boolean ) : Promise<void> => requests.post("favorites/resolveFavorite", {activityId, favorite})
+}
+
 const sites = {
   User,
   Activity,
   Dice,
+  Review,
+  Favorite,
 };
 
 export default sites;

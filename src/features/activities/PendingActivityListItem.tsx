@@ -7,7 +7,7 @@ import { ActivityTypes, IActivity, IPhoto } from '../../app/models/activity';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { LatLngLiteral} from '../../app/models/googleMaps'
 
-export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
+export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
   const { approvePendingActivity } = rootStore.activityStore;
