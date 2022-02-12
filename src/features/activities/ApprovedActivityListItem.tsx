@@ -12,17 +12,18 @@ import { ReviewButtonsComponent } from '../../app/common/form/ReviewButtonsCompo
 export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:boolean, review: ReviewTypes | null}> = ({activity, favorite, review}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const { reviewActivity } = rootStore.reviewStore;
-  const { resolveFavoriteActivity } = rootStore.favoriteStore;
+  const { reviewActivity, reviewing } = rootStore.reviewStore;
+  const { resolveFavoriteActivity, resolvingFavourite } = rootStore.favoriteStore;
   const { userId } = rootStore.userStore;
 
   const buttonData = getButtonData(activity.type);
-  const [activeButton, setActiveButton] = useState(!!review ? buttonData[review - 1].name : null);
+  console.log(review)
+  const [activeButton, setActiveButton] = useState(!!review ? buttonData[review - 1]?.name : null);
   const [isFavorite, setFavorite] = React.useState<boolean>(favorite);
 
   const toggleFavorite = () => {
       setFavorite(!isFavorite);
-      resolveFavoriteActivity(+activity.id, isFavorite);
+      resolveFavoriteActivity(+activity.id, !isFavorite);
   }
 
   const handleReviewClick = (e: any) => {
@@ -33,7 +34,7 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
 
     setActiveButton(e.target.name);
     const reviewType = e.target.value;
-    reviewActivity(+activity.id, reviewType);
+    reviewActivity(+activity.id, activity.type, reviewType);
   }
 
   const center = {
@@ -121,8 +122,8 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
         )}
       </Segment>
       <Segment>
-        <Button icon={"favorite"} active={isFavorite} onClick={toggleFavorite}/>
-        <ReviewButtonsComponent buttonData={buttonData} activeButton={activeButton} handleReviewClick={handleReviewClick} float='right'/>
+        <Button icon={"favorite"} loading={resolvingFavourite} active={isFavorite} onClick={toggleFavorite}/>
+        <ReviewButtonsComponent buttonData={buttonData} activeButton={activeButton} handleReviewClick={handleReviewClick} loading={reviewing} float='right'/>
       </Segment>
     </Segment.Group>
   );

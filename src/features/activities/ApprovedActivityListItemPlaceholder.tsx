@@ -31,7 +31,7 @@ const ApprovedActivityListItemPlaceholder = () => {
             <Segment secondary style={{ minHeight: 70 }} />
             <Segment clearing>
                 <Button disabled={true} icon={"question"} active={false}/>
-                <ReviewButtonsComponent buttonData={buttonData} activeButton={null} handleReviewClick={() => {}} float='right' disabled={true}/>
+                <ReviewButtonsComponent buttonData={buttonData} activeButton={null} handleReviewClick={() => {}} loading={false} float='right' disabled={true}/>
             </Segment>
           </Segment.Group>
         </Placeholder>

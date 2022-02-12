@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import React, { Fragment, useContext, useState } from 'react';
+import React, { Fragment, useContext } from 'react';
 import { Item } from 'semantic-ui-react';
 import { IActivity } from '../../app/models/activity';
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -13,18 +13,16 @@ const ActivityList: React.FC<{approved: boolean}> = ({approved}) => {
   const { reviewsForCurrentUserArray, loading: loadingReviews } = rootStore.reviewStore;
   const { favoritesArray, loading: loadingFavorites } = rootStore.favoriteStore;
 
-  const [review, setReview] = useState<any>(null);
-
+  console.log(reviewsForCurrentUserArray);
     return (
       <Fragment>
           <Item.Group divided>
             { approved && !loadingInitial && !loadingReviews && !loadingFavorites ? 
               approvedActivitiesArray.map((activity: IActivity) => (
                 // eslint-disable-next-line
-                setReview(reviewsForCurrentUserArray.find((ra) => ra.activityId === +activity.id)),
                 <ApprovedActivityListItem key={activity.id} activity={activity}
                 favorite={!!favoritesArray.find((fa) => fa.activityId === +activity.id)}
-                review={!!review ? review.reviewTypeId : null}
+                review={reviewsForCurrentUserArray.find((ra) => ra.activityId === +activity.id)?.reviewTypeId}
                 /> 
               ))
             :

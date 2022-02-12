@@ -1,5 +1,8 @@
+import { ActivityTypes } from "./activity";
+
 export interface IReview {
     activityId: number,
+    activityTypeId: ActivityTypes
     reviewTypeId: ReviewTypes
   };
 

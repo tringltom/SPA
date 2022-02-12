@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { IUser, IUserFormValues } from "../models/user";
 import { toast } from "react-toastify";
-import { IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
+import { ActivityTypes, IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
 import { history } from '../..';
 import { IDiceResult } from "../models/diceResult";
 import { IReview, ReviewTypes } from "../models/review";
@@ -105,7 +105,7 @@ const Dice = {
 
 const Review = {
   getReviewsForUser: (userId: number) : Promise<IReview[]> => requests.get(`reviews/getReviewsForUser?userId=${userId}`),
-  reviewActivity: (activityId: number, reviewTypeId: ReviewTypes) : Promise<void> => requests.post("reviews/reviewActivity", {activityId, reviewTypeId})
+  reviewActivity: (activityId: number, activityTypeId:ActivityTypes, reviewTypeId: ReviewTypes) : Promise<void> => requests.post("reviews/reviewActivity", {activityId, activityTypeId, reviewTypeId})
 }
 
 const Favorite = {
