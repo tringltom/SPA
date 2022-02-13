@@ -10,10 +10,6 @@ import ArenaList from './ArenaList';
 import ArenaMainPage from './ArenaMainPage';
 import InfiniteScroll from 'react-infinite-scroller';
 
-
-
-const users = ['pera','mika','zika','dragutin','milutin'];
-
 const ArenaDashboard = () => {
   const rootStore = useContext(RootStoreContext);
   const {shake, showDice, getPrice} = useContext(RootStoreContext);
