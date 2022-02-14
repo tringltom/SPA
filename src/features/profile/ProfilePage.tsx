@@ -1,8 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { Grid, GridColumn } from 'semantic-ui-react'
 import ProfileContent from './ProfileContent'
-// import ProfileHeader from './ProfileHeader'
-
+import ProfileHeader from './ProfileHeader'
 
 const ProfilePage = () => {
     
@@ -10,7 +9,7 @@ const ProfilePage = () => {
 
         <Grid>
             <GridColumn width={16}>
-                {/* <ProfileHeader/> */}
+                <ProfileHeader/>
                 <ProfileContent/>
             </GridColumn>
         </Grid>
