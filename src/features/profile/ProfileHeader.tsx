@@ -24,10 +24,10 @@ const ProfileHeader = () => {
           </Item.Group>
         </Grid.Column>
         <Grid.Column width={4}>
-          <Statistic.Group widths={2}>
+          {/* <Statistic.Group widths={2}>
             <Statistic label="Xp" value={user?.currentXp} />
             <Statistic label="Level" value={user?.currentLevel} />
-          </Statistic.Group>
+          </Statistic.Group> */}
         </Grid.Column>
       </Grid>
     </Segment>
