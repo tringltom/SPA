@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
-import { useContext } from 'react';
+
 import { Segment, Item, Header, Grid, Statistic } from 'semantic-ui-react';
-import { RootStoreContext } from '../../app/stores/rootStore';
+
 
 const ProfileHeader = () => {
   // const rootStore = useContext(RootStoreContext);
