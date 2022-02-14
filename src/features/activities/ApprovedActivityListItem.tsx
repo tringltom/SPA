@@ -17,7 +17,7 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
   const { userId } = rootStore.userStore;
 
   const buttonData = getButtonData(activity.type);
-  console.log(review)
+
   const [activeButton, setActiveButton] = useState(!!review ? buttonData[review - 1]?.name : null);
   const [isFavorite, setFavorite] = React.useState<boolean>(favorite);
 
