@@ -1,9 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
-
 import { Segment, Item, Header, Grid } from 'semantic-ui-react';
 import { RootStoreContext } from '../../app/stores/rootStore';
-
 
 const ProfileHeader = () => {
   const rootStore = useContext(RootStoreContext);
@@ -22,9 +20,21 @@ const ProfileHeader = () => {
             </Item>
           </Item.Group>
         </Grid.Column>
-        <Grid.Column width={2} verticalAlign='middle'>
-          <Header as="h1" content={user?.currentXp} subheader={"Iskustveni poeni"} textAlign="center" floated='left'/>
-          <Header as="h1" content={user?.currentLevel} subheader={"Nivo"}  textAlign="center" floated='right'/>
+        <Grid.Column width={2} verticalAlign="middle">
+          <Header
+            as="h1"
+            content={user?.currentXp}
+            subheader={"Iskustveni poeni"}
+            textAlign="center"
+            floated="left"
+          />
+          <Header
+            as="h1"
+            content={user?.currentLevel}
+            subheader={"Nivo"}
+            textAlign="center"
+            floated="right"
+          />
         </Grid.Column>
       </Grid>
     </Segment>
