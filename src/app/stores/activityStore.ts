@@ -4,7 +4,7 @@ import { IActivityFormValues } from "../models/activity";
 import { RootStore } from "./rootStore";
 import { history } from "../..";
 import { toast } from "react-toastify";
-import { setActivityProps } from "../common/utils/util";
+import { setActivityProps } from "../common/utils/commonUtil";
 
 const LIMIT = 5;
 
@@ -17,35 +17,66 @@ export default class ActivityStore {
     reaction(
       () => this.predicate.keys(),
       () => {
-        this.page = 0;
-        this.activityRegistry.clear();
+        this.pendingActivitiesPage = 0;
+        this.approvedActivitiesPage = 0;
+        this.pendingActivitiesRegistry.clear();
+        this.approvedActivitiesRegistry.clear();
         this.loadPendingActivities();
       }
     );
   }
   submitting = false;
-  activityRegistry = new Map();
-  page = 0;
+  pendingActivitiesRegistry = new Map();
+  approvedActivitiesRegistry = new Map();
+  pendingActivitiesPage = 0;
+  approvedActivitiesPage = 0;
   predicate = new Map();
   loadingInitial = false;
-  activityCount = 0;
+  pendingActivityCount = 0;
+  approvedActivityCount = 0;
 
-  get activitiesArray() {
-    return Array.from(this.activityRegistry.values());
+  get pendingActivitiesArray() {
+    return Array.from(this.pendingActivitiesRegistry.values());
   }
 
-  setPage = (page: number) => {
-    this.page = page;
+  get approvedActivitiesArray() {
+    return Array.from(this.approvedActivitiesRegistry.values());
+  }
+
+  setPendingActivitiesPage = (page: number) => {
+    this.pendingActivitiesPage = page;
   };
 
-  get totalPages() {
-    return Math.ceil(this.activityCount / LIMIT);
+  setApprovedActivitiesPage = (page: number) => {
+    this.approvedActivitiesPage = page;
+  };
+
+  get totalPendingActivityPages() {
+    return Math.ceil(this.pendingActivityCount / LIMIT);
   }
 
-  get axiosParams() {
+  get totalApprovedActivityPages() {
+    return Math.ceil(this.approvedActivityCount / LIMIT);
+  }
+
+  get pendingActivityAxiosParams() {
     const params = new URLSearchParams();
     params.append("limit", String(LIMIT));
-    params.append("offset", `${this.page ? this.page * LIMIT : 0}`);
+    params.append("offset", `${this.pendingActivitiesPage ? this.pendingActivitiesPage * LIMIT : 0}`);
+    this.predicate.forEach((value, key) => {
+      if (key === "startDate") {
+        params.append(key, value.toISOString());
+      } else {
+        params.append(key, value);
+      }
+    });
+    return params;
+  }
+
+  get approvedActivityAxiosParams() {
+    const params = new URLSearchParams();
+    params.append("limit", String(LIMIT));
+    params.append("offset", `${this.approvedActivitiesPage ? this.approvedActivitiesPage * LIMIT : 0}`);
     this.predicate.forEach((value, key) => {
       if (key === "startDate") {
         params.append(key, value.toISOString());
@@ -61,6 +92,7 @@ export default class ActivityStore {
       this.rootStore.frezeScreen();
       const message = await agent.Activity.create(values);
       runInAction(() => {
+        this.rootStore.userStore.user?.activityCounts.map(ac => (ac.type === values.type ? ac.available-- : ac));
         history.push("/arena");
         toast.success(message);
         this.rootStore.modalStore.closeModal();
@@ -77,16 +109,15 @@ export default class ActivityStore {
     this.loadingInitial = true;
     try {
       const activitiesEnvelope = await agent.Activity.getPendingActivities(
-        this.axiosParams
+        this.pendingActivityAxiosParams
       );
-      console.log(activitiesEnvelope);
       const { activities, activityCount } = activitiesEnvelope;
       runInAction(() => {
         activities.forEach((activity) => {
           setActivityProps(activity, this.rootStore.userStore.user!);
-          this.activityRegistry.set(activity.id, activity);
+          this.pendingActivitiesRegistry.set(activity.id, activity);
         });
-        this.activityCount = activityCount;
+        this.pendingActivityCount = activityCount;
         this.loadingInitial = false;
       });
     } catch (error) {
@@ -104,7 +135,7 @@ export default class ActivityStore {
       const success = await agent.Activity.resolvePendingActivity(activityId, approve);
       if (success){
         toast.success("Uspešno ste odobrili/odbili aktivnost");
-        this.activityRegistry.delete(activityId);
+        this.pendingActivitiesRegistry.delete(activityId);
       } else{
         toast.error("Neuspešno ste odobrili/odbili aktivnost");
       }      
@@ -116,5 +147,30 @@ export default class ActivityStore {
       console.log(error);
       toast.error("Neuspešno, proverite konzolu");
     }
+  }
+
+  getApprovedActivitiesFromOtherUsers = async (userId: number) => {
+    this.loadingInitial = true;
+    try {
+      const activitiesEnvelope = await agent.Activity.getApprovedActivitiesFromOtherUsers(
+        userId,
+        this.approvedActivityAxiosParams
+      );
+      const { activities, activityCount } = activitiesEnvelope;
+      
+      runInAction(() => {
+        activities.forEach((activity) => {
+          this.approvedActivitiesRegistry.set(activity.id, activity);
+        });
+        
+        this.approvedActivityCount = activityCount;
+        this.loadingInitial = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        console.log(error);
+        this.loadingInitial = false;
+      });
+    };
   }
 }

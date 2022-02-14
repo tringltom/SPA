@@ -1,17 +1,41 @@
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import { format } from 'date-fns';
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Card, Icon, Item, Label, Segment } from 'semantic-ui-react';
-import ModalYesNo from '../../app/common/modals/ModalYesNo';
 import { ActivityTypes, IActivity, IPhoto } from '../../app/models/activity';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { LatLngLiteral} from '../../app/models/googleMaps'
+import { ReviewTypes } from '../../app/models/review';
+import { getButtonData } from '../../app/layout/ReviewButtonData';
+import { ReviewButtonsComponent } from '../../app/common/form/ReviewButtonsComponent';
 
-export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
+export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:boolean, review: ReviewTypes | null}> = ({activity, favorite, review}) => {
+
   const rootStore = useContext(RootStoreContext);
-  const { openModal } = rootStore.modalStore;
-  const { approvePendingActivity } = rootStore.activityStore;
+  const { reviewActivity, reviewing } = rootStore.reviewStore;
+  const { resolveFavoriteActivity, resolvingFavourite } = rootStore.favoriteStore;
+  const { userId } = rootStore.userStore;
 
+  const buttonData = getButtonData(activity.type);
+
+  const [activeButton, setActiveButton] = useState(!!review ? buttonData[review - 1]?.name : null);
+  const [isFavorite, setFavorite] = React.useState<boolean>(favorite);
+
+  const toggleFavorite = () => {
+      setFavorite(!isFavorite);
+      resolveFavoriteActivity(+activity.id, !isFavorite);
+  }
+
+  const handleReviewClick = (e: any) => {
+    if (activeButton === e.target.name || !(!!userId))
+    {
+      return;
+    }
+
+    setActiveButton(e.target.name);
+    const reviewType = e.target.value;
+    reviewActivity(+activity.id, activity.type, reviewType);
+  }
 
   const center = {
     lat: activity.latitude ?? 44.7470721,
@@ -21,13 +45,12 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
   const mapOptions = {
     center: center,
     disableDefaultUI: true,
-    zoom: 15,
-    zoomControl: true,
+    zoom: 15
   };
 
   const containerStyle = {
-    width: "400px",
-    height: "400px",
+    width: "200px",
+    height: "200px",
   };
  
   const { isLoaded } = useJsApiLoader({
@@ -97,40 +120,10 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
         {activity.type === ActivityTypes.Puzzle && (
           <span>Odgovor: {activity.answer}</span>
         )}
-        <Button
-          floated="right"
-          content="Dozvoli"
-          color="green"
-          onClick={() =>
-            openModal(
-              <ModalYesNo
-                handleConfirmation={async () =>
-                  await approvePendingActivity(activity.id, true)
-                }
-                content="Dozvoliti aktivnost"
-                icon="thumbs up"
-              />,
-              false
-            )
-          }
-        />
-        <Button
-          floated="right"
-          content="Zabrani"
-          color="red"
-          onClick={() =>
-            openModal(
-              <ModalYesNo
-                handleConfirmation={async () =>
-                  await approvePendingActivity(activity.id, false)
-                }
-                content="Odbiti aktivnost"
-                icon="thumbs down"
-              />,
-              false
-            )
-          }
-        />
+      </Segment>
+      <Segment>
+        <Button icon={"favorite"} loading={resolvingFavourite} active={isFavorite} onClick={toggleFavorite}/>
+        <ReviewButtonsComponent buttonData={buttonData} activeButton={activeButton} handleReviewClick={handleReviewClick} loading={reviewing} float='right'/>
       </Segment>
     </Segment.Group>
   );

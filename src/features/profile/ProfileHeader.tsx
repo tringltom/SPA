@@ -1,36 +1,40 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
-import { Segment, Item, Header, Grid, Statistic } from 'semantic-ui-react';
-import { IUser } from '../../app/models/user';
+import { useContext } from 'react';
+import { Segment, Item, Header, Grid } from 'semantic-ui-react';
+import { RootStoreContext } from '../../app/stores/rootStore';
 
-interface IProps {
-    user: IUser | null;
-}
+const ProfileHeader = () => {
+  const rootStore = useContext(RootStoreContext);
+  const { user } = rootStore.userStore;
 
-
-const ProfileHeader:React.FC<IProps> = ({user}) => {
   return (
     <Segment>
       <Grid>
         <Grid.Column width={12}>
           <Item.Group>
             <Item>
-              <Item.Image
-                avatar
-                size='small'
-                src={'/assets/user.png'}
-              />
-              <Item.Content verticalAlign='middle'>
-                <Header as='h1'>{user?.username}</Header>
+              <Item.Image avatar size="small" src={"/assets/user.png"} />
+              <Item.Content verticalAlign="middle">
+                <Header as="h1" content={user?.username}></Header>
               </Item.Content>
             </Item>
           </Item.Group>
         </Grid.Column>
-        <Grid.Column width={4}>
-          <Statistic.Group widths={2}>
-            <Statistic label='Xp' value={user?.currentXp}/>
-            <Statistic label='Level' value={user?.currentLevel}/>
-          </Statistic.Group>
+        <Grid.Column width={2} verticalAlign="middle">
+          <Header
+            as="h1"
+            content={user?.currentXp}
+            subheader={"Iskustveni poeni"}
+            textAlign="center"
+            floated="left"
+          />
+          <Header
+            as="h1"
+            content={user?.currentLevel}
+            subheader={"Nivo"}
+            textAlign="center"
+            floated="right"
+          />
         </Grid.Column>
       </Grid>
     </Segment>

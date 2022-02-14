@@ -6,6 +6,8 @@ import ModalStore from "./modalStore";
 import UserStore from "./userStore";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
+import ReviewStore from "./reviewStore";
+import FavoriteStore from "./favoriteStore";
 
 configure({ enforceActions: "always" });
 
@@ -14,12 +16,16 @@ export class RootStore {
   modalStore: ModalStore;
   commonStore: CommonStore;
   activityStore: ActivityStore;
+  reviewStore: ReviewStore;
+  favoriteStore: FavoriteStore;
 
   constructor() {
     this.userStore = new UserStore(this);
     this.modalStore = new ModalStore(this);
     this.commonStore = new CommonStore(this);
     this.activityStore = new ActivityStore(this);
+    this.reviewStore = new ReviewStore(this);
+    this.favoriteStore = new FavoriteStore(this);
     makeAutoObservable(this);
   };
 

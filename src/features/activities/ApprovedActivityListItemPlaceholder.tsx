@@ -1,7 +1,11 @@
 import React, { Fragment } from 'react';
 import { Segment, Button, Placeholder } from 'semantic-ui-react';
+import { ReviewButtonsComponent } from '../../app/common/form/ReviewButtonsComponent';
+import { getButtonData } from '../../app/layout/ReviewButtonData';
 
-const ActivityListItemPlaceholder = () => {
+const buttonData = getButtonData(null);
+
+const ApprovedActivityListItemPlaceholder = () => {
   return (
     <Fragment>
       {[...Array(4)].map((el, i) => (
@@ -26,18 +30,8 @@ const ActivityListItemPlaceholder = () => {
             </Segment>
             <Segment secondary style={{ minHeight: 70 }} />
             <Segment clearing>
-               <Button
-                disabled
-                color="green"
-                floated="right"
-                content="Učitava se.."
-              />
-              <Button
-                disabled
-                color="red"
-                floated="right"
-                content="Učitava se.."
-              />
+                <Button disabled={true} icon={"question"} active={false}/>
+                <ReviewButtonsComponent buttonData={buttonData} activeButton={null} handleReviewClick={() => {}} loading={false} float='right' disabled={true}/>
             </Segment>
           </Segment.Group>
         </Placeholder>
@@ -46,4 +40,4 @@ const ActivityListItemPlaceholder = () => {
   );
 };
 
-export default ActivityListItemPlaceholder;
+export default ApprovedActivityListItemPlaceholder;
