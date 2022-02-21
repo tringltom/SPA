@@ -23,23 +23,20 @@ const ArenaDashboard = () => {
   const handleGetNext = () => {
     setLoadingNext(true);
     setPage(page + 1);
-    loadUsers().then(() => setLoadingNext(false))
-}
+    loadUsers().then(() => setLoadingNext(false));
+  }
 
   useEffect(() => {
     loadUsers();
-}, [loadUsers])
-
-  useEffect(() => {
     setshowArena(true);
-  }, []);
+  }, [loadUsers]);
 
   const arena = () => (
     <Container fluid style={{ marginTop: "1em", backgroundColor: "white" }}>
       <Navbar />
       <Grid style={{ marginTop: "4em" }}>
         <Grid.Column width={10}>
-          <ArenaMainPage />
+          <ArenaMainPage initialLoad = {showWelcomeScreen}/>
         </Grid.Column>
         {showDice && (
           <Image
@@ -73,7 +70,7 @@ const ArenaDashboard = () => {
             visible={showArena}
             animation="fly up"
             duration={3000}
-            onComplete={() => {setshowWelcomeScreen(false); location.state=""; console.log(location)}}
+            onComplete={() => {setshowWelcomeScreen(false); location.state="";}}
             children={arena()}
           />
         </Fragment>

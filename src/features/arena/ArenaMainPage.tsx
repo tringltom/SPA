@@ -6,7 +6,10 @@ import ActivityList from '../activities/ActivityList';
 import { observer } from 'mobx-react-lite';
 import ApprovedActivityListItemPlaceholder from '../activities/ApprovedActivityListItemPlaceholder';
 
-const ArenaMainPage: React.FC = () => {
+interface IProps {
+  initialLoad: boolean;
+}
+const ArenaMainPage: React.FC<IProps> = ({initialLoad}) => {
     const rootStore = useContext(RootStoreContext);
     const {loadReviewedActivities, loading: loadingReviews} = rootStore.reviewStore;
     const {getApprovedActivitiesFromOtherUsers, loadingInitial, setApprovedActivitiesPage, approvedActivitiesPage, totalApprovedActivityPages} = rootStore.activityStore;
@@ -14,13 +17,13 @@ const ArenaMainPage: React.FC = () => {
     const { userId } = rootStore.userStore;
 
     useEffect(() => {
-      if (userId)
+      if (userId && initialLoad)
       {
         loadReviewedActivities(userId);
         getApprovedActivitiesFromOtherUsers(userId);
         loadFavoriteActivitiesForUser(userId);
       }
-    }, [getApprovedActivitiesFromOtherUsers, loadReviewedActivities, loadFavoriteActivitiesForUser, userId]);
+    }, [getApprovedActivitiesFromOtherUsers, loadReviewedActivities, loadFavoriteActivitiesForUser, userId, initialLoad]);
 
     const [loadingNext, setLoadingNext] = useState(false);
   
