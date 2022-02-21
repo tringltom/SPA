@@ -9,7 +9,7 @@ interface IProps
     FormFieldProps {
         iconName : SemanticICONS,
         labelName: string,
-        password : boolean
+        password : boolean,
     }
 
 export const TextInputIcons: React.FC<IProps> = ({
@@ -17,7 +17,7 @@ export const TextInputIcons: React.FC<IProps> = ({
   meta: { touched, error },
   iconName,
   labelName,
-  password,
+  password
 }) => {
   const [inputType, setInputType] = useState("input");
   const [rightIcon, setRightIcon] = useState("eye slash" as SemanticICONS);
@@ -27,8 +27,7 @@ export const TextInputIcons: React.FC<IProps> = ({
     position: "absolute",
     left: "40px",
     top: "5px",
-    background: "transparent",
-    color: EkvitiColors.primary,
+    background: "transparent"
   };
 
   const inputStyle = {
@@ -37,7 +36,6 @@ export const TextInputIcons: React.FC<IProps> = ({
     paddingTop: "25px",
     fontFamily: "Comfortaa, cursive",
     backgroundColor: "#f0eff5",
-    borderStyle: "none",
     borderRadius: "7px",
   };
 
@@ -63,14 +61,25 @@ export const TextInputIcons: React.FC<IProps> = ({
     rightIcon === "eye slash" ? setRightIcon("eye") : setRightIcon("eye slash");
   };
 
+  const showError = touched && !!error;
+
   return (
     <div style={{ position: "relative", paddingBottom: "10px" }}>
-      <Form.Field error={touched && !!error}>
-        <Label style={labelStyle}>
-          {labelName}
-        </Label>
-        <Icon name={iconName} style={lefticonStyle}></Icon>
-
+      <Form.Field error={showError}>
+        <Label
+          style={{
+            ...labelStyle,
+            ...{ color: showError ? EkvitiColors.error : EkvitiColors.primary },
+          }}
+          content={showError ? error : labelName}
+        />
+        <Icon
+          name={iconName}
+          style={{
+            ...lefticonStyle,
+            ...{ color: showError ? EkvitiColors.error : "" },
+          }}
+        />
         {password && (
           <Icon
             name={rightIcon!}
@@ -78,14 +87,19 @@ export const TextInputIcons: React.FC<IProps> = ({
             onClick={togleType}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-          ></Icon>
+          />
         )}
-        <input {...input} type={inputType} style={inputStyle}></input>
-        {touched && error && (
-          <Label basic color="red">
-            {error}
-          </Label>
-        )}
+        <input
+          {...input}
+          type={inputType}
+          style={{
+            ...inputStyle,
+            ...{
+              borderColor: showError ? EkvitiColors.error : EkvitiColors.white,
+              borderStyle: showError ? "solid" : "none",
+            },
+          }}
+        />
       </Form.Field>
     </div>
   );
