@@ -9,6 +9,7 @@ export interface IActivityFormValues {
     longitude?: number | null;
     startDate?: string | null;
     endDate?: string | null;
+    dateCreated?: string | null;
     [key: string]: any;
   };
 
@@ -36,4 +37,10 @@ export interface IActivityFormValues {
     Puzzle = 4,
     Happening = 5,
     Challenge = 6,
+    "Dobro Delo" = GoodDeed,
+    "Vic" = Joke,
+    "Izreka" = Quote,
+    "Zagonetka" = Puzzle,
+    "Događaj" = Happening,
+    "Izazov" = Challenge
   }
