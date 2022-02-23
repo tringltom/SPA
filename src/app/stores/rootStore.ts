@@ -8,6 +8,7 @@ import agent from "../api/agent";
 import { toast } from "react-toastify";
 import ReviewStore from "./reviewStore";
 import FavoriteStore from "./favoriteStore";
+import ProfileStore from "./profileStore";
 
 configure({ enforceActions: "always" });
 
@@ -18,6 +19,7 @@ export class RootStore {
   activityStore: ActivityStore;
   reviewStore: ReviewStore;
   favoriteStore: FavoriteStore;
+  profileStore: ProfileStore;
 
   constructor() {
     this.userStore = new UserStore(this);
@@ -26,6 +28,7 @@ export class RootStore {
     this.activityStore = new ActivityStore(this);
     this.reviewStore = new ReviewStore(this);
     this.favoriteStore = new FavoriteStore(this);
+    this.profileStore = new ProfileStore(this);
     makeAutoObservable(this);
   };
 

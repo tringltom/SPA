@@ -36,12 +36,12 @@ const Navbar: React.FC = () => {
   const ChallengeCount = user?.activityCounts.find((el) => el.type === ActivityTypes.Challenge);
   
   const leftItems = [
-    { content: `Delo ${GoodDeedCount?.available}/${GoodDeedCount?.max}`, key: "delo", icon:"heartbeat", disabled: (GoodDeedCount?.available ?? 0) <= 0, onClick : () => {history.push("/gooddeed")}},
-    { content: `Vic ${JokeCount?.available}/${JokeCount?.max}`, key: "vic", icon:"smile outline", disabled: (JokeCount?.available ?? 0) <= 0, onClick : () => {history.push("/joke")}},
-    { content: `Izreka ${QuoteCount?.available}/${QuoteCount?.max}`, key: "izreka", icon:"comment alternate", disabled: (QuoteCount?.available ?? 0) <= 0, onClick : () => {history.push("/quote")}},
-    { content: `Zagonetka ${PuzzleCount?.available}/${PuzzleCount?.max}`, key: "zagonetka", icon:"puzzle piece", disabled: (PuzzleCount?.available ?? 0) <= 0, onClick : () => {history.push("/puzzle")}},
-    { content: `Događaj ${HappeningCount?.available}/${HappeningCount?.max}`, key: "dogadjaj", icon:"address card outline", disabled: (HappeningCount?.available ?? 0) <= 0, onClick : () => {history.push("/happening")}},
-    { content: `Izazov ${ChallengeCount?.available}/${ChallengeCount?.max}`, key: "izazov", icon:"hand rock", disabled: (ChallengeCount?.available ?? 0) <= 0, onClick : () => {history.push("/challenge")}},
+    { content: `${ActivityTypes[1]} ${GoodDeedCount?.available}/${GoodDeedCount?.max}`, key: "delo", icon:"heartbeat", disabled: (GoodDeedCount?.available ?? 0) <= 0, onClick : () => {history.push("/gooddeed")}},
+    { content: `${ActivityTypes[2]} ${JokeCount?.available}/${JokeCount?.max}`, key: "vic", icon:"smile outline", disabled: (JokeCount?.available ?? 0) <= 0, onClick : () => {history.push("/joke")}},
+    { content: `${ActivityTypes[3]} ${QuoteCount?.available}/${QuoteCount?.max}`, key: "izreka", icon:"comment alternate", disabled: (QuoteCount?.available ?? 0) <= 0, onClick : () => {history.push("/quote")}},
+    { content: `${ActivityTypes[4]} ${PuzzleCount?.available}/${PuzzleCount?.max}`, key: "zagonetka", icon:"puzzle piece", disabled: (PuzzleCount?.available ?? 0) <= 0, onClick : () => {history.push("/puzzle")}},
+    { content: `${ActivityTypes[5]} ${HappeningCount?.available}/${HappeningCount?.max}`, key: "dogadjaj", icon:"address card outline", disabled: (HappeningCount?.available ?? 0) <= 0, onClick : () => {history.push("/happening")}},
+    { content: `${ActivityTypes[6]} ${ChallengeCount?.available}/${ChallengeCount?.max}`, key: "izazov", icon:"hand rock", disabled: (ChallengeCount?.available ?? 0) <= 0, onClick : () => {history.push("/challenge")}},
   
   ];
   
