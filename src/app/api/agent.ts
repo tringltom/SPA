@@ -55,6 +55,7 @@ const requests = {
   get: (url: string) => axios.get(url).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
+  patch: (url: string, body: {}) => axios.patch(url, body, {headers: {'Content-type': 'application/json'}}).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
   postForm: (url: string, formData : any) => {
     return axios.post(url, formData, {
@@ -82,6 +83,8 @@ const User = {
     requests.get(`/users/resendEmailVerification?email=${email}`),
   recoverPassword: (email: string): Promise<string> =>
     requests.post("/users/RecoverPassword", email),
+  updateAbout: (about: string): Promise<string> =>
+    requests.patch("/users/updateAbout", {about})
 };
 
 const Activity = {

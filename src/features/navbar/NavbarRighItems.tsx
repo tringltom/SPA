@@ -6,19 +6,20 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 export const NavbarRighItems = () => {
     const rootStore = useContext(RootStoreContext);
     const { logout, user } = rootStore.userStore;
+    console.log(user);
 
     return (
       <Fragment>
         <Image
           avatar
           spaced="right"
-          src={user?.image || "/assets/user.png"}
+          src={user?.image?.url || "/assets/user.png"}
         />
-        <Dropdown pointing="top left" inline button text={user?.username}>
+        <Dropdown pointing="top left" inline button text={user?.userName}>
           <Dropdown.Menu direction={"left"}>
             <Dropdown.Item
               as={Link}
-              to={`/profile/${user?.username}`}
+              to={`/profile/${user?.userName}`}
               text="Profil"
               icon="user"
             />

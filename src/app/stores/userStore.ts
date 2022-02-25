@@ -66,7 +66,7 @@ export default class UserStore {
       const { users, userCount } = usersEnvelope;
       runInAction(() => {
         users?.forEach((user) => {
-          this.userRegistry.set(user.username, user);
+          this.userRegistry.set(user.userName, user);
         });
         this.userCount = userCount;
       });
@@ -120,7 +120,7 @@ export default class UserStore {
     try {
       const user = await agent.User.refreshToken();
       runInAction(() => {
-        this.user = user;
+        this.user!.token = user.token
       });
       this.rootStore.commonStore.setToken(user.token);
       this.startRefreshTokenTimer(user);

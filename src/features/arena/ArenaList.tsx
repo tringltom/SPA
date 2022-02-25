@@ -24,7 +24,7 @@ const ArenaList: React.FC<IProps> = ({users}) => {
                 />
 
                 <Item.Content>
-                  <Item.Header as="a">{user.username}</Item.Header>
+                  <Item.Header as="a">{user.userName}</Item.Header>
                   <Item.Meta>
                     Trenutni broj iskustvenih poena : {user?.currentXp}
                   </Item.Meta>

@@ -13,9 +13,9 @@ const ProfileHeader = () => {
         <Grid.Column width={12}>
           <Item.Group>
             <Item>
-              <Item.Image avatar size="small" src={"/assets/user.png"} />
+              <Item.Image avatar size="small" src={user?.image?.url || "/assets/user.png"}/>
               <Item.Content verticalAlign="middle">
-                <Header as="h1" content={user?.username}></Header>
+                <Header as="h1" content={user?.userName}></Header>
               </Item.Content>
             </Item>
           </Item.Group>
