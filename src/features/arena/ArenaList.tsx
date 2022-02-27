@@ -19,7 +19,7 @@ const ArenaList: React.FC<IProps> = ({users}) => {
                   avatar
                   circular
                   centered
-                  src={user?.image || "/assets/littleOne2.jpg"}
+                  src={user?.image?.url || "/assets/user.png"}
                   style={{ marginBottom: 3 }}
                 />
 

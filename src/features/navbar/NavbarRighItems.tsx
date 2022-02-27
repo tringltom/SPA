@@ -6,7 +6,6 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 export const NavbarRighItems = () => {
     const rootStore = useContext(RootStoreContext);
     const { logout, user } = rootStore.userStore;
-    console.log(user);
 
     return (
       <Fragment>
@@ -26,8 +25,14 @@ export const NavbarRighItems = () => {
             <Dropdown.Item
               as={Link}
               to={`/approvals`}
-              text="Odobrenja"
+              text="Odobrenja aktivnosti"
               icon="check"
+            />
+            <Dropdown.Item
+              as={Link}
+              to={`/avatarApprovals`}
+              text="Odobrenja profila"
+              icon="check circle"
             />
             <Dropdown.Item onClick={logout} text="Odjava" icon="power" />
           </Dropdown.Menu>

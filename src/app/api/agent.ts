@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { IUser, IUserEnvelope, IUserFormValues } from "../models/user";
+import { IUser, IUserEnvelope, IUserFormValues, IUserImageEnvelope } from "../models/user";
 import { toast } from "react-toastify";
 import { ActivityTypes, IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
 import { history } from '../..';
@@ -58,10 +58,19 @@ const requests = {
   patch: (url: string, body: {}) => axios.patch(url, body, {headers: {'Content-type': 'application/json'}}).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
   postForm: (url: string, formData : any) => {
-    return axios.post(url, formData, {
-        headers: {'Content-type': 'multipart/form-data'},
-    }).then(responseBody)
-}
+    return axios
+      .post(url, formData, {
+        headers: { "Content-type": "multipart/form-data" },
+      })
+      .then(responseBody);
+  },
+  patchForm: (url: string, formData : any) => {
+    return axios
+      .patch(url, formData, {
+        headers: { "Content-type": "multipart/form-data" },
+      })
+      .then(responseBody);
+  }
 };
 
 const User = {
@@ -84,7 +93,15 @@ const User = {
   recoverPassword: (email: string): Promise<string> =>
     requests.post("/users/RecoverPassword", email),
   updateAbout: (about: string): Promise<string> =>
-    requests.patch("/users/updateAbout", {about})
+    requests.patch("/users/updateAbout", {about}),
+  updateImage: (image: Blob): Promise<string> => {
+    let formData = new FormData();
+    formData.append('images', image);
+    return requests.patchForm("/users/updateImage", formData);
+  },
+  getUserImagesToApprove: (params: URLSearchParams): Promise<IUserImageEnvelope> =>
+    axios.get('/users/getImagesForApproval', {params: params}).then(responseBody),
+  resolveUserImage: (id: string, approve: boolean): Promise<boolean> => requests.post(`/users/resolve/${id}`, {approve})
 };
 
 const Activity = {

@@ -17,10 +17,6 @@ export const ProfileAbout = () => {
 
   const [edit, setEdit] = useState(false);
 
-  const handleFinalFormSubmit = (values: any) => {
-    setUserAbout(values.about);
-  };
-
   return (
     <Container>
       <Header as="h2" textAlign="center" content="O Korisniku" />

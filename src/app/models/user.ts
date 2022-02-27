@@ -29,6 +29,12 @@ export interface IUserEnvelope {
   users: IUser[] | null;
   userCount: number;
 };
+
+export interface IUserImageEnvelope {
+  users: IUser[] | null;
+  userCount: number;
+}
+
 export interface IUserActivityCount {
   type: ActivityTypes;
   max: number;

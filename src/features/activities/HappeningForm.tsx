@@ -115,7 +115,6 @@ const HappeningForm = () => {
   return (
     <FinalForm
       onSubmit={(values: IActivityFormValues) => {
-        console.log(values);
         setsubmitError(null);
         openModal(
           <ModalYesNo

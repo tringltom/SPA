@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react'
 import { Grid, Loader } from 'semantic-ui-react'
-import  ActivityList from './activities/ActivityList';
+import  ActivityList from '../activities/ActivityList';
 import InfiniteScroll from 'react-infinite-scroller'
-import PendingActivityListItemPlaceholder from './activities/PendingActivityListItemPlaceholder';
-import { RootStoreContext } from '../app/stores/rootStore';
+import PendingActivityListItemPlaceholder from '../activities/PendingActivityListItemPlaceholder';
+import { RootStoreContext } from '../../app/stores/rootStore';
 
 const Approvals: React.FC = () => {
 

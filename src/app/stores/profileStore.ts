@@ -75,4 +75,20 @@ export default class ProfileStore {
     }
   };
 
+  setUserImage = async (values: any) => {
+    try {
+      this.rootStore.frezeScreen();
+      const message = await agent.User.updateImage(values.images[0]);
+      runInAction(() => {
+        toast.success(message);
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
+    } catch (error) {
+      this.rootStore.unFrezeScreen();
+      this.rootStore.modalStore.closeModal();
+      toast.error("Neuspešna izmena");
+    }
+  };
+
 };

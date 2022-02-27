@@ -11,13 +11,15 @@ export default class ModalStore {
   @observable.shallow modal = {
     open: false,
     body: null,
-    closeOnDimmerClick : true
+    closeOnDimmerClick : true,
+    fixedWidth : false
   };
 
-  @action openModal = (content: any, closeOnDimmerClick : boolean = true) => {
+  @action openModal = (content: any, closeOnDimmerClick : boolean = true, fixedWidth : boolean = false) => {
     this.modal.open = true;
     this.modal.body = content;
     this.modal.closeOnDimmerClick = closeOnDimmerClick;
+    this.modal.fixedWidth = fixedWidth;
   };
 
   @action closeModal = () => {
