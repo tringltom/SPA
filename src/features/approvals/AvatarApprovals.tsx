@@ -1,9 +1,10 @@
 import { observer } from 'mobx-react-lite';
 import { useContext, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
-import { Button, Card, Container, Header, Image, Segment } from 'semantic-ui-react'
+import { Button, Card, Container, Grid, Header, Image, Segment } from 'semantic-ui-react'
 import ModalYesNo from '../../app/common/modals/ModalYesNo';
 import { RootStoreContext } from '../../app/stores/rootStore';
+import { AvatarApprovalsPlaceholder } from './AvatarApprovalsPlaceholder';
 
 const AvatarApprovals = () => {
 
@@ -25,20 +26,22 @@ const AvatarApprovals = () => {
 
   return (
     <Container>
-      <InfiniteScroll
+      {userImagestoApproveArray?.length! > 0 ? (
+        <InfiniteScroll
         pageStart={0}
         loadMore={handleGetNext}
         hasMore={!loadingNext && page + 1 < totalPages}
         initialLoad={false}
-      >
-        {userImagestoApproveArray?.length! > 0 &&
-          userImagestoApproveArray?.map((user, element) => (
+        >
+          <Grid>
+          {userImagestoApproveArray?.map((user, element) => (
+            <Grid.Row centered>
             <Segment.Group key={element}>
               <Segment>
                 <Header as="h2" style={{ textAlign: "center" }}>
                   {user.userName}
                 </Header>
-                <Card key={user?.image.id} fluid>
+                <Card key={user?.image.id}>
                   <Image
                     circular
                     centered
@@ -55,8 +58,8 @@ const AvatarApprovals = () => {
                   onClick={() =>
                     openModal(
                       <ModalYesNo
-                        handleConfirmation={
-                          async () => await approveUserImage(user.id, true)
+                        handleConfirmation={async () =>
+                          await approveUserImage(user.id, true)
                         }
                         content="Dozvoliti sliku"
                         icon="thumbs up"
@@ -72,8 +75,8 @@ const AvatarApprovals = () => {
                   onClick={() =>
                     openModal(
                       <ModalYesNo
-                        handleConfirmation={
-                          async () => await approveUserImage(user.id, false)
+                        handleConfirmation={async () =>
+                          await approveUserImage(user.id, false)
                         }
                         content="Odbiti sliku"
                         icon="thumbs down"
@@ -84,8 +87,13 @@ const AvatarApprovals = () => {
                 />
               </Segment>
             </Segment.Group>
+            </Grid.Row>
           ))}
-      </InfiniteScroll>
+        </Grid>
+        </InfiniteScroll>
+      ) : (
+        <AvatarApprovalsPlaceholder />
+      )}
     </Container>
   );
 }

@@ -96,7 +96,7 @@ const User = {
     requests.patch("/users/updateAbout", {about}),
   updateImage: (image: Blob): Promise<string> => {
     let formData = new FormData();
-    formData.append('images', image);
+    formData.append('image', image);
     return requests.patchForm("/users/updateImage", formData);
   },
   getUserImagesToApprove: (params: URLSearchParams): Promise<IUserImageEnvelope> =>
