@@ -1,12 +1,11 @@
-import React, { Fragment } from 'react'
-import { Button, Card, Header, Placeholder, Segment, Image, Container, Grid } from 'semantic-ui-react'
+import { Button, Card, Container, Grid, Placeholder, Segment } from 'semantic-ui-react'
 
 export const AvatarApprovalsPlaceholder = () => {
   return (
     <Container>
       <Grid>
         {[...Array(4)].map((el, i) => (
-          <Grid.Row centered>
+          <Grid.Row key={i} centered>
             <Placeholder key={i} fluid>
               <Segment.Group key={el}>
                 <Segment>
@@ -25,11 +24,9 @@ export const AvatarApprovalsPlaceholder = () => {
                     content="Učitava se.."
                     color="green"
                     disabled
-                    Simulate
                     loading
                   />
                   <Button
-                    Simulate
                     loading
                     floated="right"
                     content="Učitava se.."

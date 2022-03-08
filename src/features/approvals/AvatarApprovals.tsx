@@ -10,7 +10,7 @@ import { observer } from 'mobx-react-lite';
 const AvatarApprovals = () => {
 
   const rootStore = useContext(RootStoreContext);
-  const { loadUsersForImageApproval, setPage, page, totalPages, userImagestoApproveArray, approveUserImage } = rootStore.userStore;
+  const { loadUsersForImageApproval, setPage, page, totalPages, userImagestoApproveArray, approveUserImage, loading } = rootStore.userStore;
   const { openModal } = rootStore.modalStore;
 
   const [loadingNext, setLoadingNext] = useState(false);
@@ -27,7 +27,7 @@ const AvatarApprovals = () => {
 
   return (
     <Container>
-      {userImagestoApproveArray?.length! > 0 ? (
+      {!loading ? (
         <InfiniteScroll
         pageStart={0}
         loadMore={handleGetNext}

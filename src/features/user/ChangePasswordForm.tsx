@@ -95,6 +95,7 @@ export const ChangePasswordForm: React.FC<RouteComponentProps> = ({ location }) 
                       onClick={() => openModal(<LoginForm />)}
                       size="medium"
                       content="Prijavi se"
+                      type="button"
                     ></Button>
                   </Fragment>
                 )}

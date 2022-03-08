@@ -1,10 +1,11 @@
-import { observer } from 'mobx-react-lite';
+import { Button, Container, Form, Grid, Header, Icon, Item, Segment } from 'semantic-ui-react';
+import { Field, Form as FinalForm } from "react-final-form";
+import { combineValidators, isRequired } from 'revalidate';
 import { useContext, useState } from 'react';
-import { Segment, Item, Header, Grid, Icon, Form, Button, Container } from 'semantic-ui-react';
+
 import { FileInput } from '../../app/common/form/FileInput';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { Form as FinalForm, Field } from "react-final-form";
-import { combineValidators, isRequired } from 'revalidate';
+import { observer } from 'mobx-react-lite';
 
 const validate = combineValidators({images: isRequired({message: 'Slika je neophodna'})});
 
