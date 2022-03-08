@@ -4,8 +4,9 @@ import { Fragment, useEffect } from "react";
 import { Redirect, Route, RouteComponentProps, Switch, useLocation, withRouter } from "react-router-dom";
 
 import { ActivityTypes } from "../models/activity";
-import Approvals from "../../features/Approvals";
+import Approvals from '../../features/approvals/Approvals';
 import ArenaDashboard from "../../features/arena/ArenaDashboard";
+import AvatarApprovals from '../../features/approvals/AvatarApprovals';
 import ChallengeForm from "../../features/activities/ChallengeForm";
 import { ChangePasswordForm } from '../../features/user/ChangePasswordForm';
 import { Container } from "semantic-ui-react";
@@ -41,7 +42,7 @@ const App: React.FC<RouteComponentProps> = () => {
     }
   }, [getUser, setAppLoaded, token, appLoaded, isLoggedIn]);
 
-  const pathsWithNavBar = ["/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/profile", "/approvals"];
+  const pathsWithNavBar = ["/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/profile", "/approvals", "/avatarApprovals"];
   const location = useLocation();
 
   const ShowNavBar = () => {
@@ -79,6 +80,7 @@ const App: React.FC<RouteComponentProps> = () => {
                   <PrivateRoute path="/challenge" component={ChallengeForm} type={ActivityTypes.Challenge}/>
                   <PrivateRoute path="/profile/:username" component={ProfilePage} />
                   <PrivateRoute path="/approvals" component={Approvals} />
+                  <PrivateRoute path="/avatarApprovals" component={AvatarApprovals} />
                   <Route component={NotFound} />
                 </Switch>
               </Container>

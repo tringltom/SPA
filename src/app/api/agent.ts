@@ -1,6 +1,6 @@
 import { ActivityTypes, IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
 import { IReview, ReviewTypes } from "../models/review";
-import { IUser, IUserEnvelope, IUserFormValues } from "../models/user";
+import { IUser, IUserEnvelope, IUserFormValues, IUserImageEnvelope } from "../models/user";
 import axios, { AxiosResponse } from "axios";
 
 import { IDiceResult } from "../models/diceResult";
@@ -56,12 +56,22 @@ const requests = {
   get: (url: string) => axios.get(url).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
+  patch: (url: string, body: {}) => axios.patch(url, body, {headers: {'Content-type': 'application/json'}}).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
   postForm: (url: string, formData : any) => {
-    return axios.post(url, formData, {
-        headers: {'Content-type': 'multipart/form-data'},
-    }).then(responseBody)
-}
+    return axios
+      .post(url, formData, {
+        headers: { "Content-type": "multipart/form-data" },
+      })
+      .then(responseBody);
+  },
+  patchForm: (url: string, formData : any) => {
+    return axios
+      .patch(url, formData, {
+        headers: { "Content-type": "multipart/form-data" },
+      })
+      .then(responseBody);
+  }
 };
 
 const User = {
@@ -85,6 +95,16 @@ const User = {
     requests.post("/users/RecoverPassword", email),
   verifyPasswordRecovery: (token: string, email: string, newPassword: string): Promise<string> =>
     requests.post("/users/verifyPasswordRecovery", {email, token, newPassword}),
+  updateAbout: (about: string): Promise<string> =>
+    requests.patch("/users/updateAbout", {about}),
+  updateImage: (image: Blob): Promise<string> => {
+    let formData = new FormData();
+    formData.append('image', image);
+    return requests.patchForm("/users/updateImage", formData);
+  },
+  getUserImagesToApprove: (params: URLSearchParams): Promise<IUserImageEnvelope> =>
+    axios.get('/users/getImagesForApproval', {params: params}).then(responseBody),
+  resolveUserImage: (id: string, approve: boolean): Promise<boolean> => requests.post(`/users/resolve/${id}`, {approve})
 };
 
 const Activity = {

@@ -19,12 +19,12 @@ const ArenaList: React.FC<IProps> = ({users}) => {
                   avatar
                   circular
                   centered
-                  src={user?.image || "/assets/littleOne2.jpg"}
+                  src={user?.image?.url || "/assets/user.png"}
                   style={{ marginBottom: 3 }}
                 />
 
                 <Item.Content>
-                  <Item.Header as="a">{user.username}</Item.Header>
+                  <Item.Header as="a">{user.userName}</Item.Header>
                   <Item.Meta>
                     Trenutni broj iskustvenih poena : {user?.currentXp}
                   </Item.Meta>

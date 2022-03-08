@@ -12,7 +12,6 @@ export default class UserStore {
   refreshTokenTimeout: any;
   rootStore: RootStore;
   user: IUser | null = null;
-  users: IUser[] | null = null;
   loading = false;
 
   constructor(rootStore: RootStore) {
@@ -31,11 +30,17 @@ export default class UserStore {
 
   page = 0;
   userCount = 0;
+  userImageCount = 0;
   predicate = new Map();
   userRegistry = new Map();
+  userImageRegistry = new Map();
 
   get usersArray() {
     return Array.from(this.userRegistry.values());
+  }
+
+  get userImagestoApproveArray() {
+    return Array.from(this.userImageRegistry.values());
   }
 
   setPage = (page: number) => {
@@ -44,6 +49,14 @@ export default class UserStore {
 
   get totalPages() {
     return Math.ceil(this.userCount / LIMIT);
+  }
+
+  get isLoggedIn() {
+    return !!this.user;
+  };
+
+  get userId() {
+    return this.user?.id;
   }
 
   get axiosParams() {
@@ -60,13 +73,13 @@ export default class UserStore {
     return params;
   }
 
-  loadUsers =  async () => {
+  loadUsers = async () => {
     try {
       const usersEnvelope = await agent.User.list(this.axiosParams);
       const { users, userCount } = usersEnvelope;
       runInAction(() => {
         users?.forEach((user) => {
-          this.userRegistry.set(user.username, user);
+          this.userRegistry.set(user.userName, user);
         });
         this.userCount = userCount;
       });
@@ -75,12 +88,39 @@ export default class UserStore {
     }
   }
 
-  get isLoggedIn() {
-    return !!this.user;
+  loadUsersForImageApproval = async () => {
+    try {
+      const usersImageEnvelope = await agent.User.getUserImagesToApprove(this.axiosParams);
+      const { users, userCount } = usersImageEnvelope;
+      runInAction(() => {
+        users?.forEach((user) => {
+          this.userImageRegistry.set(user.id, user);
+        });
+        this.userImageCount = userCount;
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  get userId() {
-    return this.user?.id;
+  approveUserImage = async (userId : string, approve : boolean) => {
+    try {
+      this.rootStore.frezeScreen();
+      const success = await agent.User.resolveUserImage(userId, approve);
+      if (success) {
+        toast.success("Uspešno ste odobrili/odbili profilnu sliku");
+        this.userImageRegistry.delete(userId);
+      } else {
+        toast.error("Neuspešno ste odobrili/odbili aktivnost");
+      }
+      this.rootStore.modalStore.closeModal();
+      this.rootStore.unFrezeScreen();
+    } catch (error) {
+      this.rootStore.unFrezeScreen();
+      this.rootStore.modalStore.closeModal();
+      console.log(error);
+      toast.error("Neuspešno, proverite konzolu");
+    }
   }
 
   login = async (values: IUserFormValues) => {
@@ -120,7 +160,7 @@ export default class UserStore {
     try {
       const user = await agent.User.refreshToken();
       runInAction(() => {
-        this.user = user;
+        this.user!.token = user.token
       });
       this.rootStore.commonStore.setToken(user.token);
       this.startRefreshTokenTimer(user);
