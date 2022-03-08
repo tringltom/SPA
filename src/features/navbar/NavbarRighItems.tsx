@@ -12,21 +12,27 @@ export const NavbarRighItems = () => {
         <Image
           avatar
           spaced="right"
-          src={user?.image || "/assets/user.png"}
+          src={user?.image?.url || "/assets/user.png"}
         />
-        <Dropdown pointing="top left" inline button text={user?.username}>
+        <Dropdown pointing="top left" inline button text={user?.userName}>
           <Dropdown.Menu direction={"left"}>
             <Dropdown.Item
               as={Link}
-              to={`/profile/${user?.username}`}
+              to={`/profile/${user?.userName}`}
               text="Profil"
               icon="user"
             />
             <Dropdown.Item
               as={Link}
               to={`/approvals`}
-              text="Odobrenja"
+              text="Odobrenja aktivnosti"
               icon="check"
+            />
+            <Dropdown.Item
+              as={Link}
+              to={`/avatarApprovals`}
+              text="Odobrenja profila"
+              icon="check circle"
             />
             <Dropdown.Item onClick={logout} text="Odjava" icon="power" />
           </Dropdown.Menu>

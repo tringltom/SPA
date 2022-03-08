@@ -16,7 +16,7 @@ import { RootStoreContext } from "../stores/rootStore";
 import { LoadingComponent } from "./LoadingComponent";
 import WelcomeScreen from "../../features/WelcomeScreen";
 import PuzzleForm from "../../features/activities/PuzzleForm";
-import Approvals from "../../features/Approvals";
+import Approvals from "../../features/approvals/Approvals";
 import GoodDeedForm from "../../features/activities/GoodDeedForm";
 import ChallengeForm from "../../features/activities/ChallengeForm";
 import JokeForm from "../../features/activities/JokeForm";
@@ -24,6 +24,7 @@ import QuoteForm from "../../features/activities/QuoteForm";
 import HappeningForm from "../../features/activities/HappeningForm";
 import ProfilePage from "../../features/profile/ProfilePage";
 import { ActivityTypes } from "../models/activity";
+import AvatarApprovals from "../../features/approvals/AvatarApprovals";
 
 
 const App: React.FC<RouteComponentProps> = () => {
@@ -39,7 +40,7 @@ const App: React.FC<RouteComponentProps> = () => {
     }
   }, [getUser, setAppLoaded, token, appLoaded, isLoggedIn]);
 
-  const pathsWithNavBar = ["/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/profile", "/approvals"];
+  const pathsWithNavBar = ["/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/profile", "/approvals", "/avatarApprovals"];
   const location = useLocation();
 
   const ShowNavBar = () => {
@@ -76,6 +77,7 @@ const App: React.FC<RouteComponentProps> = () => {
                   <PrivateRoute path="/challenge" component={ChallengeForm} type={ActivityTypes.Challenge}/>
                   <PrivateRoute path="/profile/:username" component={ProfilePage} />
                   <PrivateRoute path="/approvals" component={Approvals} />
+                  <PrivateRoute path="/avatarApprovals" component={AvatarApprovals} />
                   <Route component={NotFound} />
                 </Switch>
               </Container>

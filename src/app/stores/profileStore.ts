@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { RootStore } from "./rootStore";
 import { IActivity } from "../models/activity";
+import { toast } from "react-toastify";
 
 const LIMIT = 5;
 
@@ -56,4 +57,38 @@ export default class ProfileStore {
       });
     }
   };
+
+  setUserAbout = async (about: string) => {
+    try {
+      this.rootStore.frezeScreen();
+      const message = await agent.User.updateAbout(about);
+      runInAction(() => {
+        this.rootStore.userStore.user!.about = about;
+        toast.success(message);
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
+    } catch (error) {
+      this.rootStore.unFrezeScreen();
+      this.rootStore.modalStore.closeModal();
+      toast.error("Neuspešna izmena");
+    }
+  };
+
+  setUserImage = async (values: any) => {
+    try {
+      this.rootStore.frezeScreen();
+      const message = await agent.User.updateImage(values.images[0]);
+      runInAction(() => {
+        toast.success(message);
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
+    } catch (error) {
+      this.rootStore.unFrezeScreen();
+      this.rootStore.modalStore.closeModal();
+      toast.error("Neuspešna izmena");
+    }
+  };
+
 };
