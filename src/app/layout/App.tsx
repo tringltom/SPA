@@ -1,31 +1,33 @@
-import { Fragment, useEffect } from "react";
-import ModalContainer from "../common/modals/ModalContainer";
-import { observer } from "mobx-react-lite";
-import { Redirect, Route, RouteComponentProps, Switch, useLocation, withRouter } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import { Container } from "semantic-ui-react";
-import RegisterSuccess from "../../features/user/RegisterSuccess";
-import VerifyEmail from "../../features/user/VerifyEmail";
-import NotFound from "./NotFound";
-import Navbar from "../../features/navbar/Navbar";
 import  './styles.css';
-import ArenaDashboard from "../../features/arena/ArenaDashboard";
-import PrivateRoute from "./PrivateRoute";
-import { useContext } from "react";
-import { RootStoreContext } from "../stores/rootStore";
-import { LoadingComponent } from "./LoadingComponent";
-import WelcomeScreen from "../../features/WelcomeScreen";
-import PuzzleForm from "../../features/activities/PuzzleForm";
-import Approvals from "../../features/approvals/Approvals";
-import GoodDeedForm from "../../features/activities/GoodDeedForm";
-import ChallengeForm from "../../features/activities/ChallengeForm";
-import JokeForm from "../../features/activities/JokeForm";
-import QuoteForm from "../../features/activities/QuoteForm";
-import HappeningForm from "../../features/activities/HappeningForm";
-import ProfilePage from "../../features/profile/ProfilePage";
-import { ActivityTypes } from "../models/activity";
-import AvatarApprovals from "../../features/approvals/AvatarApprovals";
 
+import { Fragment, useEffect } from "react";
+import { Redirect, Route, RouteComponentProps, Switch, useLocation, withRouter } from "react-router-dom";
+
+import { ActivityTypes } from "../models/activity";
+import Approvals from '../../features/approvals/Approvals';
+import ArenaDashboard from "../../features/arena/ArenaDashboard";
+import AvatarApprovals from '../../features/approvals/AvatarApprovals';
+import ChallengeForm from "../../features/activities/ChallengeForm";
+import { ChangePasswordForm } from '../../features/user/ChangePasswordForm';
+import { Container } from "semantic-ui-react";
+import GoodDeedForm from "../../features/activities/GoodDeedForm";
+import HappeningForm from "../../features/activities/HappeningForm";
+import JokeForm from "../../features/activities/JokeForm";
+import { LoadingComponent } from "./LoadingComponent";
+import ModalContainer from "../common/modals/ModalContainer";
+import Navbar from "../../features/navbar/Navbar";
+import NotFound from "./NotFound";
+import PrivateRoute from "./PrivateRoute";
+import ProfilePage from "../../features/profile/ProfilePage";
+import PuzzleForm from "../../features/activities/PuzzleForm";
+import QuoteForm from "../../features/activities/QuoteForm";
+import RegisterSuccess from "../../features/user/RegisterSuccess";
+import { RootStoreContext } from "../stores/rootStore";
+import { ToastContainer } from "react-toastify";
+import VerifyEmail from "../../features/user/VerifyEmail";
+import WelcomeScreen from "../../features/WelcomeScreen";
+import { observer } from "mobx-react-lite";
+import { useContext } from "react";
 
 const App: React.FC<RouteComponentProps> = () => {
   const rootStore = useContext(RootStoreContext);
@@ -68,6 +70,7 @@ const App: React.FC<RouteComponentProps> = () => {
                 <Switch>
                   <Route path="/users/registerSuccess" component={RegisterSuccess} />
                   <Route path="/users/verifyEmail" component={VerifyEmail} />
+                  <Route path="/users/verifyPasswordRecovery" component={ChangePasswordForm} />
                   <PrivateRoute path="/arena" component={ArenaDashboard} />
                   <PrivateRoute path="/gooddeed" component={GoodDeedForm} type={ActivityTypes.GoodDeed} />
                   <PrivateRoute path="/joke" component={JokeForm} type={ActivityTypes.Joke} />

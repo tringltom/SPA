@@ -1,10 +1,11 @@
-import axios, { AxiosResponse } from "axios";
-import { IUser, IUserEnvelope, IUserFormValues, IUserImageEnvelope } from "../models/user";
-import { toast } from "react-toastify";
 import { ActivityTypes, IActivitiesEnvelope, IActivityFormValues } from "../models/activity";
-import { history } from '../..';
-import { IDiceResult } from "../models/diceResult";
 import { IReview, ReviewTypes } from "../models/review";
+import { IUser, IUserEnvelope, IUserFormValues, IUserImageEnvelope } from "../models/user";
+import axios, { AxiosResponse } from "axios";
+
+import { IDiceResult } from "../models/diceResult";
+import { history } from '../..';
+import { toast } from "react-toastify";
 
 axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
 ? "https://localhost:4001"
@@ -92,6 +93,8 @@ const User = {
     requests.get(`/users/resendEmailVerification?email=${email}`),
   recoverPassword: (email: string): Promise<string> =>
     requests.post("/users/RecoverPassword", email),
+  verifyPasswordRecovery: (token: string, email: string, newPassword: string): Promise<string> =>
+    requests.post("/users/verifyPasswordRecovery", {email, token, newPassword}),
   updateAbout: (about: string): Promise<string> =>
     requests.patch("/users/updateAbout", {about}),
   updateImage: (image: Blob): Promise<string> => {

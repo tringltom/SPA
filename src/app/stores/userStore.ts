@@ -1,10 +1,10 @@
-import { makeAutoObservable, reaction, runInAction } from "mobx";
-import { toast } from "react-toastify";
-import { history } from "../..";
-import agent from "../api/agent";
 import { IUser, IUserFormValues } from "../models/user";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 
 import { RootStore } from "./rootStore";
+import agent from "../api/agent";
+import { history } from "../..";
+import { toast } from "react-toastify";
 
 const LIMIT = 3;
 
@@ -222,6 +222,24 @@ export default class UserStore {
         this.loading = false;
       });
       history.push(`/`);
+    } catch (error) {
+      this.loading = false;
+      throw error;
+    }
+  };
+
+  verifyPasswordRecovery = async (token: string, email: string, newPassword: string) => {
+    try {
+      this.loading = true;
+      console.log(token)
+      console.log(email)
+      console.log(newPassword)
+      const message = await agent.User.verifyPasswordRecovery(token, email, newPassword);
+      runInAction(() => {
+        this.rootStore.modalStore.closeModal();
+        toast.success(message);
+        this.loading = false;
+      });
     } catch (error) {
       this.loading = false;
       throw error;
