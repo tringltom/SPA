@@ -1,10 +1,11 @@
-import { observer } from 'mobx-react-lite';
-import { useContext, useEffect, useState } from 'react'
-import InfiniteScroll from 'react-infinite-scroller'
 import { Button, Card, Container, Grid, Header, Image, Segment } from 'semantic-ui-react'
+import { useContext, useEffect, useState } from 'react'
+
+import { AvatarApprovalsPlaceholder } from './AvatarApprovalsPlaceholder';
+import InfiniteScroll from 'react-infinite-scroller'
 import ModalYesNo from '../../app/common/modals/ModalYesNo';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { AvatarApprovalsPlaceholder } from './AvatarApprovalsPlaceholder';
+import { observer } from 'mobx-react-lite';
 
 const AvatarApprovals = () => {
 
@@ -70,7 +71,7 @@ const AvatarApprovals = () => {
                 />
                 <Button
                   floated="right"
-                  content="Zabrani"
+                  content="Odbij"
                   color="red"
                   onClick={() =>
                     openModal(
