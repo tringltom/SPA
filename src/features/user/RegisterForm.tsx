@@ -12,13 +12,13 @@ import { RootStoreContext } from "../../app/stores/rootStore";
 import LoginForm from "./LoginForm";
 
 const validate = combineValidators({
-  email: isRequired({ message: "E-mail adresa je neophodna" }),
-  password: isRequired({ message: "Lozinka je neophodna" }),
-  username: isRequired({ message: "Korisničko ime je neophodno" }),
+  email: isRequired({ message: "Potrebno je uneti vašu E-mail adresu" }),
+  password: isRequired({ message: "Potrebno je uneti vašu lozinku" }),
+  username: isRequired({ message: "Potrebno je uneti Korisničko ime" }),
   passwordConfirm: composeValidators(
-    isRequired({ message: "Potvrda lozinke je neophodna" }),
+    isRequired({ message: "Potrebno je ponovo uneti vašu lozinku" }),
     matchesField('password','Lozinka')({
-      message: "Niste dobro ponovili lozinku",
+      message: "Potrebno je ponovo uneti vašu lozinku",
     })
   )()
 });

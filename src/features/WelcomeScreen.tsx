@@ -117,7 +117,7 @@ const WelcomeScreen = () => {
                         basic
                         inverted
                         style={ButtonStyle}
-                        onClick={() => openModal(<LoginForm />)}
+                        onClick={() => openModal(<LoginForm />, true, true)}
                       >
                         <p style={{ padding: "7px" }}>Prijavi se</p>
                       </Button>
@@ -133,7 +133,7 @@ const WelcomeScreen = () => {
                         style={ButtonStyle}
                         basic
                         inverted
-                        onClick={() => openModal(<RegisterForm />)}
+                        onClick={() => openModal(<RegisterForm />, true, true)}
                       >
                         <p style={{ padding: "1.5px" }}>Registruj se</p>
                       </Button>

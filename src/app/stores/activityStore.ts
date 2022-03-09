@@ -128,10 +128,9 @@ export default class ActivityStore {
     }
   };
 
-  approvePendingActivity = async (activityId : string, approve : boolean) => {
+   approvePendingActivity = async (activityId : string, approve : boolean) => {
     try {
       this.rootStore.frezeScreen();
-      console.log(approve);
       const success = await agent.Activity.resolvePendingActivity(activityId, approve);
       if (success){
         toast.success("Uspešno ste odobrili/odbili aktivnost");

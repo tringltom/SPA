@@ -21,16 +21,13 @@ export default class FavoriteStore {
   resolveFavoriteActivity = async (activityId: number, favorite: boolean) => {
     this.resolvingFavourite = true;
     try {
-      await agent.Favorite.resolveFavoriteActivity(activityId, favorite).then(
-        () =>
-          runInAction(() => {
-            favorite
-              ? this.favoriteRegistry.set(activityId, activityId)
-              : this.favoriteRegistry.delete(activityId);
-
-            this.resolvingFavourite = false;
-          })
-      );
+      await agent.Favorite.resolveFavoriteActivity(activityId, favorite);
+      runInAction(() => {
+        favorite
+          ? this.favoriteRegistry.set(activityId, activityId)
+          : this.favoriteRegistry.delete(activityId);
+        this.resolvingFavourite = false;
+      });
     } catch (error) {
       toast.error("Došlo je do problema sa dodelom u omiljene aktivnosti");
       this.resolvingFavourite = false;

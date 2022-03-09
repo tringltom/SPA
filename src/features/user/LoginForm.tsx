@@ -17,8 +17,8 @@ import { styles } from "../../app/layout/TextStyle";
 import { CheckBoxInput } from "../../app/common/form/CheckBoxInput";
 
 const validate = combineValidators({
-  email: isRequired({ message: "Email adresa je neophodna" }),
-  password: isRequired({ message: "Lozinka je neophodna" }),
+  email: isRequired({ message: "Potrebno je uneti E-mail adresu" }),
+  password: isRequired({ message: "Potrebno je uneti lozinku" }),
 });
 
 const LoginForm = () => {

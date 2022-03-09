@@ -1,10 +1,10 @@
-import { ActivityTypes } from "./activity";
+import { ActivityTypes, IPhoto } from "./activity";
 
 export interface IUser {
   id?: number;
-  username: string;
+  userName: string;
   token: string;
-  image?: string;
+  image?: IPhoto;
   currentLevel: string;
   currentXp: string;
   numberOfGoodDeeds: string;
@@ -15,6 +15,7 @@ export interface IUser {
   numberOfChallenges: string;
   isDiceRollAllowed: boolean;
   activityCounts: Array<IUserActivityCount>;
+  about:string;
 };
 
 export interface IUserFormValues {
@@ -28,6 +29,12 @@ export interface IUserEnvelope {
   users: IUser[] | null;
   userCount: number;
 };
+
+export interface IUserImageEnvelope {
+  users: IUser[] | null;
+  userCount: number;
+}
+
 export interface IUserActivityCount {
   type: ActivityTypes;
   max: number;

@@ -6,7 +6,7 @@ import { RootStoreContext } from "../../stores/rootStore";
 const ModalContainer = () => {
   const rootStore = useContext(RootStoreContext);
   const {
-    modal: { open, body, closeOnDimmerClick },
+    modal: { open, body, closeOnDimmerClick, fixedWidth },
     closeModal,
   } = rootStore.modalStore;
 
@@ -15,7 +15,7 @@ const ModalContainer = () => {
       open={open}
       onClose={closeModal}
       closeOnDimmerClick={closeOnDimmerClick && rootStore.allowEvents}
-      style={{ width: "36vh", borderRadius: "7px" }}
+      style={{ width: fixedWidth ? "36vh" : "", borderRadius: "7px" }}
     >
       <Modal.Content
         style={{

@@ -12,8 +12,8 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 const ArenaDashboard = () => {
   const rootStore = useContext(RootStoreContext);
-  const {shake, showDice, getPrice} = useContext(RootStoreContext);
-  const {loadUsers, setPage, page, totalPages,usersArray} = rootStore.userStore;
+  const {shake, showDice, getPrice} = rootStore;
+  const {loadUsers, setPage, page, totalPages, usersArray} = rootStore.userStore;
   const [loadingNext, setLoadingNext] = useState(false);
   const [showArena, setshowArena] = useState(false);
   const [showWelcomeScreen, setshowWelcomeScreen] = useState(true);

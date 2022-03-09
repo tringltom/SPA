@@ -116,7 +116,7 @@ export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activi
         />
         <Button
           floated="right"
-          content="Zabrani"
+          content="Odbij"
           color="red"
           onClick={() =>
             openModal(
