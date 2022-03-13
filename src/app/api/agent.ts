@@ -4,6 +4,7 @@ import { IUser, IUserEnvelope, IUserFormValues, IUserImageEnvelope } from "../mo
 import axios, { AxiosResponse } from "axios";
 
 import { IDiceResult } from "../models/diceResult";
+import { ISkillData } from "../models/skillResult";
 import { history } from '../..';
 import { toast } from "react-toastify";
 
@@ -139,12 +140,17 @@ const Favorite = {
   resolveFavoriteActivity: (activityId: number, favorite: boolean ) : Promise<void> => requests.post("favorites/resolveFavorite", {activityId, favorite})
 }
 
+const Profile = {
+  getSkills: (userId: number) : Promise<ISkillData> => requests.get(`skills/${userId}`),
+}
+
 const sites = {
   User,
   Activity,
   Dice,
   Review,
   Favorite,
+  Profile,
 };
 
 export default sites;

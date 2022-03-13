@@ -1,7 +1,9 @@
+import { ActivityTypes, IActivity } from "../models/activity";
 import { makeAutoObservable, runInAction } from "mobx";
-import agent from "../api/agent";
+
+import { ISkillData } from "../models/skillResult";
 import { RootStore } from "./rootStore";
-import { IActivity } from "../models/activity";
+import agent from "../api/agent";
 import { toast } from "react-toastify";
 
 const LIMIT = 5;
@@ -17,7 +19,9 @@ export default class ProfileStore {
   pendingActivitiesPage = 0;
   pendingActivitiesRegistry = [] as IActivity[];
   pendingActivityCount = 0;
-
+  skillData : ISkillData | null = null;
+  skillMap : Map<string, boolean> = new Map<string, boolean>();
+  initialSkillMap : Map<string, boolean> = new Map<string, boolean>();
   
   get pendingActivityAxiosParams() {
     const params = new URLSearchParams();
@@ -88,6 +92,81 @@ export default class ProfileStore {
       this.rootStore.unFrezeScreen();
       this.rootStore.modalStore.closeModal();
       toast.error("Neuspešna izmena");
+    }
+  };
+
+  loadSkills = async (userId : number) => {
+    this.loadingInitial = true;
+    try {
+      const skillData = await agent.Profile.getSkills(userId);
+      runInAction(() => {
+        this.skillData = skillData;
+        this.setInitialToggleMap();
+        this.loadingInitial = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        console.log(error);
+        this.loadingInitial = false;
+      });
+    }
+  };
+
+  setInitialToggleMap = () => {
+    
+    var toggleMapstate = new Map<string, boolean>();
+    var initialtoggleMapstate = new Map<string, boolean>();
+
+    Object.keys(ActivityTypes).forEach((key: any, el) => {
+      if (ActivityTypes[el + 1] !== undefined) {
+        for (let index = 1; index <= 7; index++) {
+          this.skillData?.skillLevels.forEach((sl) => {
+            if (sl.type.toString() === key.toString()) {
+              if (index <= sl.level) {
+                toggleMapstate.set(key + " " + index, true);
+                initialtoggleMapstate.set(key + " " + index, true);
+              } 
+              else 
+              toggleMapstate.set(key + " " + index, false);
+            }
+          });
+        }
+      }
+    });
+
+    this.skillMap = toggleMapstate;
+    this.initialSkillMap = initialtoggleMapstate;
+  };
+
+  resetSkills = async (userId : number) => {
+    this.loadingInitial = true;
+    try {
+      const skllData = await agent.Profile.getSkills(userId);
+      runInAction(() => {
+        this.skillData = skllData;
+        this.loadingInitial = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        console.log(error);
+        this.loadingInitial = false;
+      });
+    }
+  };
+
+  confirmSkills = async (userId : number) => {
+    this.loadingInitial = true;
+    try {
+      const skllData = await agent.Profile.getSkills(userId);
+      runInAction(() => {
+        this.skillData = skllData;
+        this.loadingInitial = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        console.log(error);
+        this.loadingInitial = false;
+      });
     }
   };
 

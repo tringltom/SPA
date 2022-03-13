@@ -1,11 +1,12 @@
+import { Button, Form, Header, Segment } from 'semantic-ui-react'
+import { Field, Form as FinalForm } from "react-final-form";
 import { Fragment, useContext, useState } from 'react'
-import { Button, Container, Form, Header } from 'semantic-ui-react'
-import { RootStoreContext } from '../../app/stores/rootStore';
-import { Form as FinalForm, Field } from "react-final-form";
-import { TextAreaInput } from '../../app/common/form/TextAreaInput';
 import { combineValidators, hasLengthLessThan } from 'revalidate';
-import ModalYesNo from '../../app/common/modals/ModalYesNo';
+
 import { IUser } from '../../app/models/user';
+import ModalYesNo from '../../app/common/modals/ModalYesNo';
+import { RootStoreContext } from '../../app/stores/rootStore';
+import { TextAreaInput } from '../../app/common/form/TextAreaInput';
 
 const validate = combineValidators({about: hasLengthLessThan(2000)({message: 'Za opis je dozvoljeno maksimalno 2000 karaktera'})});
 
@@ -18,7 +19,7 @@ export const ProfileAbout = () => {
   const [edit, setEdit] = useState(false);
 
   return (
-    <Container>
+    <Segment clearing>
       <Header as="h2" textAlign="center" content="O Korisniku" />
       {!edit && 
         <Fragment>
@@ -73,6 +74,6 @@ export const ProfileAbout = () => {
           )}
         />
       )}
-    </Container>
+    </Segment>
   );
 }
