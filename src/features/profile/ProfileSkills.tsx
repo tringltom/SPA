@@ -1,8 +1,8 @@
 import { Button, ButtonProps, Grid, GridRow, Header, Icon, Loader, Segment } from 'semantic-ui-react'
-import { Fragment, useCallback, useContext, useEffect, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
+import { ISkillData, ISkillLevel } from "../../app/models/skillResult";
 
 import { ActivityTypes } from '../../app/models/activity'
-import { ISkillData } from '../../app/models/skillResult';
 import ModalYesNo from '../../app/common/modals/ModalYesNo';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
@@ -11,24 +11,11 @@ const ProfileSkills = () => {
 
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
-  const { skillData, skillMap, initialSkillMap, loadSkills, loadingInitial } = rootStore.profileStore;
-
-  const undoTakenSkills = () => {
-    SkillsTaken.forEach((value, skillKey) => {
-      toggleMap.forEach((value, key) => {
-        if (key === skillKey)
-          toggleMap.set(key, false);
-      })
-    })
-    
-    setToggleMap(new Map(toggleMap));
-    setSkillsTaken(new Map());
-    setNumberOfSkillsTaken(0);
-  }
+  const { skillData, skillMap, initialSkillMap, loadSkills, loadingInitial, resetSkills, updateSkills } = rootStore.profileStore;
 
   const isSecondTreeActive = () => {
     var active = false;
-    toggleMap.forEach((value, key) => {
+    skillMap.forEach((value, key) => {
       if (key.slice(-1) === "4" && value)
         active = true; 
     });
@@ -37,7 +24,7 @@ const ProfileSkills = () => {
 
   const isThirdTreeActive = () => {
     var active = false;
-    toggleMap.forEach((value, key) => {
+    skillMap.forEach((value, key) => {
       if (key.slice(-1) === "7" && value)
         active = true; 
     });
@@ -47,7 +34,7 @@ const ProfileSkills = () => {
   const firstTreeSkillNumberGreaterThen = (number: number) => {
     var count = 0;
 
-    toggleMap.forEach((value, key) => {
+    skillMap.forEach((value, key) => {
       if ((key.slice(-1) === "1" || key.slice(-1) === "2" || key.slice(-1) === "3") && value)
         count++;
     });
@@ -58,7 +45,7 @@ const ProfileSkills = () => {
   const secondTreeSkillNumberGreaterThen = (number: number) => {
     var count = 0;
 
-    toggleMap.forEach((value, key) => {
+    skillMap.forEach((value, key) => {
       if ((key.slice(-1) === "4" || key.slice(-1) === "5" || key.slice(-1) === "6") && value)
         count++;
     });
@@ -68,7 +55,7 @@ const ProfileSkills = () => {
   const firstAndSecondTreeSkillNumberGreaterThen = (number: number) => {
     var count = 0;
 
-    toggleMap.forEach((value, key) => {
+    skillMap.forEach((value, key) => {
       if (key.slice(-1) !== "7" && value)
         count++;
     });
@@ -79,17 +66,15 @@ const ProfileSkills = () => {
     return skillData?.xpLevel! - skillData?.currentLevel! - numberOfSkillsTaken
   }
 
-  const [toggleMap, setToggleMap] = useState(new Map<string, boolean>());
   const [numberOfSkillsTaken, setNumberOfSkillsTaken] = useState(0);
-  const [SkillsInitial, setSkillsInitial] = useState(new Map<string, boolean>());
   const [SkillsTaken, setSkillsTaken] = useState(new Map<string, boolean>());
 
   const handleClick = (el: ButtonProps | undefined) => {
-    toggleMap.forEach((value, key) => {
+    skillMap.forEach((value, key) => {
       if (key === el?.id) {
-        toggleMap.set(key, !toggleMap.get(key));
+        skillMap.set(key, !value);
 
-        if (toggleMap.get(key)) {
+        if (!value) {
           SkillsTaken.set(key, true);
           setNumberOfSkillsTaken(numberOfSkillsTaken + 1);
         } else {
@@ -100,12 +85,59 @@ const ProfileSkills = () => {
         setSkillsTaken(new Map(SkillsTaken));
       }
     });
-    setToggleMap(new Map(toggleMap));
   };
+
+  const reset = () => {
+    resetSkills().then(() => {
+      setNumberOfSkillsTaken(0);
+      setSkillsTaken(new Map<string, boolean>());
+    });
+  }
+
+  const update = () => {
+    var skillLevels: ISkillLevel[] = [];
+    var count = 0;
+    var type = 1;
+    skillMap.forEach((valueSkill, keySkill) => {
+      if (type === Number(keySkill.slice(0, 1))) {
+        if (valueSkill) count++;
+      } else {
+        skillLevels.push({ level: count, type: type });
+        count = 0;
+        type = Number(keySkill.slice(0, 1));
+
+        if (valueSkill) count++;
+      }
+    });
+
+    skillLevels.push({ level: count, type: type });
+
+    var newSkillData : ISkillData = {
+      currentLevel : skillData!.currentLevel + numberOfSkillsTaken,
+      xpLevel: skillData!.xpLevel,
+      skillLevels: skillLevels
+    }
+
+    updateSkills(newSkillData).then(() => {
+      setNumberOfSkillsTaken(0);
+      setSkillsTaken(new Map<string, boolean>());
+    });
+  };
+
+  const undoTakenSkills = () => {
+    SkillsTaken.forEach((value, skillKey) => {
+      skillMap.forEach((value, key) => {
+        if (key === skillKey)
+        skillMap.set(key, false);
+      })
+    })
+
+    setSkillsTaken(new Map());
+    setNumberOfSkillsTaken(0);
+  }
 
   useEffect(() => {
     loadSkills(1);
-    console.log(skillMap);
   }, [loadSkills]);
     
   return (
@@ -119,7 +151,6 @@ const ProfileSkills = () => {
           <Grid.Column textAlign="center">I</Grid.Column>
           <Grid.Column textAlign="center">II (minimum 6. nivo)</Grid.Column>
           <Grid.Column textAlign="center">III (minimum 11. nivo)</Grid.Column>
-          <Grid.Column textAlign="center">{skillData?.xpLevel!}</Grid.Column>
         </Grid.Row>
         <Grid.Row>
           <Grid.Column></Grid.Column>
@@ -155,31 +186,31 @@ const ProfileSkills = () => {
             <Grid.Column>
               <Grid columns={3}>
                 <Grid.Column>
-                    <Button id={key + " 1"} size="mini" color = {SkillsInitial.get(key + " 1") ? "blue" : getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {toggleMap.get(key + " 2") || SkillsInitial.get(key + " 1") || (isSecondTreeActive() && !firstTreeSkillNumberGreaterThen(5) && toggleMap.get(key + " 1")) || (isThirdTreeActive() && !firstAndSecondTreeSkillNumberGreaterThen(10) && toggleMap.get(key + " 1")) || (getAvailablePoints() === 0 && !toggleMap.get(key + " 1"))}  circular toggle active={toggleMap.get(key + " 1") && !SkillsInitial.get(key + " 1")} onClick={(key, el) => handleClick(el)} icon={toggleMap.get(key + " 1") ? <Icon name="checkmark" /> : <Icon name="plus" />}/>
+                    <Button id={key + " 1"} size="mini" color = {initialSkillMap.get(key + " 1") ? "blue" : getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {skillMap.get(key + " 2") || initialSkillMap.get(key + " 1") || (isSecondTreeActive() && !firstTreeSkillNumberGreaterThen(5) && skillMap.get(key + " 1")) || (isThirdTreeActive() && !firstAndSecondTreeSkillNumberGreaterThen(10) && skillMap.get(key + " 1")) || (getAvailablePoints() === 0 && !skillMap.get(key + " 1"))}  circular toggle active={skillMap.get(key + " 1") && !initialSkillMap.get(key + " 1")} onClick={(key, el) => handleClick(el)} icon={skillMap.get(key + " 1") ? <Icon name="checkmark" /> : <Icon name="plus" />}/>
                 </Grid.Column>
                 <Grid.Column>
-                    <Button id={key + " 2"} size="mini" color = {SkillsInitial.get(key + " 2") ? "blue" : toggleMap.get(key + " 1") && getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {!toggleMap.get(key + " 1") || toggleMap.get(key + " 3") || SkillsInitial.get(key + " 2") || (isSecondTreeActive() && !firstTreeSkillNumberGreaterThen(5) && toggleMap.get(key + " 2")) || (getAvailablePoints() === 0 && !toggleMap.get(key + " 2"))} circular toggle active={toggleMap.get(key + " 2") && !SkillsInitial.get(key + " 2")} onClick={(key, el) => handleClick(el)} icon={toggleMap.get(key + " 2") ? <Icon name="checkmark" /> : <Icon name="plus" />}/>
+                    <Button id={key + " 2"} size="mini" color = {initialSkillMap.get(key + " 2") ? "blue" : skillMap.get(key + " 1") && getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {!skillMap.get(key + " 1") || skillMap.get(key + " 3") || initialSkillMap.get(key + " 2") || (isSecondTreeActive() && !firstTreeSkillNumberGreaterThen(5) && skillMap.get(key + " 2")) || (isThirdTreeActive() && !firstAndSecondTreeSkillNumberGreaterThen(10) && skillMap.get(key + " 2")) || (getAvailablePoints() === 0 && !skillMap.get(key + " 2"))} circular toggle active={skillMap.get(key + " 2") && !initialSkillMap.get(key + " 2")} onClick={(key, el) => handleClick(el)} icon={skillMap.get(key + " 2") ? <Icon name="checkmark" /> : <Icon name="plus" />}/>
                 </Grid.Column>
                 <Grid.Column>
-                    <Button id={key + " 3"} size="mini" color = {SkillsInitial.get(key + " 3") ? "blue" : toggleMap.get(key + " 2") && getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {!toggleMap.get(key + " 2") || toggleMap.get(key + " 4") || SkillsInitial.get(key + " 3") || (isSecondTreeActive() && !firstTreeSkillNumberGreaterThen(5) && toggleMap.get(key + " 3")) || (getAvailablePoints() === 0 && !toggleMap.get(key + " 3"))} circular toggle active={toggleMap.get(key + " 3") && !SkillsInitial.get(key + " 3")} onClick={(key, el) => handleClick(el)} icon={toggleMap.get(key + " 3") ? <Icon name="checkmark" /> : <Icon name="plus" />}/>
+                    <Button id={key + " 3"} size="mini" color = {initialSkillMap.get(key + " 3") ? "blue" : skillMap.get(key + " 2") && getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {!skillMap.get(key + " 2") || skillMap.get(key + " 4") || initialSkillMap.get(key + " 3") || (isSecondTreeActive() && !firstTreeSkillNumberGreaterThen(5) && skillMap.get(key + " 3")) || (isThirdTreeActive() && !firstAndSecondTreeSkillNumberGreaterThen(10) && skillMap.get(key + " 3")) || (getAvailablePoints() === 0 && !skillMap.get(key + " 3"))} circular toggle active={skillMap.get(key + " 3") && !initialSkillMap.get(key + " 3")} onClick={(key, el) => handleClick(el)} icon={skillMap.get(key + " 3") ? <Icon name="checkmark" /> : <Icon name="plus" />}/>
                 </Grid.Column>
               </Grid>
             </Grid.Column>
             <Grid.Column>
               <Grid columns={3}>
                 <Grid.Column>
-                <Button id={key + " 4"} size="mini" color = {SkillsInitial.get(key + " 4") ? "blue" : toggleMap.get(key + " 3") && getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {!toggleMap.get(key + " 3") || toggleMap.get(key + " 5") || SkillsInitial.get(key + " 4") || (skillData?.currentLevel! + numberOfSkillsTaken <= 5) || (isThirdTreeActive() && !secondTreeSkillNumberGreaterThen(4) && toggleMap.get(key + " 4")) || (getAvailablePoints() === 0 && !toggleMap.get(key + " 4"))} circular toggle active={toggleMap.get(key + " 4")  && !SkillsInitial.get(key + " 4")} onClick={(key, el) => handleClick(el)} icon={toggleMap.get(key + " 4") ?  <Icon name="checkmark" /> : <Icon name="plus" />}/>
+                <Button id={key + " 4"} size="mini" color = {initialSkillMap.get(key + " 4") ? "blue" : skillMap.get(key + " 3") && getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {!skillMap.get(key + " 3") || skillMap.get(key + " 5") || initialSkillMap.get(key + " 4") || (skillData?.currentLevel! + numberOfSkillsTaken <= 5) || (isThirdTreeActive() && !secondTreeSkillNumberGreaterThen(4) && skillMap.get(key + " 4")) || (getAvailablePoints() === 0 && !skillMap.get(key + " 4"))} circular toggle active={skillMap.get(key + " 4")  && !initialSkillMap.get(key + " 4")} onClick={(key, el) => handleClick(el)} icon={skillMap.get(key + " 4") ?  <Icon name="checkmark" /> : <Icon name="plus" />}/>
                 </Grid.Column>
                 <Grid.Column>
-                <Button id={key + " 5"} size="mini" color = {SkillsInitial.get(key + " 5") ? "blue" : toggleMap.get(key + " 4") && getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {!toggleMap.get(key + " 4") || toggleMap.get(key + " 6") || SkillsInitial.get(key + " 5") || (isThirdTreeActive() && !secondTreeSkillNumberGreaterThen(4) && toggleMap.get(key + " 5")) || (getAvailablePoints() === 0 && !toggleMap.get(key + " 5"))} circular toggle active={toggleMap.get(key + " 5")  && !SkillsInitial.get(key + " 5")} onClick={(key, el) => handleClick(el)} icon={toggleMap.get(key + " 5") ?  <Icon name="checkmark" /> : <Icon name="plus" />}/>
+                <Button id={key + " 5"} size="mini" color = {initialSkillMap.get(key + " 5") ? "blue" : skillMap.get(key + " 4") && getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {!skillMap.get(key + " 4") || skillMap.get(key + " 6") || initialSkillMap.get(key + " 5") || (isThirdTreeActive() && !secondTreeSkillNumberGreaterThen(4) && skillMap.get(key + " 5")) || (getAvailablePoints() === 0 && !skillMap.get(key + " 5"))} circular toggle active={skillMap.get(key + " 5")  && !initialSkillMap.get(key + " 5")} onClick={(key, el) => handleClick(el)} icon={skillMap.get(key + " 5") ?  <Icon name="checkmark" /> : <Icon name="plus" />}/>
                 </Grid.Column>
                 <Grid.Column>
-                <Button id={key + " 6"} size="mini" color = {SkillsInitial.get(key + " 6") ? "blue" : toggleMap.get(key + " 5") && getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {!toggleMap.get(key + " 5") || toggleMap.get(key + " 7") || SkillsInitial.get(key + " 6") || (isThirdTreeActive() && !secondTreeSkillNumberGreaterThen(4) && toggleMap.get(key + " 6")) || (getAvailablePoints() === 0 && !toggleMap.get(key + " 6"))} circular toggle active={toggleMap.get(key + " 6")  && !SkillsInitial.get(key + " 6")} onClick={(key, el) => handleClick(el)} icon={toggleMap.get(key + " 6") ?  <Icon name="checkmark" /> : <Icon name="plus" />}/>
+                <Button id={key + " 6"} size="mini" color = {initialSkillMap.get(key + " 6") ? "blue" : skillMap.get(key + " 5") && getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {!skillMap.get(key + " 5") || skillMap.get(key + " 7") || initialSkillMap.get(key + " 6") || (isThirdTreeActive() && !secondTreeSkillNumberGreaterThen(4) && skillMap.get(key + " 6")) || (getAvailablePoints() === 0 && !skillMap.get(key + " 6"))} circular toggle active={skillMap.get(key + " 6")  && !initialSkillMap.get(key + " 6")} onClick={(key, el) => handleClick(el)} icon={skillMap.get(key + " 6") ?  <Icon name="checkmark" /> : <Icon name="plus" />}/>
                 </Grid.Column>
               </Grid>
             </Grid.Column>
             <Grid.Column>
-                <Button id={key + " 7"} size="mini" color = {SkillsInitial.get(key + " 7") ? "blue" : toggleMap.get(key + " 6") && getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {!toggleMap.get(key + " 6") || SkillsInitial.get(key + " 7") || skillData?.currentLevel! + numberOfSkillsTaken <= 10 || (getAvailablePoints() === 0 && !toggleMap.get(key + " 7"))}  circular toggle active={toggleMap.get(key + " 7")  && !SkillsInitial.get(key + " 7")} onClick={(key, el) => handleClick(el)} icon={toggleMap.get(key + " 7") ?  <Icon name="checkmark" /> : <Icon name="plus" />}/>   
+                <Button id={key + " 7"} size="mini" color = {initialSkillMap.get(key + " 7") ? "blue" : skillMap.get(key + " 6") && getAvailablePoints() > 0 ? "yellow" : "grey"} disabled = {!skillMap.get(key + " 6") || initialSkillMap.get(key + " 7") || skillData?.currentLevel! + numberOfSkillsTaken <= 10 || (getAvailablePoints() === 0 && !skillMap.get(key + " 7"))}  circular toggle active={skillMap.get(key + " 7")  && !initialSkillMap.get(key + " 7")} onClick={(key, el) => handleClick(el)} icon={skillMap.get(key + " 7") ?  <Icon name="checkmark" /> : <Icon name="plus" />}/>   
             </Grid.Column>
           </GridRow>
           )
@@ -190,7 +221,7 @@ const ProfileSkills = () => {
         <Grid.Row>
         <Grid.Column textAlign='center'>
           {
-            SkillsInitial.size > 0 && (
+            initialSkillMap.size > 0 && (
             <Button
               size="small"
               color="blue"
@@ -199,9 +230,7 @@ const ProfileSkills = () => {
                 <ModalYesNo
                   content="Resetovanje veština"
                   icon="redo" 
-                  handleConfirmation={function (values: any): Promise<any> {
-                    throw new Error('Function not implemented.');
-                  }}           
+                  handleConfirmation={async () => reset()}           
                 />
             )}/>
             )
@@ -220,13 +249,12 @@ const ProfileSkills = () => {
           />
           <Button
           positive
-          content="Potvrdi"onClick={() => openModal(
+          content="Potvrdi" 
+          onClick={() => openModal(
             <ModalYesNo
               content="Potvrda odabira veština"
               icon="chess" 
-              handleConfirmation={function (values: any): Promise<any> {
-                throw new Error('Function not implemented.');
-              }}           
+              handleConfirmation={async () => update()}           
             />
           )}/>
           </Fragment>

@@ -138,34 +138,56 @@ export default class ProfileStore {
     this.initialSkillMap = initialtoggleMapstate;
   };
 
-  resetSkills = async (userId : number) => {
-    this.loadingInitial = true;
+  resetSkills = async () => {
+    this.rootStore.frezeScreen();
     try {
-      const skllData = await agent.Profile.getSkills(userId);
+      await agent.Profile.resetSkills();
       runInAction(() => {
-        this.skillData = skllData;
-        this.loadingInitial = false;
+        this.setResetToggleMap();
+        this.skillData!.currentLevel = 1;
+        toast.success("Uspešno ste poništili vaše odabrane poene");
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
       });
     } catch (error) {
       runInAction(() => {
-        console.log(error);
-        this.loadingInitial = false;
+        toast.error("Neuspešno poništavanje");
       });
     }
   };
 
-  confirmSkills = async (userId : number) => {
-    this.loadingInitial = true;
+  setResetToggleMap = () => {
+    
+    var toggleMapstate = new Map<string, boolean>();
+
+    Object.keys(ActivityTypes).forEach((key: any, el) => {
+      if (ActivityTypes[el + 1] !== undefined) {
+        for (let index = 1; index <= 7; index++) {
+          this.skillData?.skillLevels.forEach(() => {
+              toggleMapstate.set(key + " " + index, false);
+          });
+        }
+      }
+    });
+    
+    this.skillMap = toggleMapstate;
+    this.initialSkillMap = toggleMapstate;
+  };
+
+  updateSkills = async (skillData : ISkillData) => {
+    this.rootStore.frezeScreen();
     try {
-      const skllData = await agent.Profile.getSkills(userId);
+      await agent.Profile.updateSkills(skillData);
       runInAction(() => {
-        this.skillData = skllData;
-        this.loadingInitial = false;
+        this.skillData = skillData;
+        this.setInitialToggleMap();
+        toast.success("Uspešno ste izabrali dodatne poene");
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
       });
     } catch (error) {
       runInAction(() => {
-        console.log(error);
-        this.loadingInitial = false;
+        toast.error("Neuspešan obabir");
       });
     }
   };
