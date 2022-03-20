@@ -78,7 +78,7 @@ const App: React.FC<RouteComponentProps> = () => {
                   <PrivateRoute path="/puzzle" component={PuzzleForm} type={ActivityTypes.Puzzle}/>
                   <PrivateRoute path="/happening" component={HappeningForm} type={ActivityTypes.Happening} />
                   <PrivateRoute path="/challenge" component={ChallengeForm} type={ActivityTypes.Challenge}/>
-                  <PrivateRoute path="/profile/:username" component={ProfilePage} />
+                  <PrivateRoute path="/profile/:id" component={ProfilePage} />
                   <PrivateRoute path="/approvals" component={Approvals} />
                   <PrivateRoute path="/avatarApprovals" component={AvatarApprovals} />
                   <Route component={NotFound} />

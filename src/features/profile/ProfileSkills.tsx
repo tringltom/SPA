@@ -7,11 +7,17 @@ import ModalYesNo from '../../app/common/modals/ModalYesNo';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
 
-const ProfileSkills = () => {
+interface IProps {
+  userId: string;
+}
 
+const ProfileSkills: React.FC<IProps> = ({ userId }) => {
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
   const { skillData, skillMap, initialSkillMap, loadSkills, loadingInitial, resetSkills, updateSkills } = rootStore.profileStore;
+  const { user } = rootStore.userStore;
+
+  const isProfileOwner = () => Number(userId) === user?.id
 
   const isSecondTreeActive = () => {
     var active = false;
@@ -63,7 +69,9 @@ const ProfileSkills = () => {
   }
 
   const getAvailablePoints = () => {
-    return skillData?.xpLevel! - skillData?.currentLevel! - numberOfSkillsTaken
+    if (isProfileOwner())
+      return skillData?.xpLevel! - skillData?.currentLevel! - numberOfSkillsTaken;
+    return 0;
   }
 
   const [numberOfSkillsTaken, setNumberOfSkillsTaken] = useState(0);
@@ -137,8 +145,9 @@ const ProfileSkills = () => {
   }
 
   useEffect(() => {
-    loadSkills(1);
-  }, [loadSkills]);
+    loadSkills(Number(userId));
+    console.log(skillMap)
+  }, [loadSkills, userId]);
     
   return (
     <Segment clearing>
@@ -147,7 +156,7 @@ const ProfileSkills = () => {
       ) : (
       <Grid columns={4}>
         <Grid.Row>
-          <Grid.Column><Header>Broj dodatnih veština: {getAvailablePoints()}</Header></Grid.Column>
+          <Grid.Column>{isProfileOwner() && <Header>Broj dodatnih veština: {getAvailablePoints()}</Header>}</Grid.Column>
           <Grid.Column textAlign="center">I</Grid.Column>
           <Grid.Column textAlign="center">II (minimum 6. nivo)</Grid.Column>
           <Grid.Column textAlign="center">III (minimum 11. nivo)</Grid.Column>
@@ -221,7 +230,7 @@ const ProfileSkills = () => {
         <Grid.Row>
         <Grid.Column textAlign='center'>
           {
-            initialSkillMap.size > 0 && (
+            isProfileOwner() && initialSkillMap.size > 0 && (
             <Button
               size="small"
               color="blue"

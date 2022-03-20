@@ -106,7 +106,7 @@ export default class ProfileStore {
       });
     } catch (error) {
       runInAction(() => {
-        console.log(error);
+        toast.error("Neuspešno dostavljanje podataka");
         this.loadingInitial = false;
       });
     }
@@ -141,10 +141,12 @@ export default class ProfileStore {
   resetSkills = async () => {
     this.rootStore.frezeScreen();
     try {
-      await agent.Profile.resetSkills();
+      const updatedUser = await agent.Profile.resetSkills();
       runInAction(() => {
         this.setResetToggleMap();
         this.skillData!.currentLevel = 1;
+        this.rootStore.userStore.user!.currentLevel = updatedUser.currentLevel;
+        this.rootStore.userStore.user!.activityCounts = updatedUser.activityCounts;
         toast.success("Uspešno ste poništili vaše odabrane poene");
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();
@@ -152,6 +154,8 @@ export default class ProfileStore {
     } catch (error) {
       runInAction(() => {
         toast.error("Neuspešno poništavanje");
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
       });
     }
   };
@@ -177,10 +181,12 @@ export default class ProfileStore {
   updateSkills = async (skillData : ISkillData) => {
     this.rootStore.frezeScreen();
     try {
-      await agent.Profile.updateSkills(skillData);
+      const updatedUser = await agent.Profile.updateSkills(skillData);
       runInAction(() => {
         this.skillData = skillData;
         this.setInitialToggleMap();
+        this.rootStore.userStore.user!.currentLevel = updatedUser.currentLevel;
+        this.rootStore.userStore.user!.activityCounts = updatedUser.activityCounts;
         toast.success("Uspešno ste izabrali dodatne poene");
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();
@@ -188,6 +194,8 @@ export default class ProfileStore {
     } catch (error) {
       runInAction(() => {
         toast.error("Neuspešan obabir");
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
       });
     }
   };

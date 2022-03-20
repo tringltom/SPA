@@ -1,6 +1,7 @@
-import { Fragment, useContext } from 'react'
-import { Link } from 'react-router-dom';
 import { Dropdown, Image } from 'semantic-ui-react'
+import { Fragment, useContext } from 'react'
+
+import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 
 export const NavbarRighItems = () => {
@@ -18,7 +19,7 @@ export const NavbarRighItems = () => {
           <Dropdown.Menu direction={"left"}>
             <Dropdown.Item
               as={Link}
-              to={`/profile/${user?.userName}`}
+              to={`/profile/${user?.id}`}
               text="Profil"
               icon="user"
             />

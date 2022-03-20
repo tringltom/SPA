@@ -142,8 +142,8 @@ const Favorite = {
 
 const Profile = {
   getSkills: (userId: number) : Promise<ISkillData> => requests.get(`skills/${userId}`),
-  resetSkills: (): Promise<void> => requests.put("/skills/reset", {}),
-  updateSkills: (skillData : ISkillData): Promise<void> => requests.put("/skills/update", skillData),
+  resetSkills: (): Promise<IUser> => requests.put("/skills/reset", {}),
+  updateSkills: (skillData : ISkillData): Promise<IUser> => requests.put("/skills/update", skillData),
 }
 
 const sites = {
