@@ -147,6 +147,7 @@ export default class ProfileStore {
         this.skillData!.currentLevel = 1;
         this.rootStore.userStore.user!.currentLevel = updatedUser.currentLevel;
         this.rootStore.userStore.user!.activityCounts = updatedUser.activityCounts;
+        this.rootStore.userStore.user!.userName = updatedUser.userName;
         toast.success("Uspešno ste poništili vaše odabrane poene");
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();
@@ -187,6 +188,7 @@ export default class ProfileStore {
         this.setInitialToggleMap();
         this.rootStore.userStore.user!.currentLevel = updatedUser.currentLevel;
         this.rootStore.userStore.user!.activityCounts = updatedUser.activityCounts;
+        this.rootStore.userStore.user!.userName = updatedUser.userName;
         toast.success("Uspešno ste izabrali dodatne poene");
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();

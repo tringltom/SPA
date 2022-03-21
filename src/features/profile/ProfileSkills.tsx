@@ -146,7 +146,6 @@ const ProfileSkills: React.FC<IProps> = ({ userId }) => {
 
   useEffect(() => {
     loadSkills(Number(userId));
-    console.log(skillMap)
   }, [loadSkills, userId]);
     
   return (
