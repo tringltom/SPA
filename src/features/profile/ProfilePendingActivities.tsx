@@ -1,9 +1,10 @@
+import { ActivityTypes, IActivity } from '../../app/models/activity';
+import { Icon, Loader, Pagination, Segment, Table } from 'semantic-ui-react';
+import { useContext, useEffect, useState } from 'react'
+
+import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
-import { Fragment, useContext, useEffect, useState } from 'react'
-import { Icon, Loader, Pagination, Table } from 'semantic-ui-react';
-import { ActivityTypes, IActivity } from '../../app/models/activity';
-import { RootStoreContext } from '../../app/stores/rootStore';
 
 export const ProfilePendingActivities = () => {
   const rootStore = useContext(RootStoreContext);
@@ -31,7 +32,7 @@ export const ProfilePendingActivities = () => {
   }
 
   return (
-    <Fragment>
+    <Segment>
       {loadingInitial && !loadingNext ? (
         <Loader active inline='centered'/>
       ) : (
@@ -86,7 +87,7 @@ export const ProfilePendingActivities = () => {
           </Table.Footer>
         </Table>
       )}
-    </Fragment>
+    </Segment>
   );
 }
 
