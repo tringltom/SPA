@@ -1,7 +1,9 @@
+import { ActivityTypes, IActivity } from "../models/activity";
 import { makeAutoObservable, runInAction } from "mobx";
-import agent from "../api/agent";
+
+import { ISkillData } from "../models/skillResult";
 import { RootStore } from "./rootStore";
-import { IActivity } from "../models/activity";
+import agent from "../api/agent";
 import { toast } from "react-toastify";
 
 const LIMIT = 5;
@@ -17,7 +19,9 @@ export default class ProfileStore {
   pendingActivitiesPage = 0;
   pendingActivitiesRegistry = [] as IActivity[];
   pendingActivityCount = 0;
-
+  skillData : ISkillData | null = null;
+  skillMap : Map<string, boolean> = new Map<string, boolean>();
+  initialSkillMap : Map<string, boolean> = new Map<string, boolean>();
   
   get pendingActivityAxiosParams() {
     const params = new URLSearchParams();
@@ -88,6 +92,113 @@ export default class ProfileStore {
       this.rootStore.unFrezeScreen();
       this.rootStore.modalStore.closeModal();
       toast.error("Neuspešna izmena");
+    }
+  };
+
+  loadSkills = async (userId : number) => {
+    this.loadingInitial = true;
+    try {
+      const skillData = await agent.Profile.getSkills(userId);
+      runInAction(() => {
+        this.skillData = skillData;
+        this.setInitialToggleMap();
+        this.loadingInitial = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        toast.error("Neuspešno dostavljanje podataka");
+        this.loadingInitial = false;
+      });
+    }
+  };
+
+  setInitialToggleMap = () => {
+    
+    var toggleMapstate = new Map<string, boolean>();
+    var initialtoggleMapstate = new Map<string, boolean>();
+
+    Object.keys(ActivityTypes).forEach((key: any, el) => {
+      if (ActivityTypes[el + 1] !== undefined) {
+        for (let index = 1; index <= 7; index++) {
+          this.skillData?.skillLevels.forEach((sl) => {
+            if (sl.type.toString() === key.toString()) {
+              if (index <= sl.level) {
+                toggleMapstate.set(key + " " + index, true);
+                initialtoggleMapstate.set(key + " " + index, true);
+              } 
+              else 
+              toggleMapstate.set(key + " " + index, false);
+            }
+          });
+        }
+      }
+    });
+
+    this.skillMap = toggleMapstate;
+    this.initialSkillMap = initialtoggleMapstate;
+  };
+
+  resetSkills = async () => {
+    this.rootStore.frezeScreen();
+    try {
+      const updatedUser = await agent.Profile.resetSkills();
+      runInAction(() => {
+        this.setResetToggleMap();
+        this.skillData!.currentLevel = 1;
+        this.rootStore.userStore.user!.currentLevel = updatedUser.currentLevel;
+        this.rootStore.userStore.user!.activityCounts = updatedUser.activityCounts;
+        this.rootStore.userStore.user!.userName = updatedUser.userName;
+        toast.success("Uspešno ste poništili vaše odabrane poene");
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
+    } catch (error) {
+      runInAction(() => {
+        toast.error("Neuspešno poništavanje");
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
+    }
+  };
+
+  setResetToggleMap = () => {
+    
+    var toggleMapstate = new Map<string, boolean>();
+
+    Object.keys(ActivityTypes).forEach((key: any, el) => {
+      if (ActivityTypes[el + 1] !== undefined) {
+        for (let index = 1; index <= 7; index++) {
+          this.skillData?.skillLevels.forEach(() => {
+              toggleMapstate.set(key + " " + index, false);
+          });
+        }
+      }
+    });
+    
+    this.skillMap = toggleMapstate;
+    this.initialSkillMap = toggleMapstate;
+  };
+
+  updateSkills = async (skillData : ISkillData) => {
+    this.rootStore.frezeScreen();
+    try {
+      const updatedUser = await agent.Profile.updateSkills(skillData);
+      runInAction(() => {
+        this.skillData = skillData;
+        this.setInitialToggleMap();
+        this.rootStore.userStore.user!.currentLevel = updatedUser.currentLevel;
+        this.rootStore.userStore.user!.activityCounts = updatedUser.activityCounts;
+        this.rootStore.userStore.user!.userName = updatedUser.userName;
+        toast.success("Uspešno ste izabrali dodatne poene");
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
+    } catch (error) {
+      runInAction(() => {
+        toast.error("Neuspešan obabir");
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
     }
   };
 
