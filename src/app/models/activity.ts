@@ -23,6 +23,18 @@ export interface IActivityFormValues {
     userName: string;
     photos?: IPhoto[];
     isHost: boolean;
+    dateApproved?: string | null;
+  }; 
+
+  export interface IPendingActivitiesEnvelope {
+    activities: IPendingActivity[];
+    activityCount: number;
+  };
+
+  export interface IPendingActivity extends IActivityFormValues {
+    id: string;
+    userName: string;
+    photos?: IPhoto[];
   }; 
 
   export interface IPhoto {
