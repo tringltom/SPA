@@ -90,11 +90,11 @@ export default class ActivityStore {
   create = async (values: IActivityFormValues) => {
     try {
       this.rootStore.frezeScreen();
-      const message = await agent.PendingActivity.create(values);
+      await agent.PendingActivity.create(values);
       runInAction(() => {
         this.rootStore.userStore.user?.activityCounts.map(ac => (ac.type === values.type ? ac.available-- : ac));
         history.push("/arena");
-        toast.success(message);
+        toast.success("Uspešno kreiranje, molimo Vas da sačekate odobrenje");
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();
       });

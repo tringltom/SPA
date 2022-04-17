@@ -65,10 +65,10 @@ export default class ProfileStore {
   setUserAbout = async (about: string) => {
     try {
       this.rootStore.frezeScreen();
-      const message = await agent.User.updateAbout(about);
+      await agent.User.updateAbout(about);
       runInAction(() => {
         this.rootStore.userStore.user!.about = about;
-        toast.success(message);
+        toast.success("Uspešna izmena o korisniku");
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();
       });
@@ -82,9 +82,9 @@ export default class ProfileStore {
   setUserImage = async (values: any) => {
     try {
       this.rootStore.frezeScreen();
-      const message = await agent.User.updateImage(values.images[0]);
+      await agent.User.updateImage(values.images[0]);
       runInAction(() => {
-        toast.success(message);
+        toast.success("Uspešna izmena profilne slike, molimo Vas sačekajte odobrenje");
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();
       });
@@ -144,10 +144,8 @@ export default class ProfileStore {
       const skillLevel : ISkillLevel[] = [];
       
       Object.keys(ActivityTypes).forEach((key: any, el) => {
-        if (ActivityTypes[el + 1] !== undefined) {
-        console.log(key)
-        skillLevel.push( {type: key, level: 1} as ISkillLevel)
-        }
+        if (ActivityTypes[el + 1] !== undefined) 
+          skillLevel.push( {type: key, level: 1} as ISkillLevel)
       });
 
       const skillData: ISkillData = {

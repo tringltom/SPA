@@ -78,8 +78,8 @@ const requests = {
 };
 
 const Session = {
-  sendEmailVerification: (email: string): Promise<string> => requests.head(`/session/email=${email}`),
-  sendRecoverPassword: (email: string): Promise<string> => requests.head(`/session/password/${email}`),
+  sendEmailVerification: (email: string): Promise<string> => requests.head(`/session/email?email=${email}`),
+  sendRecoverPassword: (email: string): Promise<string> => requests.head(`/session/password?email=${email}`),
   login: (user: IUserFormValues): Promise<IUser> => requests.put("/session", user),
   current: (): Promise<IUser> => requests.get("/session/me"),
   refreshToken: (): Promise<IUser> => requests.put("/session/refresh", {}),

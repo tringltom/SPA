@@ -9,7 +9,6 @@ interface IProps {
 }
 
 export const ErrorMessage: React.FC<IProps> = ({ error, text }) => {
-  console.log(error)
   return (
     <Message style={{color: EkvitiColors.error }} error>
       <Message.Header style={{color: EkvitiColors.error }} >Nažalost, došlo je do problema :/</Message.Header>

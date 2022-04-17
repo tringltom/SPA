@@ -211,10 +211,10 @@ export default class UserStore {
   recoverPassword = async (email: string) => {
     try {
       this.loading = true;
-      const message = await agent.Session.sendRecoverPassword(email);
+      await agent.Session.sendRecoverPassword(email);
       runInAction(() => {
         this.rootStore.modalStore.closeModal();
-        toast.success(message);
+        toast.success("Molimo proverite Vaše poštansko sanduče kako biste uneli novu šifru");
         this.loading = false;
       });
       history.push(`/`);
@@ -227,13 +227,10 @@ export default class UserStore {
   verifyPasswordRecovery = async (token: string, email: string, newPassword: string) => {
     try {
       this.loading = true;
-      console.log(token)
-      console.log(email)
-      console.log(newPassword)
-      const message = await agent.Session.verifyPasswordRecovery(token, email, newPassword);
+      await agent.Session.verifyPasswordRecovery(token, email, newPassword);
       runInAction(() => {
         this.rootStore.modalStore.closeModal();
-        toast.success(message);
+        toast.success("Uspešna izmena šifre, molimo Vas da se ulogujete sa novim kredencijalima");
         this.loading = false;
       });
     } catch (error) {
