@@ -1,19 +1,20 @@
-import { observer } from "mobx-react-lite";
-import { useContext, useState } from "react";
-import { Form as FinalForm, Field } from "react-final-form";
-import { combineValidators, composeValidators, createValidator, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
-import { Button, Divider, Form, Header } from "semantic-ui-react";
-import { TextInput } from "../../app/common/form/TextInput";
-import ModalYesNo from "../../app/common/modals/ModalYesNo";
 import { ActivityTypes, IActivityFormValues } from "../../app/models/activity";
+import { Button, Divider, Form, Header } from "semantic-ui-react";
+import { Field, Form as FinalForm } from "react-final-form";
+import { combineValidators, composeValidators, createValidator, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
+import { useContext, useState } from "react";
+
+import DateInput from "../../app/common/form/DateInput";
+import { ErrorMessage } from "../../app/common/form/ErrorMessage";
+import { FileInput } from "../../app/common/form/FileInput";
+import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
+import ModalYesNo from "../../app/common/modals/ModalYesNo";
 import { RootStoreContext } from "../../app/stores/rootStore";
 import { TextAreaInput } from "../../app/common/form/TextAreaInput";
-import { FileInput } from "../../app/common/form/FileInput";
-import { ErrorMessage } from "../../app/common/form/ErrorMessage";
-import DateInput from "../../app/common/form/DateInput";
-import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
+import { TextInput } from "../../app/common/form/TextInput";
 import { combineDateAndTime } from "../../app/common/form/utils/formUtil";
 import get from 'lodash/get';
+import { observer } from "mobx-react-lite";
 
 const isDateGreater = (otherField: string)  => createValidator(
   message => (value: any, allValues: any) => {
@@ -65,7 +66,7 @@ const validate = combineValidators({
   )(),
   coords: isCoordsRequired()({ message: "Lokacija je neophodna za kreiranje događaja" }),
   description: composeValidators(
-    isRequiredIf()((values: { image: any }) => values && !values.image)({
+    isRequiredIf()((values: { images: any }) => values && !values.images)({
       message: "Opis je obavezan ukoliko niste priložili sliku",
     }),
     hasLengthLessThan(250)({
@@ -144,7 +145,7 @@ const HappeningForm = () => {
             placeholder="Opis događaja (nije potreban ukoliko priložite sliku)"
           />
           <Divider horizontal>Lokacija događaja</Divider>
-          <Field name="coords" component={MapWithSearchInput} />
+          {/* <Field name="coords" component={MapWithSearchInput} /> */}
           <Divider horizontal>Početak događaja</Divider>
           <Form.Group>
             <Field

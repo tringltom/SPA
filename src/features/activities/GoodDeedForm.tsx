@@ -1,17 +1,17 @@
-import { observer } from "mobx-react-lite";
-import { useContext, useState } from "react";
-import { Form as FinalForm, Field } from "react-final-form";
-import { combineValidators, composeValidators, hasLengthLessThan, isRequired } from "revalidate";
-import { Button, Divider, Form, Header } from "semantic-ui-react";
-import { TextInput } from "../../app/common/form/TextInput";
-import ModalYesNo from "../../app/common/modals/ModalYesNo";
 import { ActivityTypes, IActivityFormValues } from "../../app/models/activity";
+import { Button, Divider, Form, Header } from "semantic-ui-react";
+import { Field, Form as FinalForm } from "react-final-form";
+import { combineValidators, composeValidators, hasLengthLessThan, isRequired } from "revalidate";
+import { useContext, useState } from "react";
+
+import { ErrorMessage } from "../../app/common/form/ErrorMessage";
+import { FileInput } from "../../app/common/form/FileInput";
+import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
+import ModalYesNo from "../../app/common/modals/ModalYesNo";
 import { RootStoreContext } from "../../app/stores/rootStore";
 import { TextAreaInput } from "../../app/common/form/TextAreaInput";
-import { FileInput } from "../../app/common/form/FileInput";
-import { ErrorMessage } from "../../app/common/form/ErrorMessage";
-import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
-
+import { TextInput } from "../../app/common/form/TextInput";
+import { observer } from "mobx-react-lite";
 
 const validate = combineValidators({
   title: composeValidators(
@@ -85,7 +85,7 @@ const GoodDeedForm = () => {
             placeholder="Opis"
           />
           <Divider horizontal>Lokacija dobrog dela</Divider>
-          <Field name="coords" component={MapWithSearchInput} />
+          {/* <Field name="coords" component={MapWithSearchInput} /> */}
           <Divider horizontal></Divider>
           {submitError && <ErrorMessage error={submitError} />}
           <Button

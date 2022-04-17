@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
-import React from "react";
-import { Message } from "semantic-ui-react";
 import { EkvitiColors } from "../../layout/EkvitiColors";
+import { Message } from "semantic-ui-react";
+import React from "react";
 
 interface IProps {
   error: AxiosResponse;
@@ -9,6 +9,7 @@ interface IProps {
 }
 
 export const ErrorMessage: React.FC<IProps> = ({ error, text }) => {
+  console.log(error)
   return (
     <Message style={{color: EkvitiColors.error }} error>
       <Message.Header style={{color: EkvitiColors.error }} >Nažalost, došlo je do problema :/</Message.Header>

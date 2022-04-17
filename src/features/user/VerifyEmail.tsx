@@ -1,12 +1,13 @@
+import { Button, Container, Grid, GridColumn, Header, Image, Segment } from "semantic-ui-react";
 import React, { useContext, useEffect, useState } from "react";
-import { RouteComponentProps } from "react-router";
-import { RootStoreContext } from "../../app/stores/rootStore";
-import queryString from "query-string";
-import agent from "../../app/api/agent";
-import { Button, GridColumn, Segment,Image, Grid, Container, Header } from "semantic-ui-react";
+
 import LoginForm from "./LoginForm";
-import { toast } from "react-toastify";
+import { RootStoreContext } from "../../app/stores/rootStore";
+import { RouteComponentProps } from "react-router";
+import agent from "../../app/api/agent";
+import queryString from "query-string";
 import { styles } from "../../app/layout/FullScreenCardStyle";
+import { toast } from "react-toastify";
 
 const VerifyEmail: React.FC<RouteComponentProps> = ({ location }) => {
   const rootStore = useContext(RootStoreContext);
@@ -21,7 +22,7 @@ const VerifyEmail: React.FC<RouteComponentProps> = ({ location }) => {
   const { token, email } = queryString.parse(location.search);
 
   useEffect(() => {
-    agent.User.verifyEmail(token as string, email as string)
+    agent.Session.verifyEmail(token as string, email as string)
       .then(() => {
         SetStatus(Status.Success);
       })
@@ -31,7 +32,7 @@ const VerifyEmail: React.FC<RouteComponentProps> = ({ location }) => {
   }, [Status.Failed, Status.Success, token, email]);
 
   const handleConfirmEmailResend = () => {
-    agent.User.resendVerifyEmailConfirm(email as string)
+    agent.Session.sendEmailVerification(email as string)
       .then(() => {
         toast.success("Potvrda je poslata - molimo Vas da proverite poštu");
       })

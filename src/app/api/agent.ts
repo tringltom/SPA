@@ -55,8 +55,8 @@ axios.interceptors.request.use((config) => {
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
-  head: (url: string, body?: {}) => axios.head(url, body).then(responseBody),
-  get: (url: string, body?: {}) => axios.get(url, body).then(responseBody),
+  head: (url: string) => axios.head(url).then(responseBody),
+  get: (url: string) => axios.get(url).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   patch: (url: string, body: {}) => axios.patch(url, body, {headers: {'Content-type': 'application/json'}}).then(responseBody),
@@ -78,11 +78,11 @@ const requests = {
 };
 
 const Session = {
-  sendEmailVerification: (email: string): Promise<string> => requests.head("/session/email", email),
-  sendRecoverPassword: (email: string): Promise<string> => requests.head("/session/password", email),
-  login: (user: IUserFormValues): Promise<IUser> => requests.get("/session", user),
+  sendEmailVerification: (email: string): Promise<string> => requests.head(`/session/email=${email}`),
+  sendRecoverPassword: (email: string): Promise<string> => requests.head(`/session/password/${email}`),
+  login: (user: IUserFormValues): Promise<IUser> => requests.put("/session", user),
   current: (): Promise<IUser> => requests.get("/session/me"),
-  refreshToken: (): Promise<IUser> => requests.put("/session", {}),
+  refreshToken: (): Promise<IUser> => requests.put("/session/refresh", {}),
   verifyEmail: (token: string, email: string): Promise<string> => requests.patch("/session/email", { token, email }),
   verifyPasswordRecovery: (token: string, email: string, newPassword: string): Promise<string> => 
     requests.patch("/session/password", {email, token, newPassword}),
@@ -141,7 +141,7 @@ const PendingActivity = {
         formData.append(key, activity[key]);
       }
     });
-    return requests.postForm("/activities/create", formData);
+    return requests.postForm("/pending-activities", formData);
   }
 };
 
@@ -158,13 +158,13 @@ const Review = {
 const Favorite = {
   get: () : Promise<IUserFavoriteActivity> => requests.get(`favorites/me/ids`),
   getOwnerFavoriteActivityIds: () : Promise<number[]> => requests.get(`favorites/me/ids`),
-  removeFavoriteActivity: (id: string): Promise<void> => requests.delete(`/favorites/${id}`),
-  createFavoriteActivity: (activityId: number) : Promise<IUserFavoriteActivity> => requests.post(`favorites/${activityId}`, {})
+  removeFavoriteActivity: (id: number): Promise<void> => requests.delete(`/favorites/${id}`),
+  createFavoriteActivity: (id: number) : Promise<IUserFavoriteActivity> => requests.post(`favorites/${id}`, {})
 }
 
 const Profile = {
-  getSkills: (userId: number) : Promise<ISkillData> => requests.get(`skills/${userId}`),
-  updateSkills: (skillData : ISkillData): Promise<IUser> => requests.put("/skills/users/me", skillData),
+  getSkills: (userId: number) : Promise<ISkillData> => requests.get(`skills/user/${userId}`),
+  updateSkills: (skillData : ISkillData): Promise<IUser> => requests.put("/skills/user/me", skillData),
 }
 
 const sites = {

@@ -1,10 +1,10 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
-import agent from "../api/agent";
+
 import { IActivityFormValues } from "../models/activity";
 import { RootStore } from "./rootStore";
+import agent from "../api/agent";
 import { history } from "../..";
 import { toast } from "react-toastify";
-import { setActivityProps } from "../common/utils/commonUtil";
 
 const LIMIT = 5;
 
@@ -90,7 +90,7 @@ export default class ActivityStore {
   create = async (values: IActivityFormValues) => {
     try {
       this.rootStore.frezeScreen();
-      const message = await agent.Activity.create(values);
+      const message = await agent.PendingActivity.create(values);
       runInAction(() => {
         this.rootStore.userStore.user?.activityCounts.map(ac => (ac.type === values.type ? ac.available-- : ac));
         history.push("/arena");
@@ -108,13 +108,12 @@ export default class ActivityStore {
   loadPendingActivities = async () => {
     this.loadingInitial = true;
     try {
-      const activitiesEnvelope = await agent.Activity.getPendingActivities(
+      const activitiesEnvelope = await agent.PendingActivity.getPendingActivities(
         this.pendingActivityAxiosParams
       );
       const { activities, activityCount } = activitiesEnvelope;
       runInAction(() => {
         activities.forEach((activity) => {
-          setActivityProps(activity, this.rootStore.userStore.user!);
           this.pendingActivitiesRegistry.set(activity.id, activity);
         });
         this.pendingActivityCount = activityCount;
@@ -131,13 +130,15 @@ export default class ActivityStore {
    approvePendingActivity = async (activityId : string, approve : boolean) => {
     try {
       this.rootStore.frezeScreen();
-      const success = await agent.Activity.resolvePendingActivity(activityId, approve);
-      if (success){
-        toast.success("Uspešno ste odobrili/odbili aktivnost");
-        this.pendingActivitiesRegistry.delete(activityId);
-      } else{
-        toast.error("Neuspešno ste odobrili/odbili aktivnost");
-      }      
+      
+      if (approve)
+        await agent.Activity.approvePendingActivity(activityId);
+      else
+        await agent.PendingActivity.dissaprove(activityId);
+        
+      toast.success("Uspešno ste odobrili/odbili aktivnost");
+      this.pendingActivitiesRegistry.delete(activityId);
+    
       this.rootStore.modalStore.closeModal();
       this.rootStore.unFrezeScreen();
     } catch (error) {
@@ -148,11 +149,10 @@ export default class ActivityStore {
     }
   }
 
-  getApprovedActivitiesFromOtherUsers = async (userId: number) => {
+  getApprovedActivitiesFromOtherUsers = async () => {
     this.loadingInitial = true;
     try {
-      const activitiesEnvelope = await agent.Activity.getApprovedActivitiesFromOtherUsers(
-        userId,
+      const activitiesEnvelope = await agent.Activity.getActivitiesFromOtherUsers(
         this.approvedActivityAxiosParams
       );
       const { activities, activityCount } = activitiesEnvelope;

@@ -1,4 +1,4 @@
-import { ActivityTypes, IActivity } from '../../app/models/activity';
+import { ActivityTypes, IActivity, IPendingActivity } from '../../app/models/activity';
 import { Icon, Loader, Pagination, Segment, Table } from 'semantic-ui-react';
 import { useContext, useEffect, useState } from 'react'
 
@@ -46,7 +46,7 @@ export const ProfilePendingActivities = () => {
           </Table.Header>
 
           <Table.Body>
-          {pendingActivitiesArray.map((activity: IActivity) => (
+          {pendingActivitiesArray.map((activity: IPendingActivity) => (
               <Table.Row key={activity.id}>
               <Table.Cell content={ActivityTypes[activity.type]}/>
               <Table.Cell content={activity.title}/>

@@ -75,7 +75,7 @@ export default class UserStore {
 
   loadUsers = async () => {
     try {
-      const usersEnvelope = await agent.User.list(this.axiosParams);
+      const usersEnvelope = await agent.User.getRankedUsers(this.axiosParams);
       const { users, userCount } = usersEnvelope;
       runInAction(() => {
         users?.forEach((user) => {
@@ -90,7 +90,7 @@ export default class UserStore {
 
   loadUsersForImageApproval = async () => {
     try {
-      const usersImageEnvelope = await agent.User.getUserImagesToApprove(this.axiosParams);
+      const usersImageEnvelope = await agent.User.getImagesForApproval(this.axiosParams);
       const { users, userCount } = usersImageEnvelope;
       runInAction(() => {
         users?.forEach((user) => {
@@ -106,13 +106,9 @@ export default class UserStore {
   approveUserImage = async (userId : string, approve : boolean) => {
     try {
       this.rootStore.frezeScreen();
-      const success = await agent.User.resolveUserImage(userId, approve);
-      if (success) {
-        toast.success("Uspešno ste odobrili/odbili profilnu sliku");
-        this.userImageRegistry.delete(userId);
-      } else {
-        toast.error("Neuspešno ste odobrili/odbili aktivnost");
-      }
+      await agent.User.resolveImage(userId, approve);   
+      toast.success("Uspešno ste odobrili/odbili profilnu sliku");
+      this.userImageRegistry.delete(userId); 
       this.rootStore.modalStore.closeModal();
       this.rootStore.unFrezeScreen();
     } catch (error) {
@@ -126,7 +122,7 @@ export default class UserStore {
   login = async (values: IUserFormValues) => {
     try {
       this.rootStore.frezeScreen();
-      const user = await agent.User.login(values);
+      const user = await agent.Session.login(values);
       runInAction(() => {
         this.user = user;
         this.rootStore.showDice = user.isDiceRollAllowed;
@@ -145,7 +141,7 @@ export default class UserStore {
   register = async (values: IUserFormValues) => {
     try {
       this.rootStore.frezeScreen();
-      await agent.User.register(values);
+      await agent.Session.register(values);
       this.rootStore.modalStore.closeModal();
       history.push(`/users/registerSuccess?email=${values.email}`);
       this.rootStore.unFrezeScreen();
@@ -158,7 +154,7 @@ export default class UserStore {
   refreshToken = async () => {
     this.stopRefreshTokenTimer();
     try {
-      const user = await agent.User.refreshToken();
+      const user = await agent.Session.refreshToken();
       runInAction(() => {
         this.user!.token = user.token
       });
@@ -169,7 +165,7 @@ export default class UserStore {
 
   getUser = async () => {
     try {
-      const user = await agent.User.current();
+      const user = await agent.Session.current();
       runInAction(() => {
         this.user = user;
         this.rootStore.showDice = user.isDiceRollAllowed;
@@ -183,7 +179,7 @@ export default class UserStore {
   logout = async () => {
     try {
       this.rootStore.frezeScreen();
-      await agent.User.logout();
+      await agent.Session.logout();
       this.rootStore.unFrezeScreen();
     } 
     catch (error) {
@@ -197,7 +193,7 @@ export default class UserStore {
   fbLogin = async (response: any) => {
     this.loading = true;
     try {
-      const user = await agent.User.fbLogin(response.accessToken);
+      const user = await agent.Session.fbLogin(response.accessToken);
       runInAction(() => {
         this.user = user;
         this.rootStore.commonStore.setToken(user.token);
@@ -215,7 +211,7 @@ export default class UserStore {
   recoverPassword = async (email: string) => {
     try {
       this.loading = true;
-      const message = await agent.User.recoverPassword(email);
+      const message = await agent.Session.sendRecoverPassword(email);
       runInAction(() => {
         this.rootStore.modalStore.closeModal();
         toast.success(message);
@@ -234,7 +230,7 @@ export default class UserStore {
       console.log(token)
       console.log(email)
       console.log(newPassword)
-      const message = await agent.User.verifyPasswordRecovery(token, email, newPassword);
+      const message = await agent.Session.verifyPasswordRecovery(token, email, newPassword);
       runInAction(() => {
         this.rootStore.modalStore.closeModal();
         toast.success(message);

@@ -1,11 +1,12 @@
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
-import { format } from 'date-fns';
-import React, { useContext } from 'react'
-import { Button, Card, Icon, Item, Label, Segment } from 'semantic-ui-react';
-import ModalYesNo from '../../app/common/modals/ModalYesNo';
 import { ActivityTypes, IActivity, IPhoto } from '../../app/models/activity';
+import { Button, Card, Icon, Item, Label, Segment } from 'semantic-ui-react';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import React, { useContext } from 'react'
+
+import { LatLngLiteral } from '../../app/models/googleMaps'
+import ModalYesNo from '../../app/common/modals/ModalYesNo';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { LatLngLiteral} from '../../app/models/googleMaps'
+import { format } from 'date-fns';
 
 export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
   const rootStore = useContext(RootStoreContext);
@@ -30,10 +31,10 @@ export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activi
     height: "400px",
   };
  
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyAGraVkB2T6hAEWpq7DefFBzn9YkkWgg7I&libraries=places&language=sr-Latn"
-  })
+  // const { isLoaded } = useJsApiLoader({
+  //   id: 'google-map-script',
+  //   googleMapsApiKey: "AIzaSyAGraVkB2T6hAEWpq7DefFBzn9YkkWgg7I&libraries=places&language=sr-Latn"
+  // })
 
   const latLng: LatLngLiteral
   = ({lat: activity.latitude!, lng: activity.longitude!});
@@ -66,7 +67,7 @@ export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activi
           </Item>
         </Item.Group>
       </Segment>
-      {(activity.location || activity.startDate) && (
+      {/* {(activity.location || activity.startDate) && (
         <Segment>
           {activity.startDate && <Icon name="clock" />}
           {activity.startDate &&
@@ -91,7 +92,7 @@ export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activi
             </GoogleMap>
           )}
         </Segment>
-      )}
+      )} */}
       <Segment secondary>{activity.description}</Segment>
       <Segment clearing>
         {activity.type === ActivityTypes.Puzzle && (
