@@ -1,9 +1,10 @@
+import { IActivityFormValues, IPendingActivity } from "../models/activity";
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 
-import { IActivityFormValues } from "../models/activity";
 import { RootStore } from "./rootStore";
 import agent from "../api/agent";
 import { history } from "../..";
+import { toSafeInteger } from "lodash";
 import { toast } from "react-toastify";
 
 const LIMIT = 5;
@@ -25,6 +26,7 @@ export default class ActivityStore {
       }
     );
   }
+
   submitting = false;
   pendingActivitiesRegistry = new Map();
   approvedActivitiesRegistry = new Map();
@@ -34,6 +36,8 @@ export default class ActivityStore {
   loadingInitial = false;
   pendingActivityCount = 0;
   approvedActivityCount = 0;
+
+  pendingActivity: IActivityFormValues | null = null;
 
   get pendingActivitiesArray() {
     return Array.from(this.pendingActivitiesRegistry.values());
@@ -58,6 +62,10 @@ export default class ActivityStore {
   get totalApprovedActivityPages() {
     return Math.ceil(this.approvedActivityCount / LIMIT);
   }
+
+  resetPendingActivitiy = () => {
+    this.pendingActivity = null;
+  };
 
   get pendingActivityAxiosParams() {
     const params = new URLSearchParams();
@@ -89,6 +97,7 @@ export default class ActivityStore {
 
   create = async (values: IActivityFormValues) => {
     try {
+      console.log(values);
       this.rootStore.frezeScreen();
       await agent.PendingActivity.create(values);
       runInAction(() => {
@@ -104,6 +113,32 @@ export default class ActivityStore {
       throw error;
     }
   };
+
+  getOwnerPendingActivity = async (id: string) => {
+    console.log(id);
+    this.loadingInitial = true;
+    this.rootStore.frezeScreen();
+    try {
+      const pendingActivity = await agent.PendingActivity.getOwnerPendingActivity(id);
+      runInAction(() => {
+        this.pendingActivity = pendingActivity as IActivityFormValues;
+        console.log(this.pendingActivity)
+        console.log(pendingActivity)
+        if (pendingActivity?.photos!.length > 0)
+        {
+          console.log(pendingActivity!.photos![0]!.url!)
+          console.log(new Blob([pendingActivity!.photos![0]!.url!]))
+          this.pendingActivity!.images?.push(new Blob([pendingActivity!.photos![0]!.url!]));
+        }
+        console.log(this.pendingActivity);
+        this.rootStore.unFrezeScreen();
+        this.loadingInitial = false;
+      });
+    } catch (error) {
+      this.rootStore.unFrezeScreen();
+      this.loadingInitial = false;
+    }
+  }
 
   loadPendingActivities = async () => {
     this.loadingInitial = true;

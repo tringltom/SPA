@@ -1,8 +1,9 @@
 import { ActivityTypes, IActivityFormValues } from "../../app/models/activity";
 import { Button, Divider, Form, Header } from "semantic-ui-react";
 import { Field, Form as FinalForm } from "react-final-form";
+import { RouteComponentProps, useLocation } from "react-router-dom";
 import { combineValidators, composeValidators, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import { FileInput } from "../../app/common/form/FileInput";
@@ -28,14 +29,24 @@ const validate = combineValidators({
 });
 
 const JokeForm = () => {
+
+  const { state } = useLocation<string>();
   const rootStore = useContext(RootStoreContext);
-  const { create } = rootStore.activityStore;
+  const { create, getOwnerPendingActivity, resetPendingActivitiy, pendingActivity } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
   const [submitError, setsubmitError] = useState(null);
 
+  useEffect(() => {
+    if (state)
+      getOwnerPendingActivity(state);
+    resetPendingActivitiy();
+  }, [state, getOwnerPendingActivity, resetPendingActivitiy]);
+ 
+
   return (
     <FinalForm
+    initialValues={pendingActivity ?? {}}
       onSubmit={(values: IActivityFormValues) => {
         setsubmitError(null);
         openModal(

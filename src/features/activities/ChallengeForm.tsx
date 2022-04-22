@@ -2,7 +2,7 @@ import { ActivityTypes, IActivityFormValues } from "../../app/models/activity";
 import { Button, Divider, Form, Header } from "semantic-ui-react";
 import { Field, Form as FinalForm } from "react-final-form";
 import { combineValidators, composeValidators, createValidator, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import DateInput from "../../app/common/form/DateInput";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
@@ -15,6 +15,7 @@ import { TextInput } from "../../app/common/form/TextInput";
 import { combineDateAndTime } from "../../app/common/form/utils/formUtil";
 import get from 'lodash/get';
 import { observer } from "mobx-react-lite";
+import { useLocation } from "react-router-dom";
 
 const isDateGreater = (otherField: string)  => createValidator(
   message => (value: any, allValues: any) => {
@@ -71,11 +72,19 @@ const validate = combineValidators({
 });
 
 const ChallengeForm = () => {
+  
+  const { state } = useLocation<string>();
   const rootStore = useContext(RootStoreContext);
-  const { create } = rootStore.activityStore;
+  const { create, getOwnerPendingActivity, resetPendingActivitiy, pendingActivity } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
   const [submitError, setsubmitError] = useState(null);
+
+  useEffect(() => {
+    if (state)
+      getOwnerPendingActivity(state);
+    resetPendingActivitiy();
+  }, [state, getOwnerPendingActivity, resetPendingActivitiy]);
 
   const normaliseValues = (values: IActivityFormValues) => {
     if (values.coords) {
@@ -98,6 +107,7 @@ const ChallengeForm = () => {
 
   return (
     <FinalForm
+    initialValues={pendingActivity ?? {}}
       onSubmit={(values: IActivityFormValues) => {
         setsubmitError(null);
         openModal(

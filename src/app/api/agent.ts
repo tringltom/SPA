@@ -26,7 +26,7 @@ axios.interceptors.request.use((config) => {
    if (error.message === "Network Error" && !error.response) {
      toast.error("Servis trenutno nije dostupan, molimo Vas pokušajte kasnije");
    }
-   const { status, data, config, headers } = error.response;
+   const { status, data, config, headers } = error?.response;
    if (status === 404) {
      history.push("/notfound");
    }
@@ -46,8 +46,13 @@ axios.interceptors.request.use((config) => {
    ) {
      history.push("/notfound");
    }
+   if (status === 400 && config.method === "get") {
+     toast.error(data.errors.error);
+   }
    if (status === 500) {
-     toast.error("Mrežna greška - Problem na servisu, molimo Vas pokušajte kasnije");
+     toast.error(
+       "Mrežna greška - Problem na servisu, molimo Vas pokušajte kasnije"
+     );
    }
    throw error.response;
  });
@@ -118,7 +123,7 @@ const PendingActivity = {
     axios.get("/pending-activities",{params: params}).then(responseBody),
   getOwnerPendingActivities: (params: URLSearchParams): Promise<IPendingActivitiesEnvelope> => 
     axios.get("/pending-activities/me",{params: params}).then(responseBody),
-  getOwnerPendingActivity: (id: string): Promise<IPendingActivity> =>
+  getOwnerPendingActivity: (id: string): Promise<IActivityFormValues> =>
     requests.get(`/pending-activities/me/${id}`),
   update: (id: string, activity: IActivityFormValues): Promise<IPendingActivity> => {
     let formData = new FormData();
