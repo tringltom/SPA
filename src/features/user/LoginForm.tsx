@@ -42,8 +42,7 @@ const LoginForm = () => {
         dirtySinceLastSubmit,
       }) => (
         <Fragment>
-          <Image
-            size="small"
+          <Image            
             centered
             verticalAlign="middle"
             src="/assets/LogInEkvitiLogo.png"
@@ -52,7 +51,7 @@ const LoginForm = () => {
             size="medium"
             as="h2"
             content="Dobrodošli nazad."
-            color="black"
+            color="black"        
             textAlign="center"
           />
 
