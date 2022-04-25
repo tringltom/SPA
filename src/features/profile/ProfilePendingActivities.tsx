@@ -51,7 +51,7 @@ export const ProfilePendingActivities = () => {
           {pendingActivitiesArray.map((activity: IPendingActivity) => (
               <Table.Row key={activity.id}>
               <Table.Cell content={ActivityTypes[activity.type]}/>
-              <Table.Cell content={<Link to={{pathname : GenerateActivityRoute(activity.type, activity.id), state : activity.id}}>{activity.title}</Link>}/>
+              <Table.Cell content={<Link to={{pathname : GenerateActivityRoute(activity.type, activity.id)}}>{activity.title}</Link>}/>
               {activity.dateCreated && <Table.Cell content={format(new Date(activity.dateCreated), "d.M.yyyy H:mm ")}/>}
               </Table.Row>
           ))}

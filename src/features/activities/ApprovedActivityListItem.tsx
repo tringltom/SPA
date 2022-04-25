@@ -1,9 +1,7 @@
 import { ActivityTypes, IActivity, IPhoto } from '../../app/models/activity';
 import { Button, Card, Icon, Item, Label, Segment } from 'semantic-ui-react';
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import React, { useContext, useState } from 'react'
 
-import { LatLngLiteral } from '../../app/models/googleMaps'
 import { ReviewButtonsComponent } from '../../app/common/form/ReviewButtonsComponent';
 import { ReviewTypes } from '../../app/models/review';
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -38,29 +36,29 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
     reviewActivity(+activity.id, activity.type, reviewType);
   }
 
-  const center = {
-    lat: activity.latitude ?? 44.7470721,
-    lng: activity.longitude ?? 20.4518071
-  };
+  // const center = {
+  //   lat: activity.latitude ?? 44.7470721,
+  //   lng: activity.longitude ?? 20.4518071
+  // };
 
-  const mapOptions = {
-    center: center,
-    disableDefaultUI: true,
-    zoom: 15
-  };
+  // const mapOptions = {
+  //   center: center,
+  //   disableDefaultUI: true,
+  //   zoom: 15
+  // };
 
-  const containerStyle = {
-    width: "200px",
-    height: "200px",
-  };
+  // const containerStyle = {
+  //   width: "200px",
+  //   height: "200px",
+  // };
  
   // const { isLoaded } = useJsApiLoader({
   //   id: 'google-map-script',
   //   googleMapsApiKey: "AIzaSyAGraVkB2T6hAEWpq7DefFBzn9YkkWgg7I&libraries=places&language=sr-Latn"
   // })
 
-  const latLng: LatLngLiteral
-  = ({lat: activity.latitude!, lng: activity.longitude!});
+  // const latLng: LatLngLiteral
+  // = ({lat: activity.latitude!, lng: activity.longitude!});
 
   return (
     <Segment.Group>

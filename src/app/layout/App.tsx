@@ -3,7 +3,6 @@ import  './styles.css';
 import { Fragment, useEffect } from "react";
 import { Redirect, Route, RouteComponentProps, Switch, useLocation, withRouter } from "react-router-dom";
 
-import { ActivityTypes } from "../models/activity";
 import Approvals from '../../features/approvals/Approvals';
 import ArenaDashboard from "../../features/arena/ArenaDashboard";
 import AvatarApprovals from '../../features/approvals/AvatarApprovals';
@@ -57,30 +56,46 @@ const App: React.FC<RouteComponentProps> = () => {
     return <LoadingComponent content="Momenat, aplikacija se ucitava..." />;
   return (
     <Fragment>
-      <div style={{pointerEvents: rootStore.allowEvents ? 'all' : 'none' }}>
+      <div style={{ pointerEvents: rootStore.allowEvents ? "all" : "none" }}>
         <ModalContainer />
         <ToastContainer position="bottom-right" />
-        <Route exact path="/"> {isLoggedIn ? <Redirect to={{pathname: '/arena', state: '/'}}/> : <WelcomeScreen />}</Route>
+        <Route exact path="/">
+          {" "}
+          {isLoggedIn ? (
+            <Redirect to={{ pathname: "/arena", state: "/" }} />
+          ) : (
+            <WelcomeScreen />
+          )}
+        </Route>
         <Route
           path={"/(.+)"}
           render={() => (
             <Fragment>
               {ShowNavBar() && <Navbar />}
-              <Container style={ ShowNavBar() ? { marginTop: "7em" } : {}} fluid>
+              <Container style={ShowNavBar() ? { marginTop: "7em" } : {}} fluid>
                 <Switch>
-                  <Route path="/users/registerSuccess" component={RegisterSuccess} />
+                  <Route
+                    path="/users/registerSuccess"
+                    component={RegisterSuccess}
+                  />
                   <Route path="/users/verifyEmail" component={VerifyEmail} />
-                  <Route path="/users/verifyPasswordRecovery" component={ChangePasswordForm} />
+                  <Route
+                    path="/users/verifyPasswordRecovery"
+                    component={ChangePasswordForm}
+                  />
                   <PrivateRoute path="/arena" component={ArenaDashboard} />
-                  <PrivateRoute path="/gooddeed" component={GoodDeedForm} type={ActivityTypes.GoodDeed} />
-                  <PrivateRoute path="/joke" component={JokeForm} type={ActivityTypes.Joke} />
-                  <PrivateRoute path="/quote" component={QuoteForm} type={ActivityTypes.Quote} />
-                  <PrivateRoute path="/puzzle" component={PuzzleForm} type={ActivityTypes.Puzzle}/>
-                  <PrivateRoute path="/happening" component={HappeningForm} type={ActivityTypes.Happening} />
-                  <PrivateRoute path="/challenge" component={ChallengeForm} type={ActivityTypes.Challenge}/>
+                  <PrivateRoute path="/gooddeed/:id?" component={GoodDeedForm} />
+                  <PrivateRoute path="/joke/:id?" component={JokeForm} />
+                  <PrivateRoute path="/quote/:id?" component={QuoteForm} />
+                  <PrivateRoute path="/puzzle/:id?" component={PuzzleForm} />
+                  <PrivateRoute path="/happening/:id?" component={HappeningForm} />
+                  <PrivateRoute path="/challenge/:id?" component={ChallengeForm} />
                   <PrivateRoute path="/profile/:id" component={ProfilePage} />
                   <PrivateRoute path="/approvals" component={Approvals} />
-                  <PrivateRoute path="/avatarApprovals" component={AvatarApprovals} />
+                  <PrivateRoute
+                    path="/avatarApprovals"
+                    component={AvatarApprovals}
+                  />
                   <Route component={NotFound} />
                 </Switch>
               </Container>

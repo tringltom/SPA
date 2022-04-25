@@ -1,5 +1,4 @@
 export const GenerateActivityRoute = (activityType: number, activityId: string) => {
-  console.log(activityType)
   let route = ''
   switch (activityType) {
     case 1:

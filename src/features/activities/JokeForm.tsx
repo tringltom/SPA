@@ -1,7 +1,6 @@
 import { ActivityTypes, IActivityFormValues } from "../../app/models/activity";
 import { Button, Divider, Form, Header } from "semantic-ui-react";
 import { Field, Form as FinalForm } from "react-final-form";
-import { RouteComponentProps, useLocation } from "react-router-dom";
 import { combineValidators, composeValidators, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
 import { useContext, useEffect, useState } from "react";
 
@@ -9,6 +8,7 @@ import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import { FileInput } from "../../app/common/form/FileInput";
 import ModalYesNo from "../../app/common/modals/ModalYesNo";
 import { RootStoreContext } from "../../app/stores/rootStore";
+import { RouteComponentProps } from "react-router-dom";
 import { TextAreaInput } from "../../app/common/form/TextAreaInput";
 import { TextInput } from "../../app/common/form/TextInput";
 import { observer } from "mobx-react-lite";
@@ -28,21 +28,26 @@ const validate = combineValidators({
   )(),
 });
 
-const JokeForm = () => {
+interface DetailParams {
+  id: string;
+}
 
-  const { state } = useLocation<string>();
+const JokeForm : React.FC<RouteComponentProps<DetailParams>>= ({match}) => {
+  const activityId = match.params.id;
+
   const rootStore = useContext(RootStoreContext);
-  const { create, getOwnerPendingActivity, resetPendingActivitiy, pendingActivity } = rootStore.activityStore;
+  const { create, update, getOwnerPendingActivity, resetPendingActivitiy, pendingActivity } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
   const [submitError, setsubmitError] = useState(null);
 
   useEffect(() => {
-    if (state)
-      getOwnerPendingActivity(state);
-    resetPendingActivitiy();
-  }, [state, getOwnerPendingActivity, resetPendingActivitiy]);
- 
+    if (activityId)
+      getOwnerPendingActivity(activityId);
+    else
+      resetPendingActivitiy();
+    return () => resetPendingActivitiy();      
+  }, [activityId, getOwnerPendingActivity, resetPendingActivitiy]);
 
   return (
     <FinalForm
@@ -52,7 +57,7 @@ const JokeForm = () => {
         openModal(
           <ModalYesNo
             handleConfirmation={() =>
-              create(values).catch((error) => setsubmitError(error))
+              activityId ? update(activityId, values).catch((error) => setsubmitError(error)) : create(values).catch((error) => setsubmitError(error))
             }
             content="Novi vic"
             icon="smile outline"
@@ -67,7 +72,7 @@ const JokeForm = () => {
           <Header as="h2" content="Vic" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
           <Divider horizontal>Priložite sliku ili napišite vic</Divider>
-          <Field name="images" component={FileInput} />
+          <Field name="images" component={FileInput} state={activityId}/>
           <Divider horizontal></Divider>
           <Field
             name="description"
@@ -79,7 +84,7 @@ const JokeForm = () => {
           <Button
             disabled={invalid || pristine}
             color="teal"
-            content="Kreiraj"
+            content={activityId ? "Izmeni" : "Kreiraj"}
             fluid
           />
         </Form>

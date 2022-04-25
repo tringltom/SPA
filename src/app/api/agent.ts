@@ -46,7 +46,7 @@ axios.interceptors.request.use((config) => {
    ) {
      history.push("/notfound");
    }
-   if (status === 400 && config.method === "get") {
+   if (status === 400 && config.method === "get" && config.url !== '/session/me') {
      toast.error(data.errors.error);
    }
    if (status === 500) {
@@ -76,6 +76,13 @@ const requests = {
   patchForm: (url: string, formData : any) => {
     return axios
       .patch(url, formData, {
+        headers: { "Content-type": "multipart/form-data" },
+      })
+      .then(responseBody);
+  },
+  putForm: (url: string, formData : any) => {
+    return axios
+      .put(url, formData, {
         headers: { "Content-type": "multipart/form-data" },
       })
       .then(responseBody);
@@ -134,7 +141,7 @@ const PendingActivity = {
         formData.append(key, activity[key]);
       }
     });
-    return requests.postForm(`/pending-activities/${id}`, formData);
+    return requests.putForm(`/pending-activities/${id}`, formData);
   },
   dissaprove: (id: string): Promise<void> => requests.delete(`/pending-activities/${id}`),
   create: (activity: IActivityFormValues): Promise<IPendingActivity> => {

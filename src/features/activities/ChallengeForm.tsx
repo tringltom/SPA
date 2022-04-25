@@ -7,15 +7,14 @@ import { useContext, useEffect, useState } from "react";
 import DateInput from "../../app/common/form/DateInput";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import { FileInput } from "../../app/common/form/FileInput";
-import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
 import ModalYesNo from "../../app/common/modals/ModalYesNo";
 import { RootStoreContext } from "../../app/stores/rootStore";
+import { RouteComponentProps } from "react-router-dom";
 import { TextAreaInput } from "../../app/common/form/TextAreaInput";
 import { TextInput } from "../../app/common/form/TextInput";
 import { combineDateAndTime } from "../../app/common/form/utils/formUtil";
 import get from 'lodash/get';
 import { observer } from "mobx-react-lite";
-import { useLocation } from "react-router-dom";
 
 const isDateGreater = (otherField: string)  => createValidator(
   message => (value: any, allValues: any) => {
@@ -71,20 +70,26 @@ const validate = combineValidators({
       ({message: "Vreme završetka izazova je potrebno ukoliko je definisan datum završetka istog" }))()
 });
 
-const ChallengeForm = () => {
+interface DetailParams {
+  id: string;
+}
+
+const ChallengeForm : React.FC<RouteComponentProps<DetailParams>>= ({match}) => {
+  const activityId = match.params.id;
   
-  const { state } = useLocation<string>();
   const rootStore = useContext(RootStoreContext);
-  const { create, getOwnerPendingActivity, resetPendingActivitiy, pendingActivity } = rootStore.activityStore;
+  const { create, update, getOwnerPendingActivity, resetPendingActivitiy, pendingActivity } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
   const [submitError, setsubmitError] = useState(null);
 
   useEffect(() => {
-    if (state)
-      getOwnerPendingActivity(state);
-    resetPendingActivitiy();
-  }, [state, getOwnerPendingActivity, resetPendingActivitiy]);
+    if (activityId)
+      getOwnerPendingActivity(activityId);
+    else
+      resetPendingActivitiy();
+    return () => resetPendingActivitiy();      
+  }, [activityId, getOwnerPendingActivity, resetPendingActivitiy]);
 
   const normaliseValues = (values: IActivityFormValues) => {
     if (values.coords) {
@@ -99,10 +104,6 @@ const ChallengeForm = () => {
       values.endDate = combineDateAndTime(values.dateEnd, values.timeEnd);
     }
     delete values.coords;
-    delete values.dateStart;
-    delete values.timeStart;
-    delete values.dateEnd;
-    delete values.timeEnd;
   };
 
   return (
@@ -115,7 +116,7 @@ const ChallengeForm = () => {
             handleConfirmation={() => (
               // eslint-disable-next-line
               normaliseValues(values),
-              create(values).catch((error) => setsubmitError(error))
+              activityId ? update(activityId, values).catch((error) => setsubmitError(error)) : create(values).catch((error) => setsubmitError(error))
             )}
             content="Novi Izazov"
             icon="hand rock"
@@ -130,7 +131,7 @@ const ChallengeForm = () => {
           <Header as="h2" content="Izazov" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
           <Divider horizontal>Priložite sliku ili opišite izazov</Divider>
-          <Field name="images" component={FileInput} />
+          <Field name="images" component={FileInput} state={activityId} />
           <Divider horizontal></Divider>
           <Field
             name="description"
@@ -174,7 +175,7 @@ const ChallengeForm = () => {
           <Button
             disabled={invalid || pristine}
             color="teal"
-            content="Kreiraj"
+            content={activityId ? "Izmeni" : "Kreiraj"}
             fluid
           />
         </Form>

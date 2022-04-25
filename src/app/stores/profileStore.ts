@@ -1,4 +1,4 @@
-import { ActivityTypes, IActivity, IPendingActivity } from "../models/activity";
+import { ActivityTypes, IPendingActivity } from "../models/activity";
 import { ISkillData, ISkillLevel } from "../models/skillResult";
 import { makeAutoObservable, runInAction } from "mobx";
 

@@ -8,10 +8,10 @@ import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import { FileInput } from "../../app/common/form/FileInput";
 import ModalYesNo from "../../app/common/modals/ModalYesNo";
 import { RootStoreContext } from "../../app/stores/rootStore";
+import { RouteComponentProps } from "react-router-dom";
 import { TextAreaInput } from "../../app/common/form/TextAreaInput";
 import { TextInput } from "../../app/common/form/TextInput";
 import { observer } from "mobx-react-lite";
-import { useLocation } from "react-router-dom";
 
 const validate = combineValidators({
   title: composeValidators(
@@ -28,20 +28,26 @@ const validate = combineValidators({
   )(),
 });
 
-const QuoteForm = () => {
+interface DetailParams {
+  id: string;
+}
 
-  const { state } = useLocation<string>();
+const QuoteForm : React.FC<RouteComponentProps<DetailParams>>= ({match}) => {
+  const activityId = match.params.id;
+
   const rootStore = useContext(RootStoreContext);
-  const { create, getOwnerPendingActivity, resetPendingActivitiy, pendingActivity } = rootStore.activityStore;
+  const { create, update, getOwnerPendingActivity, resetPendingActivitiy, pendingActivity } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
   const [submitError, setsubmitError] = useState(null);
 
   useEffect(() => {
-    if (state)
-      getOwnerPendingActivity(state);
-    resetPendingActivitiy();
-  }, [state, getOwnerPendingActivity, resetPendingActivitiy]);
+    if (activityId) 
+      getOwnerPendingActivity(activityId);
+    else 
+      resetPendingActivitiy();
+    return () => resetPendingActivitiy();
+  }, [activityId, getOwnerPendingActivity, resetPendingActivitiy]);
 
   return (
     <FinalForm
@@ -51,7 +57,7 @@ const QuoteForm = () => {
         openModal(
           <ModalYesNo
             handleConfirmation={() =>
-              create(values).catch((error) => setsubmitError(error))
+              activityId ? update(activityId, values).catch((error) => setsubmitError(error)) : create(values).catch((error) => setsubmitError(error))
             }
             content="Nova Izreka"
             icon="comment alternate"
@@ -66,7 +72,7 @@ const QuoteForm = () => {
           <Header as="h2" content="Izreka" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
           <Divider horizontal>Priložite sliku ili opišite izreku</Divider>
-          <Field name="images" component={FileInput} />
+          <Field name="images" component={FileInput} state={activityId}/>
           <Divider horizontal></Divider>
           <Field
             name="description"
@@ -78,7 +84,7 @@ const QuoteForm = () => {
           <Button
             disabled={invalid || pristine}
             color="teal"
-            content="Kreiraj"
+            content={activityId ? "Izmeni" : "Kreiraj"}
             fluid
           />
         </Form>

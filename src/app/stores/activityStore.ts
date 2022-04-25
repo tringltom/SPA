@@ -1,10 +1,10 @@
-import { IActivityFormValues, IPendingActivity } from "../models/activity";
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 
+import { IActivityFormValues } from "../models/activity";
 import { RootStore } from "./rootStore";
 import agent from "../api/agent";
 import { history } from "../..";
-import { toSafeInteger } from "lodash";
+import { parseDate } from "../common/form/utils/formUtil";
 import { toast } from "react-toastify";
 
 const LIMIT = 5;
@@ -97,7 +97,6 @@ export default class ActivityStore {
 
   create = async (values: IActivityFormValues) => {
     try {
-      console.log(values);
       this.rootStore.frezeScreen();
       await agent.PendingActivity.create(values);
       runInAction(() => {
@@ -114,25 +113,43 @@ export default class ActivityStore {
     }
   };
 
+  update = async (activityId : string, values: IActivityFormValues) => {
+    try {
+
+      this.rootStore.frezeScreen();
+      await agent.PendingActivity.update(activityId, values);
+      runInAction(() => {
+        history.push("/arena");
+        toast.success("Uspešna izmena, molimo Vas da sačekate odobrenje");
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
+    } catch (error) {
+      this.rootStore.unFrezeScreen();
+      this.rootStore.modalStore.closeModal();
+      throw error;
+    }
+  };
+
   getOwnerPendingActivity = async (id: string) => {
-    console.log(id);
     this.loadingInitial = true;
     this.rootStore.frezeScreen();
     try {
       const pendingActivity = await agent.PendingActivity.getOwnerPendingActivity(id);
-      runInAction(() => {
-        this.pendingActivity = pendingActivity as IActivityFormValues;
-        console.log(this.pendingActivity)
-        console.log(pendingActivity)
-        if (pendingActivity?.photos!.length > 0)
-        {
-          console.log(pendingActivity!.photos![0]!.url!)
-          console.log(new Blob([pendingActivity!.photos![0]!.url!]))
-          this.pendingActivity!.images?.push(new Blob([pendingActivity!.photos![0]!.url!]));
-        }
-        console.log(this.pendingActivity);
-        this.rootStore.unFrezeScreen();
-        this.loadingInitial = false;
+      runInAction(async () => {
+        let promises = await pendingActivity.urls.map((el: RequestInfo) => fetch(el).then(r => r.blob()));
+        Promise.all(promises).then((res) => {
+          runInAction(() => {
+          if (res.length > 0) pendingActivity.images = res as Blob[];
+          pendingActivity.dateStart = parseDate(pendingActivity.startDate ?? "");
+          pendingActivity.timeStart = parseDate(pendingActivity.startDate ?? "");
+          pendingActivity.dateEnd = parseDate(pendingActivity.endDate ?? "");
+          pendingActivity.timeEnd = parseDate(pendingActivity.endDate ?? "");
+          this.pendingActivity = pendingActivity as IActivityFormValues;
+          this.rootStore.unFrezeScreen();
+          this.loadingInitial = false;
+          })
+        })
       });
     } catch (error) {
       this.rootStore.unFrezeScreen();

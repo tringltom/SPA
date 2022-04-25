@@ -1,12 +1,9 @@
 import { ActivityTypes, IActivity, IPhoto } from '../../app/models/activity';
-import { Button, Card, Icon, Item, Label, Segment } from 'semantic-ui-react';
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import { Button, Card, Item, Label, Segment } from 'semantic-ui-react';
 import React, { useContext } from 'react'
 
-import { LatLngLiteral } from '../../app/models/googleMaps'
 import ModalYesNo from '../../app/common/modals/ModalYesNo';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { format } from 'date-fns';
 
 export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
   const rootStore = useContext(RootStoreContext);
@@ -14,30 +11,30 @@ export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activi
   const { approvePendingActivity } = rootStore.activityStore;
 
 
-  const center = {
-    lat: activity.latitude ?? 44.7470721,
-    lng: activity.longitude ?? 20.4518071
-  };
+  // const center = {
+  //   lat: activity.latitude ?? 44.7470721,
+  //   lng: activity.longitude ?? 20.4518071
+  // };
 
-  const mapOptions = {
-    center: center,
-    disableDefaultUI: true,
-    zoom: 15,
-    zoomControl: true,
-  };
+  // const mapOptions = {
+  //   center: center,
+  //   disableDefaultUI: true,
+  //   zoom: 15,
+  //   zoomControl: true,
+  // };
 
-  const containerStyle = {
-    width: "400px",
-    height: "400px",
-  };
+  // const containerStyle = {
+  //   width: "400px",
+  //   height: "400px",
+  // };
  
   // const { isLoaded } = useJsApiLoader({
   //   id: 'google-map-script',
   //   googleMapsApiKey: "AIzaSyAGraVkB2T6hAEWpq7DefFBzn9YkkWgg7I&libraries=places&language=sr-Latn"
   // })
 
-  const latLng: LatLngLiteral
-  = ({lat: activity.latitude!, lng: activity.longitude!});
+  // const latLng: LatLngLiteral
+  // = ({lat: activity.latitude!, lng: activity.longitude!});
 
   return (
     <Segment.Group>

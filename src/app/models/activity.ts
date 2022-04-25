@@ -10,6 +10,10 @@ export interface IActivityFormValues {
     startDate?: string | null;
     endDate?: string | null;
     dateCreated?: string | null;
+    dateStart: Date | null;
+    dateEnd: Date | null;
+    timeStart: Date | null;
+    timeEnd: Date | null;
     [key: string]: any;
   };
 
@@ -35,6 +39,7 @@ export interface IActivityFormValues {
     id: string;
     userName: string;
     photos?: IPhoto[];
+    urls: string[];
   }; 
 
   export interface IPhoto {

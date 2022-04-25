@@ -1,5 +1,5 @@
+import { Button, Placeholder, Segment } from 'semantic-ui-react';
 import React, { Fragment } from 'react';
-import { Segment, Button, Placeholder } from 'semantic-ui-react';
 
 const PendingActivityListItemPlaceholder = () => {
   return (
