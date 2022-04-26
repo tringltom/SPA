@@ -1,9 +1,10 @@
 import { ActivityTypes, IActivity, IPhoto } from '../../app/models/activity';
-import { Button, Card, Item, Label, Segment } from 'semantic-ui-react';
+import { Button, Card, Icon, Item, Label, Segment } from 'semantic-ui-react';
 import React, { useContext } from 'react'
 
 import ModalYesNo from '../../app/common/modals/ModalYesNo';
 import { RootStoreContext } from '../../app/stores/rootStore';
+import { format } from 'date-fns';
 
 export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
   const rootStore = useContext(RootStoreContext);
@@ -64,7 +65,7 @@ export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activi
           </Item>
         </Item.Group>
       </Segment>
-      {/* {(activity.location || activity.startDate) && (
+      {(activity.location || activity.startDate) && (
         <Segment>
           {activity.startDate && <Icon name="clock" />}
           {activity.startDate &&
@@ -73,7 +74,7 @@ export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activi
             format(new Date(activity.endDate), "- d.M.yyyy H:mm ")}
           {activity.location && <Icon name="marker" />}
           {activity.location}
-          {activity.longitude && isLoaded && (
+          {/* {activity.longitude && isLoaded && (
             <GoogleMap
               options={mapOptions}
               mapContainerStyle={containerStyle}
@@ -87,9 +88,9 @@ export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activi
             >
               <Marker position={{ lat: latLng.lat, lng: latLng.lng }} />
             </GoogleMap>
-          )}
+          )} */}
         </Segment>
-      )} */}
+      )}
       <Segment secondary>{activity.description}</Segment>
       <Segment clearing>
         {activity.type === ActivityTypes.Puzzle && (

@@ -43,6 +43,10 @@ export default class ActivityStore {
     return Array.from(this.pendingActivitiesRegistry.values());
   }
 
+  resetPendingActivitiesArray = () => {
+    this.pendingActivitiesRegistry = new Map();
+  }
+
   get approvedActivitiesArray() {
     return Array.from(this.approvedActivitiesRegistry.values());
   }

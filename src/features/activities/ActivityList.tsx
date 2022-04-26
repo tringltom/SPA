@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment, useContext, useEffect } from 'react';
 
 import { ApprovedActivityListItem } from './ApprovedActivityListItem';
 import { IActivity } from '../../app/models/activity';
@@ -10,9 +10,13 @@ import { observer } from 'mobx-react-lite';
 const ActivityList: React.FC<{approved: boolean}> = ({approved}) => {
   const rootStore = useContext(RootStoreContext);
 
-  const { pendingActivitiesArray, approvedActivitiesArray, loadingInitial } = rootStore.activityStore;
+  const { pendingActivitiesArray, approvedActivitiesArray, loadingInitial, resetPendingActivitiesArray } = rootStore.activityStore;
   const { reviewsForCurrentUserArray, loading: loadingReviews } = rootStore.reviewStore;
   const { favoritesArray, loading: loadingFavorites } = rootStore.favoriteStore;
+
+  useEffect(() => {
+    return () => resetPendingActivitiesArray();      
+  }, [resetPendingActivitiesArray]);
 
   return (
     <Fragment>
