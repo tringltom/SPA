@@ -46,7 +46,7 @@ axios.interceptors.request.use((config) => {
    ) {
      history.push("/notfound");
    }
-   if (status === 400 || status === 404 && config.method === "get" && config.url !== '/session/me') {
+   if ((status === 400 || status === 404) && config.method === "get" && config.url !== '/session/me') {
      toast.error(data.errors.error);
    }
    if (status === 500) {
