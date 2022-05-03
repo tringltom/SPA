@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
-import React from "react";
-import { Message } from "semantic-ui-react";
 import { EkvitiColors } from "../../layout/EkvitiColors";
+import { Message } from "semantic-ui-react";
+import React from "react";
 
 interface IProps {
   error: AxiosResponse;

@@ -1,13 +1,14 @@
-import { useContext } from "react";
+import { Button, Form, Header } from "semantic-ui-react";
+import { Field, Form as FinalForm } from "react-final-form";
 import { combineValidators, isRequired } from "revalidate";
-import { Form as FinalForm, Field } from "react-final-form";
-import { Button, Header, Form } from "semantic-ui-react";
+
+import { EkvitiColors } from "../../app/layout/EkvitiColors";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
-import { observer } from "mobx-react-lite";
 import { FORM_ERROR } from "final-form";
 import { RootStoreContext } from "../../app/stores/rootStore";
-import { EkvitiColors } from "../../app/layout/EkvitiColors";
 import { TextInputIcons } from "../../app/common/form/TextInputIcons";
+import { observer } from "mobx-react-lite";
+import { useContext } from "react";
 
 const validate = combineValidators({
   email: isRequired({ message: "Email adresa je neophodna" }),
@@ -25,8 +26,8 @@ export const ForgotPasswordForm = () => {
   const { recoverPassword } = rootStore.userStore;
   return (
     <FinalForm
-      onSubmit={(email: string) =>
-        recoverPassword(email).catch((error) => ({
+      onSubmit={(values: any) =>
+        recoverPassword(values.email).catch((error) => ({
           [FORM_ERROR]: error,
         }))
       }

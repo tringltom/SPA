@@ -1,7 +1,7 @@
-import { ActivityTypes, IActivity } from "../models/activity";
+import { ActivityTypes, IPendingActivity } from "../models/activity";
+import { ISkillData, ISkillLevel } from "../models/skillResult";
 import { makeAutoObservable, runInAction } from "mobx";
 
-import { ISkillData } from "../models/skillResult";
 import { RootStore } from "./rootStore";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
@@ -17,7 +17,7 @@ export default class ProfileStore {
 
   loadingInitial = false;
   pendingActivitiesPage = 0;
-  pendingActivitiesRegistry = [] as IActivity[];
+  pendingActivitiesRegistry = [] as IPendingActivity[];
   pendingActivityCount = 0;
   skillData : ISkillData | null = null;
   skillMap : Map<string, boolean> = new Map<string, boolean>();
@@ -45,7 +45,7 @@ export default class ProfileStore {
   loadPendingActivitiesForUser = async () => {
     this.loadingInitial = true;
     try {
-      const activitiesEnvelope = await agent.Activity.getPendingActivitiesForUser(
+      const activitiesEnvelope = await agent.PendingActivity.getOwnerPendingActivities(
         this.pendingActivityAxiosParams
       );
       const { activities, activityCount } = activitiesEnvelope;
@@ -65,10 +65,10 @@ export default class ProfileStore {
   setUserAbout = async (about: string) => {
     try {
       this.rootStore.frezeScreen();
-      const message = await agent.User.updateAbout(about);
+      await agent.User.updateAbout(about);
       runInAction(() => {
         this.rootStore.userStore.user!.about = about;
-        toast.success(message);
+        toast.success("Uspešna izmena o korisniku");
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();
       });
@@ -82,9 +82,9 @@ export default class ProfileStore {
   setUserImage = async (values: any) => {
     try {
       this.rootStore.frezeScreen();
-      const message = await agent.User.updateImage(values.images[0]);
+      await agent.User.updateImage(values.images[0]);
       runInAction(() => {
-        toast.success(message);
+        toast.success("Uspešna izmena profilne slike, molimo Vas sačekajte odobrenje");
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();
       });
@@ -141,7 +141,20 @@ export default class ProfileStore {
   resetSkills = async () => {
     this.rootStore.frezeScreen();
     try {
-      const updatedUser = await agent.Profile.resetSkills();
+      const skillLevel : ISkillLevel[] = [];
+      
+      Object.keys(ActivityTypes).forEach((key: any, el) => {
+        if (ActivityTypes[el + 1] !== undefined) 
+          skillLevel.push( {type: key, level: 1} as ISkillLevel)
+      });
+
+      const skillData: ISkillData = {
+        currentLevel: Number(this.rootStore.userStore.user!.currentLevel),
+        xpLevel: Number(this.rootStore.userStore.user!.currentLevel),
+        skillLevels : skillLevel,
+      };
+
+      const updatedUser = await agent.Profile.updateSkills(skillData);
       runInAction(() => {
         this.setResetToggleMap();
         this.skillData!.currentLevel = 1;

@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
 import { Grid, Loader } from 'semantic-ui-react'
-import { RootStoreContext } from '../../app/stores/rootStore';
-import InfiniteScroll from 'react-infinite-scroller';
+import { useContext, useEffect, useState } from 'react';
+
 import ActivityList from '../activities/ActivityList';
-import { observer } from 'mobx-react-lite';
 import ApprovedActivityListItemPlaceholder from '../activities/ApprovedActivityListItemPlaceholder';
+import InfiniteScroll from 'react-infinite-scroller';
+import { RootStoreContext } from '../../app/stores/rootStore';
+import { observer } from 'mobx-react-lite';
 
 interface IProps {
   initialLoad: boolean;
@@ -13,24 +14,24 @@ const ArenaMainPage: React.FC<IProps> = ({initialLoad}) => {
     const rootStore = useContext(RootStoreContext);
     const {loadReviewedActivities, loading: loadingReviews} = rootStore.reviewStore;
     const {getApprovedActivitiesFromOtherUsers, loadingInitial, setApprovedActivitiesPage, approvedActivitiesPage, totalApprovedActivityPages} = rootStore.activityStore;
-    const {loadFavoriteActivitiesForUser, loading: loadingFavorites} = rootStore.favoriteStore;
+    const {loadFavoriteActivities, loading: loadingFavorites} = rootStore.favoriteStore;
     const { userId } = rootStore.userStore;
 
     useEffect(() => {
       if (userId && initialLoad)
       {
-        loadReviewedActivities(userId);
-        getApprovedActivitiesFromOtherUsers(userId);
-        loadFavoriteActivitiesForUser(userId);
+        loadReviewedActivities();
+        getApprovedActivitiesFromOtherUsers();
+        loadFavoriteActivities();
       }
-    }, [getApprovedActivitiesFromOtherUsers, loadReviewedActivities, loadFavoriteActivitiesForUser, userId, initialLoad]);
+    }, [getApprovedActivitiesFromOtherUsers, loadReviewedActivities, loadFavoriteActivities, userId, initialLoad]);
 
     const [loadingNext, setLoadingNext] = useState(false);
   
     const handleGetNext = () => {
       setLoadingNext(true);
       setApprovedActivitiesPage(approvedActivitiesPage + 1);
-      getApprovedActivitiesFromOtherUsers(userId ? userId : -1).then(() => setLoadingNext(false));
+      getApprovedActivitiesFromOtherUsers().then(() => setLoadingNext(false));
     }
 
     return (

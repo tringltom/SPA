@@ -1,14 +1,15 @@
 import { configure, makeAutoObservable, runInAction } from "mobx";
-import { createContext } from "react";
+
 import ActivityStore from "./activityStore";
 import CommonStore from "./commonStore";
+import FavoriteStore from "./favoriteStore";
 import ModalStore from "./modalStore";
+import ProfileStore from "./profileStore";
+import ReviewStore from "./reviewStore";
 import UserStore from "./userStore";
 import agent from "../api/agent";
+import { createContext } from "react";
 import { toast } from "react-toastify";
-import ReviewStore from "./reviewStore";
-import FavoriteStore from "./favoriteStore";
-import ProfileStore from "./profileStore";
 
 configure({ enforceActions: "always" });
 
@@ -44,7 +45,7 @@ export class RootStore {
     this.allowEvents =  true;
   };
 
-  getPrice = async () => { 
+  getPrize = async () => { 
       this.shake = true;
       setTimeout(async () => {
         try {

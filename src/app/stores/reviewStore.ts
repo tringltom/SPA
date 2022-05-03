@@ -1,9 +1,10 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { toast } from "react-toastify";
-import agent from "../api/agent";
+
 import { ActivityTypes } from "../models/activity";
 import { ReviewTypes } from "../models/review";
 import { RootStore } from "./rootStore";
+import agent from "../api/agent";
+import { toast } from "react-toastify";
 
 export default class ReviewStore {
   rootStore: RootStore;
@@ -20,10 +21,10 @@ export default class ReviewStore {
     return Array.from(this.reviewsForCurrentUserRegistry.values());
   }
 
-  loadReviewedActivities = async (userId: number) => {
+  loadReviewedActivities = async () => {
     this.loading = true;
     try {
-      const reviews = await agent.Review.getReviewsForUser(userId);
+      const reviews = await agent.Review.getOwnerReviews();
       runInAction(() => {
         reviews.forEach((review) => {
           this.reviewsForCurrentUserRegistry.set(review.activityId, review);
