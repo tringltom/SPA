@@ -1,16 +1,17 @@
+import { Button, Grid, Header, Image } from "semantic-ui-react";
+
 import React from "react";
 import { RouteComponentProps } from "react-router";
-import queryString from "query-string";
-import { Button, Grid, Header, Image } from "semantic-ui-react";
 import agent from "../../app/api/agent";
-import { toast } from "react-toastify";
+import queryString from "query-string";
 import { styles } from "../../app/layout/FullScreenCardStyle";
+import { toast } from "react-toastify";
 
 const RegisterSuccess: React.FC<RouteComponentProps> = ({ location }) => {
   const { email } = queryString.parse(location.search);
 
   const handleConfirmEmailResend = () => {
-    agent.User.resendVerifyEmailConfirm(email as string)
+    agent.Session.sendEmailVerification(email as string)
       .then(() => {
         toast.success("Potvrda je poslata - molimo Vas da proverite poštu");
       })

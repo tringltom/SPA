@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import "@reach/combobox/styles.css";
+
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxList,
+  ComboboxOption,
+  ComboboxPopover,
+} from "@reach/combobox";
 import { Form, FormFieldProps, Input, Label } from "semantic-ui-react";
-import { FieldRenderProps } from "react-final-form";
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { ICoords, LatLngLiteral, MapMouseEvent, MapType } from '../../models/googleMaps'
+import React, { useEffect, useState } from 'react'
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-} from "@reach/combobox";
-import "@reach/combobox/styles.css";
-import { ICoords, LatLngLiteral, MapMouseEvent, MapType} from '../../models/googleMaps'
+
+import { FieldRenderProps } from "react-final-form";
 
 interface IProps
   extends FieldRenderProps<Input, HTMLElement>,

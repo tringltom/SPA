@@ -1,7 +1,8 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { toast } from "react-toastify";
-import agent from "../api/agent";
+
 import { RootStore } from "./rootStore";
+import agent from "../api/agent";
+import { toast } from "react-toastify";
 
 export default class FavoriteStore {
   rootStore: RootStore;
@@ -21,7 +22,10 @@ export default class FavoriteStore {
   resolveFavoriteActivity = async (activityId: number, favorite: boolean) => {
     this.resolvingFavourite = true;
     try {
-      await agent.Favorite.resolveFavoriteActivity(activityId, favorite);
+      if(favorite)
+        await agent.Favorite.createFavoriteActivity(activityId);
+      else
+        await agent.Favorite.removeFavoriteActivity(activityId);
       runInAction(() => {
         favorite
           ? this.favoriteRegistry.set(activityId, activityId)
@@ -34,10 +38,10 @@ export default class FavoriteStore {
     }
   };
 
-  loadFavoriteActivitiesForUser = async (userId: number) => {
+  loadFavoriteActivities = async () => {
     this.loading = true;
     try {
-      const favorites = await agent.Favorite.getFavoritesForUser(userId);
+      const favorites = await agent.Favorite.getOwnerFavoriteActivityIds();
       runInAction(() => {
         favorites.forEach((favorite) => {
           this.favoriteRegistry.set(favorite, favorite);

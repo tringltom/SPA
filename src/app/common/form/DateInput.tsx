@@ -1,8 +1,10 @@
-import React from 'react'
-import { FieldRenderProps } from 'react-final-form';
-import { FormFieldProps, Form, Label } from 'semantic-ui-react';
-import { DateTimePicker } from 'react-widgets';
 import 'react-widgets/dist/css/react-widgets.css';
+
+import { Form, FormFieldProps, Label } from 'semantic-ui-react';
+
+import { DateTimePicker } from 'react-widgets';
+import { FieldRenderProps } from 'react-final-form';
+import React from 'react'
 
 interface IProps
   extends FieldRenderProps<Date, HTMLElement>,
@@ -29,6 +31,7 @@ const DateInput: React.FC<IProps> = ({
             date={date}
             time={time}
             step={5}
+            value={input.value.toString() === "" ? undefined : input.value}
             {...rest}
         />
         {error && (

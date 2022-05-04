@@ -1,7 +1,8 @@
-import React, { useCallback, useState} from 'react'
-import {useDropzone} from 'react-dropzone'
-import { FieldInputProps } from 'react-final-form'
 import { Header, Icon, Input } from 'semantic-ui-react'
+import React, { useCallback, useState } from 'react'
+
+import { FieldInputProps } from 'react-final-form'
+import {useDropzone} from 'react-dropzone'
 
 interface IProps {
   maxNumberofFiles: number;
@@ -40,7 +41,7 @@ export const PhotoWidgetDropzone: React.FC<IProps> = ({setFiles, setActiveFile, 
     (acceptedFiles) => {
       setFiles([]);
       setFiles(
-        acceptedFiles.map((file: object) =>
+        acceptedFiles.map((file: any) =>
           Object.assign(file, {
             preview: URL.createObjectURL(file),
           })

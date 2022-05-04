@@ -1,14 +1,16 @@
+import { Button, Container, Grid, GridColumn, Header, Input } from 'semantic-ui-react';
 import { Fragment, useEffect, useState } from 'react';
-import { Header, Grid, Button, Input, Container, GridColumn } from 'semantic-ui-react';
-import { observer } from 'mobx-react-lite';
-import { PhotoWidgetDropzone } from './PhotoWidgetDropzone';
-import { PhotoWidgetCropper } from './PhotoWidgetCropper';
+
 import { FieldInputProps } from 'react-final-form';
+import { PhotoWidgetCropper } from './PhotoWidgetCropper';
+import { PhotoWidgetDropzone } from './PhotoWidgetDropzone';
+import { observer } from 'mobx-react-lite';
 
 interface IProps {
   props : FieldInputProps<Input, HTMLElement>,
   error? : boolean,
-  maxNumberofFiles : number
+  maxNumberofFiles : number,
+  state: string
 }
 
 const thumbsContainer = {
@@ -52,10 +54,11 @@ const croppedImg = {
   maxWidth: '100%'
 };
 
-const PhotoUploadWidget : React.FC<IProps> = ({props, error, maxNumberofFiles}) => {
+const PhotoUploadWidget : React.FC<IProps> = ({props, error, maxNumberofFiles, state}) => {
 
+  const [loadExisting, setLoadExisting] = useState(true);
+  const [reset, setReset] = useState(true);
   const [hovered, setHovered] = useState("");
-
   const [files, setFiles] = useState<any[]>([]);
   const [activefile, setActiveFile] = useState<any>(null);
   const [images, setImages] = useState<Blob[] | null>(null);
@@ -63,42 +66,64 @@ const PhotoUploadWidget : React.FC<IProps> = ({props, error, maxNumberofFiles}) 
   const thumbs = files.map((file) => (
     <div
       style={
-        file.name === activefile?.name
+        file?.name === activefile?.name
           ? { ...thumb, border: "2px solid #21ba45", padding: 0 }
           : file.name === hovered
           ? { ...thumb, padding: 0 }
           : thumb
       }
-      key={file.name}
+      key={files.indexOf(file)}
       onClick={() => setActiveFile(file)}
       onMouseOver={() => {
         setHovered(file.name);
       }}
     >
       <div style={thumbInner}>
-        <img src={file.preview} style={img} alt="slika" />
+        <img src={file?.preview} style={img} alt="slika" />
       </div>
     </div>
   ));
 
-  const croppedthumbs = images?.map((image) => (
+  const croppedthumbs = images?.map((image) => 
     <div style={thumb} key={images.indexOf(image)}>
       <div style={thumbInner}>
         <img src={URL.createObjectURL(image)} style={croppedImg}  alt="spremna slika"/>
       </div>
     </div>
-  ));
+  );
 
   useEffect(() => {
-    if (props.onChange) {
+    let values=  props?.value as unknown as any[];
+
+    if (loadExisting && values && values.length > 0 && state) {
+      setFiles(
+        values.map((file: any) => {
+          return Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          });
+        })
+      );
+      setActiveFile(values[0]);
+      setImages(values);
+      setLoadExisting(false);
+    }
+
+    if (state === undefined && reset) {
+      setReset(false);
+      setFiles([]);
+      setImages(null);
+    }
+    
+    if ((values || images) && props.onChange) {
       props.onChange(images);
     }
+
     return () => {
-      if (props.onChange) {
+      if ((values || images) && props.onChange) {
         props.onChange(images);
-      }
+      }    
     };
-  }, [images, props]);
+  }, [props, images, setFiles, loadExisting, state, reset]);
 
   return (
     <Fragment>

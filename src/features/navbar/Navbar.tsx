@@ -1,13 +1,15 @@
-import React, { useContext } from 'react'
-import { observer } from 'mobx-react-lite';
 import  '../../app/layout/styles.css';
-import { history } from "../..";
-import { createMedia } from "@artsy/fresnel";
-import { NavbarMobile } from './NavbarMobile';
+
+import React, { useContext } from 'react'
+
+import { ActivityTypes } from '../../app/models/activity';
 import { NavbarDesktop } from './NavbarDesktop';
+import { NavbarMobile } from './NavbarMobile';
 import { NavbarRighItems } from './NavbarRighItems';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { ActivityTypes } from '../../app/models/activity';
+import { createMedia } from "@artsy/fresnel";
+import { history } from "../..";
+import { observer } from 'mobx-react-lite';
 
 const AppMedia = createMedia({
   breakpoints: {
@@ -28,12 +30,12 @@ const Navbar: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
   const { user } = rootStore.userStore;
 
-  const GoodDeedCount = user?.activityCounts.find((el) => el.type === ActivityTypes.GoodDeed);
-  const JokeCount = user?.activityCounts.find((el) => el.type === ActivityTypes.Joke);
-  const QuoteCount = user?.activityCounts.find((el) => el.type === ActivityTypes.Quote);
-  const PuzzleCount = user?.activityCounts.find((el) => el.type === ActivityTypes.Puzzle);
-  const HappeningCount = user?.activityCounts.find((el) => el.type === ActivityTypes.Happening);
-  const ChallengeCount = user?.activityCounts.find((el) => el.type === ActivityTypes.Challenge);
+  const GoodDeedCount = user?.activityCounts?.find((el) => el.type === ActivityTypes.GoodDeed);
+  const JokeCount = user?.activityCounts?.find((el) => el.type === ActivityTypes.Joke);
+  const QuoteCount = user?.activityCounts?.find((el) => el.type === ActivityTypes.Quote);
+  const PuzzleCount = user?.activityCounts?.find((el) => el.type === ActivityTypes.Puzzle);
+  const HappeningCount = user?.activityCounts?.find((el) => el.type === ActivityTypes.Happening);
+  const ChallengeCount = user?.activityCounts?.find((el) => el.type === ActivityTypes.Challenge);
   
   const leftItems = [
     { content: `${ActivityTypes[1]} ${GoodDeedCount?.available}/${GoodDeedCount?.max}`, key: "delo", icon:"heartbeat", disabled: (GoodDeedCount?.available ?? 0) <= 0, onClick : () => {history.push("/gooddeed")}},

@@ -1,18 +1,18 @@
-
-import { observer } from 'mobx-react-lite';
-import { Fragment, useContext, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom';
 import { Container, Grid, Image, Transition } from 'semantic-ui-react';
-import { RootStoreContext } from '../../app/stores/rootStore';
-import Navbar from '../navbar/Navbar';
-import WelcomeScreen from '../WelcomeScreen';
+import { Fragment, useContext, useEffect, useState } from 'react'
+
 import ArenaList from './ArenaList';
 import ArenaMainPage from './ArenaMainPage';
 import InfiniteScroll from 'react-infinite-scroller';
+import Navbar from '../navbar/Navbar';
+import { RootStoreContext } from '../../app/stores/rootStore';
+import WelcomeScreen from '../WelcomeScreen';
+import { observer } from 'mobx-react-lite';
+import { useLocation } from 'react-router-dom';
 
 const ArenaDashboard = () => {
   const rootStore = useContext(RootStoreContext);
-  const {shake, showDice, getPrice} = rootStore;
+  const {shake, showDice, getPrize} = rootStore;
   const {loadUsers, setPage, page, totalPages, usersArray} = rootStore.userStore;
   const [loadingNext, setLoadingNext] = useState(false);
   const [showArena, setshowArena] = useState(false);
@@ -40,7 +40,7 @@ const ArenaDashboard = () => {
         </Grid.Column>
         {showDice && (
           <Image
-            onClick={getPrice}
+            onClick={getPrize}
             className={shake ? `shake` : undefined}
             style={{ position: "absolute" }}
             size="small"

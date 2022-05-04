@@ -1,7 +1,9 @@
-import { ActivityTypes, IActivity } from '../../app/models/activity';
+import { ActivityTypes, IPendingActivity } from '../../app/models/activity';
 import { Icon, Loader, Pagination, Segment, Table } from 'semantic-ui-react';
 import { useContext, useEffect, useState } from 'react'
 
+import { GenerateActivityRoute } from './utils/GenerateActivityRoute';
+import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
@@ -46,10 +48,10 @@ export const ProfilePendingActivities = () => {
           </Table.Header>
 
           <Table.Body>
-          {pendingActivitiesArray.map((activity: IActivity) => (
+          {pendingActivitiesArray.map((activity: IPendingActivity) => (
               <Table.Row key={activity.id}>
               <Table.Cell content={ActivityTypes[activity.type]}/>
-              <Table.Cell content={activity.title}/>
+              <Table.Cell content={<Link to={{pathname : GenerateActivityRoute(activity.type, activity.id)}}>{activity.title}</Link>}/>
               {activity.dateCreated && <Table.Cell content={format(new Date(activity.dateCreated), "d.M.yyyy H:mm ")}/>}
               </Table.Row>
           ))}
