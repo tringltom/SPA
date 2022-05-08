@@ -228,4 +228,30 @@ export default class ActivityStore {
       });
     };
   }
+
+  answerPuzzle = async (values: any) => {
+    try {
+      this.rootStore.frezeScreen();
+      this.submitting = true;
+      const result = await agent.Activity.answerPuzzle(
+        values.id,
+        values.answer
+      );
+      runInAction(() => {
+        toast.success(
+          `Tačan odogovor, osvojili ste ${result} iskustvenih poena!`
+        );
+        this.submitting = false;
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
+    } catch (error : any) {
+      runInAction(() => {
+        this.submitting = false;
+        this.rootStore.unFrezeScreen();
+        this.rootStore.modalStore.closeModal();
+        toast.error(error?.data.errors.error);
+      });
+    }
+  }
 }

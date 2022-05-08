@@ -2,6 +2,7 @@ import { ActivityTypes, IActivity, IPhoto } from '../../app/models/activity';
 import { Button, Card, Icon, Item, Label, Segment } from 'semantic-ui-react';
 import React, { useContext, useState } from 'react'
 
+import PuzzleAnswerForm from './PuzzleAnswerForm';
 import { ReviewButtonsComponent } from '../../app/common/form/ReviewButtonsComponent';
 import { ReviewTypes } from '../../app/models/review';
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -14,6 +15,7 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
   const { reviewActivity, reviewing } = rootStore.reviewStore;
   const { resolveFavoriteActivity, resolvingFavourite } = rootStore.favoriteStore;
   const { userId } = rootStore.userStore;
+  const { openModal } = rootStore.modalStore;
 
   const buttonData = getButtonData(activity.type);
 
@@ -117,11 +119,11 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
       <Segment secondary>{activity.description}</Segment>
       <Segment clearing>
         {activity.type === ActivityTypes.Puzzle && (
-          <span>Odgovor: {activity.answer}</span>
+          <Button icon='microphone' content='Odgovori' floated='right' onClick={() => openModal(<PuzzleAnswerForm activityId={activity.id} />)}></Button>
         )}
       </Segment>
       <Segment>
-        <Button icon={"favorite"} loading={resolvingFavourite} active={isFavorite} onClick={toggleFavorite}/>
+        <Button icon='favorite' loading={resolvingFavourite} active={isFavorite} onClick={toggleFavorite}/>
         <ReviewButtonsComponent buttonData={buttonData} activeButton={activeButton} handleReviewClick={handleReviewClick} loading={reviewing} float='right'/>
       </Segment>
     </Segment.Group>
