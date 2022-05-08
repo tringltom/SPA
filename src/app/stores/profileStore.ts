@@ -1,7 +1,7 @@
-import { ActivityTypes, IPendingActivity } from "../models/activity";
 import { ISkillData, ISkillLevel } from "../models/skillResult";
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 
+import { ActivityTypes } from "../models/activity";
 import { RootStore } from "./rootStore";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
@@ -12,13 +12,24 @@ export default class ProfileStore {
   rootStore: RootStore;
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
-    makeAutoObservable(this);    
+    makeAutoObservable(this);   
+
+    reaction(
+      () => this.predicate.keys(),
+      () => {
+        this.pendingActivitiesPage = 0;
+        this.pendingActivitiesRegistry.clear();
+        this.loadPendingActivitiesForUser();
+      }
+    );
   };
 
   loadingInitial = false;
   pendingActivitiesPage = 0;
-  pendingActivitiesRegistry = [] as IPendingActivity[];
+  predicate = new Map();
+  pendingActivitiesRegistry = new Map();
   pendingActivityCount = 0;
+
   skillData : ISkillData | null = null;
   skillMap : Map<string, boolean> = new Map<string, boolean>();
   initialSkillMap : Map<string, boolean> = new Map<string, boolean>();
@@ -27,6 +38,17 @@ export default class ProfileStore {
     const params = new URLSearchParams();
     params.append("limit", String(LIMIT));
     params.append("offset", `${this.pendingActivitiesPage ? this.pendingActivitiesPage * LIMIT : 0}`);
+
+    this.predicate.forEach((value, key) => {
+      if (key.includes("Array"))
+      {
+        var arrayValue = JSON.parse("[" + value + "]");
+        arrayValue.map((el : any) => params.append(key.replace("Array", ""), el))
+      }
+      else
+        params.append(key, value)
+    });
+
     return params;
   }
 
@@ -42,6 +64,14 @@ export default class ProfileStore {
     this.pendingActivitiesPage = page;
   };
 
+  setPredicate = (predicate: string, value: string | Date) => {
+    if (this.predicate.has(predicate))
+      this.predicate.delete(predicate);
+    if (value !== "") {
+      this.predicate.set(predicate, value);
+    } 
+  }
+
   loadPendingActivitiesForUser = async () => {
     this.loadingInitial = true;
     try {
@@ -50,7 +80,10 @@ export default class ProfileStore {
       );
       const { activities, activityCount } = activitiesEnvelope;
       runInAction(() => {
-        this.pendingActivitiesRegistry = activities;
+        this.pendingActivitiesRegistry.clear();
+        activities.forEach((activity) => {
+          this.pendingActivitiesRegistry.set(activity.id, activity);
+        });
         this.pendingActivityCount = activityCount;
         this.loadingInitial = false;
       });
