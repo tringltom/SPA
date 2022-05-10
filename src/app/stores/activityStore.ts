@@ -18,11 +18,9 @@ export default class ActivityStore {
     reaction(
       () => this.predicate.keys(),
       () => {
-        this.pendingActivitiesPage = 0;
         this.approvedActivitiesPage = 0;
-        this.pendingActivitiesRegistry.clear();
         this.approvedActivitiesRegistry.clear();
-        this.loadPendingActivities();
+        this.getApprovedActivitiesFromOtherUsers();
       }
     );
   }
@@ -71,6 +69,14 @@ export default class ActivityStore {
     this.pendingActivity = null;
   };
 
+  setPredicate = (predicate: string, value: string | Date) => {
+    if (this.predicate.has(predicate))
+      this.predicate.delete(predicate);
+    if (value !== "") {
+      this.predicate.set(predicate, value);
+    } 
+  }
+
   get pendingActivityAxiosParams() {
     const params = new URLSearchParams();
     params.append("limit", String(LIMIT));
@@ -90,11 +96,13 @@ export default class ActivityStore {
     params.append("limit", String(LIMIT));
     params.append("offset", `${this.approvedActivitiesPage ? this.approvedActivitiesPage * LIMIT : 0}`);
     this.predicate.forEach((value, key) => {
-      if (key === "startDate") {
-        params.append(key, value.toISOString());
-      } else {
-        params.append(key, value);
+      if (key.includes("Array"))
+      {
+        var arrayValue = JSON.parse("[" + value + "]");
+        arrayValue.map((el : any) => params.append(key.replace("Array", ""), el))
       }
+      else
+        params.append(key, value)
     });
     return params;
   }
@@ -119,7 +127,6 @@ export default class ActivityStore {
 
   update = async (activityId : string, values: IActivityFormValues) => {
     try {
-
       this.rootStore.frezeScreen();
       await agent.PendingActivity.update(activityId, values);
       runInAction(() => {
