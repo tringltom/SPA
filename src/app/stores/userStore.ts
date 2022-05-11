@@ -47,6 +47,14 @@ export default class UserStore {
     this.page = page;
   };
 
+  setPredicate = (predicate: string, value: string | Date) => {
+    if (this.predicate.has(predicate)) 
+      this.predicate.delete(predicate);
+    if (value !== "") {
+      this.predicate.set(predicate, value);
+    }
+  }
+
   get totalPages() {
     return Math.ceil(this.userCount / LIMIT);
   }
@@ -64,11 +72,7 @@ export default class UserStore {
     params.append("limit", String(LIMIT));
     params.append("offset", `${this.page ? this.page * LIMIT : 0}`);
     this.predicate.forEach((value, key) => {
-      if (key === "startDate") {
-        params.append(key, value.toISOString());
-      } else {
         params.append(key, value);
-      }
     });
     return params;
   }

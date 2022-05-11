@@ -1,15 +1,27 @@
-import { observer } from 'mobx-react-lite';
-import React from 'react'
-import { Button, Icon, Item, Segment, Statistic, StatisticGroup } from 'semantic-ui-react';
+import { Button, Icon, Input, Item, Segment, Statistic, StatisticGroup } from 'semantic-ui-react';
+import React, { useContext } from 'react'
+
 import { IUser } from '../../app/models/user';
+import { RootStoreContext } from '../../app/stores/rootStore';
+import { observer } from 'mobx-react-lite';
 
 interface IProps {
     users: IUser[] | null ;
 }
 
 const ArenaList: React.FC<IProps> = ({users}) => {
+  const rootStore = useContext(RootStoreContext);
+  const {setPredicate} = rootStore.userStore;
+
     return (
       <Segment clearing>
+        <Input
+          style={{ float: "right" }}
+          icon="users"
+          iconPosition="left"
+          placeholder="Pretraži korisnike..."
+          onChange={(e) => setPredicate("userName", e.target.value)}
+        />
         <Item.Group divided>
           {users?.length! > 0 &&
             users?.map((user, element) => (
@@ -22,7 +34,6 @@ const ArenaList: React.FC<IProps> = ({users}) => {
                   src={user?.image?.url || "/assets/user.png"}
                   style={{ marginBottom: 3 }}
                 />
-
                 <Item.Content>
                   <Item.Header as="a">{user.userName}</Item.Header>
                   <Item.Meta>
