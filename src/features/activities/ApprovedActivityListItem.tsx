@@ -11,6 +11,7 @@ import { getButtonData } from '../../app/layout/ReviewButtonData';
 
 export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:boolean, review: ReviewTypes | null}> = ({activity, favorite, review}) => {
 
+  console.log(activity.numberOfAttendees)
   const rootStore = useContext(RootStoreContext);
   const { reviewActivity, reviewing } = rootStore.reviewStore;
   const { resolveFavoriteActivity, resolvingFavourite } = rootStore.favoriteStore;
@@ -90,6 +91,7 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
           </Item>
         </Item.Group>
       </Segment>
+      {activity.numberOfAttendees > 0 && <Label basic color="blue" content={`Broj učesnika: ${activity.numberOfAttendees}`}/>}
       {(activity.location || activity.startDate) && (
         <Segment>
           {activity.startDate && <Icon name="clock" />}

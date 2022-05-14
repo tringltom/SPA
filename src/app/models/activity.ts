@@ -28,6 +28,7 @@ export interface IActivityFormValues {
     photos?: IPhoto[];
     isHost: boolean;
     dateApproved?: string | null;
+    numberofAttendees: number
   }; 
 
   export interface IPendingActivitiesEnvelope {

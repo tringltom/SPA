@@ -219,7 +219,6 @@ export default class ActivityStore {
         this.approvedActivityAxiosParams
       );
       const { activities, activityCount } = activitiesEnvelope;
-      
       runInAction(() => {
         activities.forEach((activity) => {
           this.approvedActivitiesRegistry.set(activity.id, activity);
