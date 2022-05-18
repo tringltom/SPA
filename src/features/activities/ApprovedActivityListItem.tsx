@@ -2,6 +2,8 @@ import { ActivityTypes, IActivity, IPhoto } from '../../app/models/activity';
 import { Button, Card, Icon, Item, Label, Segment } from 'semantic-ui-react';
 import React, { useContext, useState } from 'react'
 
+import { EkvitiColors } from '../../app/layout/EkvitiColors';
+import { Link } from 'react-router-dom';
 import PuzzleAnswerForm from './PuzzleAnswerForm';
 import { ReviewButtonsComponent } from '../../app/common/form/ReviewButtonsComponent';
 import { ReviewTypes } from '../../app/models/review';
@@ -11,8 +13,8 @@ import { getButtonData } from '../../app/layout/ReviewButtonData';
 
 export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:boolean, review: ReviewTypes | null}> = ({activity, favorite, review}) => {
 
-  console.log(activity.numberOfAttendees)
   const rootStore = useContext(RootStoreContext);
+  const { attendToHappening, cancelAttendenceToHappening } = rootStore.activityStore;
   const { reviewActivity, reviewing } = rootStore.reviewStore;
   const { resolveFavoriteActivity, resolvingFavourite } = rootStore.favoriteStore;
   const { userId } = rootStore.userStore;
@@ -21,11 +23,30 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
   const buttonData = getButtonData(activity.type);
 
   const [activeButton, setActiveButton] = useState(!!review ? buttonData[review - 1]?.name : null);
-  const [isFavorite, setFavorite] = React.useState<boolean>(favorite);
+  const [isFavorite, setFavorite] = useState(favorite);
+  const [isAttending, setAttending] = useState(activity.isUserAttending);
+  const [attendences, setAttendences] = useState(activity.numberOfAttendees);
+  const [loadingAttendence, setLoadingAttendence] = useState(false);
 
   const toggleFavorite = () => {
       setFavorite(!isFavorite);
       resolveFavoriteActivity(+activity.id, !isFavorite);
+  }
+
+  const toggleAttendence = () => {
+    setLoadingAttendence(true);
+    if (!isAttending)
+      attendToHappening(activity.id).then(() => {
+        setAttending(true); 
+        setAttendences(attendences + 1); 
+        setLoadingAttendence(false);
+      });
+    else  
+      cancelAttendenceToHappening(activity.id).then(() => {
+        setAttending(false); 
+        setAttendences(attendences - 1); 
+        setLoadingAttendence(false);
+      });;    
   }
 
   const handleReviewClick = (e: any) => {
@@ -69,7 +90,13 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
         <Item.Group>
           <Item>
             <Item.Content>
-              <Item.Header>{activity.title}</Item.Header>
+              <Item.Header><Link
+                      to={{
+                        pathname: `/activity/${activity.id}/${favorite}/${review}`
+                      }}
+                    >
+                      {activity.title}
+                    </Link></Item.Header>
               <Item.Description>
                 Stvaralac: {activity.userName}
               </Item.Description>
@@ -87,11 +114,14 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
                   <Item.Image src={photo.url || "/assets/user.png"} />
                 </Card>
               ))}
+              {attendences > 0 && <Label basic style={{ color: EkvitiColors.primary }} content={`Broj učesnika: ${attendences}`}/>}
+              {activity.type === ActivityTypes.Happening 
+                && !activity.isHeld 
+                && <Button toggle loading={loadingAttendence} floated='right' style={{ color: EkvitiColors.secondary}} content={isAttending ? "Otkaži" : "Dolazim"} onClick={toggleAttendence}/>}
             </Item.Content>
           </Item>
         </Item.Group>
       </Segment>
-      {activity.numberOfAttendees > 0 && <Label basic color="blue" content={`Broj učesnika: ${activity.numberOfAttendees}`}/>}
       {(activity.location || activity.startDate) && (
         <Segment>
           {activity.startDate && <Icon name="clock" />}

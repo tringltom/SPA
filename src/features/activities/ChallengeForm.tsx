@@ -78,7 +78,7 @@ const ChallengeForm : React.FC<RouteComponentProps<DetailParams>>= ({match}) => 
   const activityId = match.params.id;
   
   const rootStore = useContext(RootStoreContext);
-  const { create, update, getOwnerPendingActivity, resetPendingActivitiy, pendingActivity } = rootStore.activityStore;
+  const { create, update, getOwnerPendingActivity, resetPendingActivity, pendingActivity } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
   const [submitError, setsubmitError] = useState(null);
@@ -87,9 +87,9 @@ const ChallengeForm : React.FC<RouteComponentProps<DetailParams>>= ({match}) => 
     if (activityId)
       getOwnerPendingActivity(activityId);
     else
-      resetPendingActivitiy();
-    return () => resetPendingActivitiy();      
-  }, [activityId, getOwnerPendingActivity, resetPendingActivitiy]);
+      resetPendingActivity();
+    return () => resetPendingActivity();      
+  }, [activityId, getOwnerPendingActivity, resetPendingActivity]);
 
   const normaliseValues = (values: IActivityFormValues) => {
     if (values.coords) {
