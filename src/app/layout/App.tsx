@@ -1,4 +1,5 @@
 import  './styles.css';
+import './style.css'
 
 import { Fragment, useEffect } from "react";
 import { Redirect, Route, RouteComponentProps, Switch, useLocation, withRouter } from "react-router-dom";

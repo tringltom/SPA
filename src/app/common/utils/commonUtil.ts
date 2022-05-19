@@ -6,3 +6,7 @@ export const setActivityProps = (activity: IActivity, user: IUser) => {
     
     return activity;
 }
+
+export function classNames(...classes: (false | null | undefined | string)[]) {
+    return classes.filter(Boolean).join(" ");
+}
