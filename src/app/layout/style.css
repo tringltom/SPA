@@ -521,18 +521,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   left: 0px;
 }
 
-.bottom-0 {
-  bottom: 0px;
-}
-
-.right-0 {
-  right: 0px;
-}
-
-.left-0 {
-  left: 0px;
-}
-
 .top-6 {
   top: 1.5rem;
 }
@@ -590,10 +578,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-bottom: 0.5rem;
 }
 
-.mb-4 {
-  margin-bottom: 1rem;
-}
-
 .ml-2 {
   margin-left: 0.5rem;
 }
@@ -604,10 +588,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .block {
   display: block;
-}
-
-.inline-block {
-  display: inline-block;
 }
 
 .inline {
@@ -744,10 +724,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-
-.grid-rows-\[auto_mincontent\] {
-  grid-template-rows: auto mincontent;
 }
 
 .grid-rows-\[auto_min-content\] {
@@ -919,27 +895,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-bottom: 1.25rem;
 }
 
-.py-3 {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-}
-
-.py-8 {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
-
-.px-14 {
-  padding-left: 3.5rem;
-  padding-right: 3.5rem;
-}
-
 .pb-8 {
   padding-bottom: 2rem;
 }
 
 .pb-12 {
   padding-bottom: 3rem;
+}
+
+.pb-5 {
+  padding-bottom: 1.25rem;
 }
 
 .pb-4 {
@@ -950,28 +915,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-top: 2.25rem;
 }
 
-.pt-8 {
-  padding-top: 2rem;
-}
-
-.pl-16 {
-  padding-left: 4rem;
-}
-
 .pl-14 {
   padding-left: 3.5rem;
 }
 
-.pr-14 {
-  padding-right: 3.5rem;
-}
-
 .pr-10 {
   padding-right: 2.5rem;
-}
-
-.pb-5 {
-  padding-bottom: 1.25rem;
 }
 
 .text-left {
@@ -988,10 +937,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .text-justify {
   text-align: justify;
-}
-
-.indent-14 {
-  text-indent: 3.5rem;
 }
 
 .align-middle {
@@ -1017,11 +962,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   line-height: 2rem;
 }
 
-.text-lg {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-}
-
 .text-6xl {
   font-size: 3.75rem;
   line-height: 1;
@@ -1030,6 +970,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
 }
 
 .text-base {
@@ -1130,16 +1075,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   outline-style: solid;
 }
 
-.outline-4 {
-  outline-width: 4px;
-}
-
 .outline-2 {
   outline-width: 2px;
-}
-
-.outline-offset-2 {
-  outline-offset: 2px;
 }
 
 .outline-primary {
@@ -1190,26 +1127,15 @@ Ensure the default browser behavior of the `hidden` attribute.
   outline-style: solid;
 }
 
-@media (prefers-color-scheme: dark) {
-  .dark\:accent-primary {
-    accent-color: #01B7FF;
-  }
-}
-
 @media (min-width: 480px) {
-  .sm\:px-20 {
-    padding-left: 5rem;
-    padding-right: 5rem;
-  }
-
   .sm\:py-8 {
     padding-top: 2rem;
     padding-bottom: 2rem;
   }
 
-  .sm\:text-sm {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+  .sm\:px-20 {
+    padding-left: 5rem;
+    padding-right: 5rem;
   }
 }
 
@@ -1266,10 +1192,6 @@ Ensure the default browser behavior of the `hidden` attribute.
     padding-bottom: 3rem;
   }
 
-  .md\:pt-10 {
-    padding-top: 2.5rem;
-  }
-
   .md\:pl-16 {
     padding-left: 4rem;
   }
@@ -1278,18 +1200,9 @@ Ensure the default browser behavior of the `hidden` attribute.
     padding-right: 2.75rem;
   }
 
-  .md\:indent-16 {
-    text-indent: 4rem;
-  }
-
   .md\:text-3xl {
     font-size: 1.875rem;
     line-height: 2.25rem;
-  }
-
-  .md\:text-2xl {
-    font-size: 1.5rem;
-    line-height: 2rem;
   }
 
   .md\:text-sm {
