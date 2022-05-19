@@ -1,7 +1,7 @@
-import { ActivityTypes, IActivity } from "../models/activity";
-import { makeAutoObservable, runInAction } from "mobx";
+import { ISkillData, ISkillLevel } from "../models/skillResult";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 
-import { ISkillData } from "../models/skillResult";
+import { ActivityTypes } from "../models/activity";
 import { RootStore } from "./rootStore";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
@@ -12,13 +12,24 @@ export default class ProfileStore {
   rootStore: RootStore;
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
-    makeAutoObservable(this);    
+    makeAutoObservable(this);   
+
+    reaction(
+      () => this.predicate.keys(),
+      () => {
+        this.pendingActivitiesPage = 0;
+        this.pendingActivitiesRegistry.clear();
+        this.loadPendingActivitiesForUser();
+      }
+    );
   };
 
   loadingInitial = false;
   pendingActivitiesPage = 0;
-  pendingActivitiesRegistry = [] as IActivity[];
+  predicate = new Map();
+  pendingActivitiesRegistry = new Map();
   pendingActivityCount = 0;
+
   skillData : ISkillData | null = null;
   skillMap : Map<string, boolean> = new Map<string, boolean>();
   initialSkillMap : Map<string, boolean> = new Map<string, boolean>();
@@ -27,6 +38,17 @@ export default class ProfileStore {
     const params = new URLSearchParams();
     params.append("limit", String(LIMIT));
     params.append("offset", `${this.pendingActivitiesPage ? this.pendingActivitiesPage * LIMIT : 0}`);
+
+    this.predicate.forEach((value, key) => {
+      if (key.includes("Array"))
+      {
+        var arrayValue = JSON.parse("[" + value + "]");
+        arrayValue.map((el : any) => params.append(key.replace("Array", ""), el))
+      }
+      else
+        params.append(key, value)
+    });
+
     return params;
   }
 
@@ -42,15 +64,26 @@ export default class ProfileStore {
     this.pendingActivitiesPage = page;
   };
 
+  setPredicate = (predicate: string, value: string | Date) => {
+    if (this.predicate.has(predicate))
+      this.predicate.delete(predicate);
+    if (value !== "") {
+      this.predicate.set(predicate, value);
+    } 
+  }
+
   loadPendingActivitiesForUser = async () => {
     this.loadingInitial = true;
     try {
-      const activitiesEnvelope = await agent.Activity.getPendingActivitiesForUser(
+      const activitiesEnvelope = await agent.PendingActivity.getOwnerPendingActivities(
         this.pendingActivityAxiosParams
       );
       const { activities, activityCount } = activitiesEnvelope;
       runInAction(() => {
-        this.pendingActivitiesRegistry = activities;
+        this.pendingActivitiesRegistry.clear();
+        activities.forEach((activity) => {
+          this.pendingActivitiesRegistry.set(activity.id, activity);
+        });
         this.pendingActivityCount = activityCount;
         this.loadingInitial = false;
       });
@@ -65,10 +98,10 @@ export default class ProfileStore {
   setUserAbout = async (about: string) => {
     try {
       this.rootStore.frezeScreen();
-      const message = await agent.User.updateAbout(about);
+      await agent.User.updateAbout(about);
       runInAction(() => {
         this.rootStore.userStore.user!.about = about;
-        toast.success(message);
+        toast.success("Uspešna izmena o korisniku");
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();
       });
@@ -82,9 +115,9 @@ export default class ProfileStore {
   setUserImage = async (values: any) => {
     try {
       this.rootStore.frezeScreen();
-      const message = await agent.User.updateImage(values.images[0]);
+      await agent.User.updateImage(values.images[0]);
       runInAction(() => {
-        toast.success(message);
+        toast.success("Uspešna izmena profilne slike, molimo Vas sačekajte odobrenje");
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();
       });
@@ -141,7 +174,20 @@ export default class ProfileStore {
   resetSkills = async () => {
     this.rootStore.frezeScreen();
     try {
-      const updatedUser = await agent.Profile.resetSkills();
+      const skillLevel : ISkillLevel[] = [];
+      
+      Object.keys(ActivityTypes).forEach((key: any, el) => {
+        if (ActivityTypes[el + 1] !== undefined) 
+          skillLevel.push( {type: key, level: 1} as ISkillLevel)
+      });
+
+      const skillData: ISkillData = {
+        currentLevel: Number(this.rootStore.userStore.user!.currentLevel),
+        xpLevel: Number(this.rootStore.userStore.user!.currentLevel),
+        skillLevels : skillLevel,
+      };
+
+      const updatedUser = await agent.Profile.updateSkills(skillData);
       runInAction(() => {
         this.setResetToggleMap();
         this.skillData!.currentLevel = 1;

@@ -1,15 +1,17 @@
-import { observer } from "mobx-react-lite";
-import { useContext, useState } from "react";
-import { Form as FinalForm, Field } from "react-final-form";
-import { combineValidators, composeValidators, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
-import { Button, Divider, Form, Header } from "semantic-ui-react";
-import { TextInput } from "../../app/common/form/TextInput";
-import ModalYesNo from "../../app/common/modals/ModalYesNo";
 import { ActivityTypes, IActivityFormValues } from "../../app/models/activity";
-import { RootStoreContext } from "../../app/stores/rootStore";
-import { TextAreaInput } from "../../app/common/form/TextAreaInput";
-import { FileInput } from "../../app/common/form/FileInput";
+import { Button, Divider, Form, Header } from "semantic-ui-react";
+import { Field, Form as FinalForm } from "react-final-form";
+import { combineValidators, composeValidators, hasLengthLessThan, isRequired, isRequiredIf } from "revalidate";
+import { useContext, useEffect, useState } from "react";
+
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
+import { FileInput } from "../../app/common/form/FileInput";
+import ModalYesNo from "../../app/common/modals/ModalYesNo";
+import { RootStoreContext } from "../../app/stores/rootStore";
+import { RouteComponentProps } from "react-router-dom";
+import { TextAreaInput } from "../../app/common/form/TextAreaInput";
+import { TextInput } from "../../app/common/form/TextInput";
+import { observer } from "mobx-react-lite";
 
 const validate = combineValidators({
   title: composeValidators(
@@ -25,28 +27,43 @@ const validate = combineValidators({
     })
   )(),
   description: composeValidators(
-    isRequiredIf()((values: { image: any; }) => values && !values.image)({message: 'Opis je obavezan ukoliko niste priložili sliku' }),
+    isRequiredIf()((values: { images: any; }) => values && !values.images)({message: 'Opis je obavezan ukoliko niste priložili sliku' }),
     hasLengthLessThan(250)({
       message: "Za opis je dozvoljeno maksimalno 250 karaktera",
     })
   )(),
 });
 
-const PuzzleForm = () => {
+interface DetailParams {
+  id: string;
+}
+
+const PuzzleForm : React.FC<RouteComponentProps<DetailParams>>= ({match}) => {
+  const activityId = match.params.id;
+  
   const rootStore = useContext(RootStoreContext);
-  const { create } = rootStore.activityStore;
+  const { create, update, getOwnerPendingActivity, resetPendingActivitiy, pendingActivity } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
 
   const [submitError, setsubmitError] = useState(null);
 
+  useEffect(() => {
+    if (activityId)
+      getOwnerPendingActivity(activityId);
+    else
+      resetPendingActivitiy();
+    return () => resetPendingActivitiy();
+  }, [activityId, getOwnerPendingActivity, resetPendingActivitiy]);
+
   return (
     <FinalForm
+      initialValues={pendingActivity ?? {}}
       onSubmit={(values: IActivityFormValues) => {
         setsubmitError(null);
         openModal(
           <ModalYesNo
             handleConfirmation={() =>
-              create(values).catch((error) => setsubmitError(error))
+              activityId ? update(activityId, values).catch((error) => setsubmitError(error)) : create(values).catch((error) => setsubmitError(error))
             }
             content="Nova Zagonetka"
             icon="puzzle piece"
@@ -61,7 +78,7 @@ const PuzzleForm = () => {
           <Header as="h2" content="Zagonetka" color="teal" textAlign="center" />
           <Field name="title" component={TextInput} placeholder="Naziv" />
           <Divider horizontal>Priložite sliku ili opišite zagonetku</Divider>
-          <Field name="images" component={FileInput} />
+          <Field name="images" component={FileInput} state={activityId}/>
           <Divider horizontal></Divider>
           <Field
             name="description"
@@ -75,7 +92,7 @@ const PuzzleForm = () => {
           <Button
             disabled={invalid || pristine}
             color="teal"
-            content="Kreiraj"
+            content={activityId ? "Izmeni" : "Kreiraj"}
             fluid
           />
         </Form>

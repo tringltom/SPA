@@ -1,13 +1,13 @@
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
-import { format } from 'date-fns';
-import React, { useContext, useState } from 'react'
-import { Button, Card, Icon, Item, Label, Segment } from 'semantic-ui-react';
 import { ActivityTypes, IActivity, IPhoto } from '../../app/models/activity';
-import { RootStoreContext } from '../../app/stores/rootStore';
-import { LatLngLiteral} from '../../app/models/googleMaps'
-import { ReviewTypes } from '../../app/models/review';
-import { getButtonData } from '../../app/layout/ReviewButtonData';
+import { Button, Card, Icon, Item, Label, Segment } from 'semantic-ui-react';
+import React, { useContext, useState } from 'react'
+
+import PuzzleAnswerForm from './PuzzleAnswerForm';
 import { ReviewButtonsComponent } from '../../app/common/form/ReviewButtonsComponent';
+import { ReviewTypes } from '../../app/models/review';
+import { RootStoreContext } from '../../app/stores/rootStore';
+import { format } from 'date-fns';
+import { getButtonData } from '../../app/layout/ReviewButtonData';
 
 export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:boolean, review: ReviewTypes | null}> = ({activity, favorite, review}) => {
 
@@ -15,6 +15,7 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
   const { reviewActivity, reviewing } = rootStore.reviewStore;
   const { resolveFavoriteActivity, resolvingFavourite } = rootStore.favoriteStore;
   const { userId } = rootStore.userStore;
+  const { openModal } = rootStore.modalStore;
 
   const buttonData = getButtonData(activity.type);
 
@@ -37,29 +38,29 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
     reviewActivity(+activity.id, activity.type, reviewType);
   }
 
-  const center = {
-    lat: activity.latitude ?? 44.7470721,
-    lng: activity.longitude ?? 20.4518071
-  };
+  // const center = {
+  //   lat: activity.latitude ?? 44.7470721,
+  //   lng: activity.longitude ?? 20.4518071
+  // };
 
-  const mapOptions = {
-    center: center,
-    disableDefaultUI: true,
-    zoom: 15
-  };
+  // const mapOptions = {
+  //   center: center,
+  //   disableDefaultUI: true,
+  //   zoom: 15
+  // };
 
-  const containerStyle = {
-    width: "200px",
-    height: "200px",
-  };
+  // const containerStyle = {
+  //   width: "200px",
+  //   height: "200px",
+  // };
  
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyAGraVkB2T6hAEWpq7DefFBzn9YkkWgg7I&libraries=places&language=sr-Latn"
-  })
+  // const { isLoaded } = useJsApiLoader({
+  //   id: 'google-map-script',
+  //   googleMapsApiKey: "AIzaSyAGraVkB2T6hAEWpq7DefFBzn9YkkWgg7I&libraries=places&language=sr-Latn"
+  // })
 
-  const latLng: LatLngLiteral
-  = ({lat: activity.latitude!, lng: activity.longitude!});
+  // const latLng: LatLngLiteral
+  // = ({lat: activity.latitude!, lng: activity.longitude!});
 
   return (
     <Segment.Group>
@@ -98,7 +99,7 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
             format(new Date(activity.endDate), "- d.M.yyyy H:mm ")}
           {activity.location && <Icon name="marker" />}
           {activity.location}
-          {activity.longitude && isLoaded && (
+          {/* {activity.longitude && isLoaded && (
             <GoogleMap
               options={mapOptions}
               mapContainerStyle={containerStyle}
@@ -112,17 +113,17 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
             >
               <Marker position={{ lat: latLng.lat, lng: latLng.lng }} />
             </GoogleMap>
-          )}
+          )} */}
         </Segment>
       )}
       <Segment secondary>{activity.description}</Segment>
       <Segment clearing>
         {activity.type === ActivityTypes.Puzzle && (
-          <span>Odgovor: {activity.answer}</span>
+          <Button icon='microphone' content='Odgovori' floated='right' onClick={() => openModal(<PuzzleAnswerForm activityId={activity.id} />)}></Button>
         )}
       </Segment>
       <Segment>
-        <Button icon={"favorite"} loading={resolvingFavourite} active={isFavorite} onClick={toggleFavorite}/>
+        <Button icon='favorite' loading={resolvingFavourite} active={isFavorite} onClick={toggleFavorite}/>
         <ReviewButtonsComponent buttonData={buttonData} activeButton={activeButton} handleReviewClick={handleReviewClick} loading={reviewing} float='right'/>
       </Segment>
     </Segment.Group>

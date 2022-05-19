@@ -1,13 +1,17 @@
-import { ActivityTypes, IActivity } from '../../app/models/activity';
-import { Icon, Loader, Pagination, Segment, Table } from 'semantic-ui-react';
-import { useContext, useEffect, useState } from 'react'
+import { ActivityTypes, IPendingActivity } from '../../app/models/activity';
+import { Dropdown, DropdownItemProps, Icon, Input, Loader, Pagination, Table } from 'semantic-ui-react';
+import { Fragment, useContext, useEffect, useState } from 'react'
 
+import { GenerateActivityRoute } from './utils/GenerateActivityRoute';
+import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 
 export const ProfilePendingActivities = () => {
   const rootStore = useContext(RootStoreContext);
+
+  const {setPredicate} = rootStore.profileStore;
 
   const {
     loadPendingActivitiesForUser,
@@ -31,12 +35,32 @@ export const ProfilePendingActivities = () => {
     loadPendingActivitiesForUser().then(() => setLoadingNext(false));
   }
 
+  const options = Object.keys(ActivityTypes).map((key: any, el) => {
+    if (ActivityTypes[el + 1] !== undefined)
+      return {key: key, text: ActivityTypes[el + 1], value: Number(key)}
+    return undefined
+  }).filter(f => f !== undefined);
+
   return (
-    <Segment>
+    <Fragment>
+      <Dropdown style={{ float: "right", marginBottom:"1em" }}
+       placeholder='Akivnosti' 
+       multiple 
+       selection 
+       options={options as DropdownItemProps[]} 
+       onChange={(e, {value}) => setPredicate("activityTypesArray", value?.toString() ?? "")}
+      />
+      <Input
+        style={{ float: "right", marginBottom:"1em", marginRight:"1em" }}
+        icon="spinner"
+        iconPosition="left"
+        placeholder="Pretraži aktivnosti..."
+        onChange={(e) => setPredicate("title", e.target.value)}
+      />
       {loadingInitial && !loadingNext ? (
-        <Loader active inline='centered'/>
+        <Loader active inline="centered" />
       ) : (
-        <Table celled textAlign='center'>
+        <Table celled textAlign="center">
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Tip</Table.HeaderCell>
@@ -46,20 +70,39 @@ export const ProfilePendingActivities = () => {
           </Table.Header>
 
           <Table.Body>
-          {pendingActivitiesArray.map((activity: IActivity) => (
+            {pendingActivitiesArray.map((activity: IPendingActivity) => (
               <Table.Row key={activity.id}>
-              <Table.Cell content={ActivityTypes[activity.type]}/>
-              <Table.Cell content={activity.title}/>
-              {activity.dateCreated && <Table.Cell content={format(new Date(activity.dateCreated), "d.M.yyyy H:mm ")}/>}
+                <Table.Cell content={ActivityTypes[activity.type]} />
+                <Table.Cell
+                  content={
+                    <Link
+                      to={{
+                        pathname: GenerateActivityRoute(
+                          activity.type,
+                          activity.id
+                        ),
+                      }}
+                    >
+                      {activity.title}
+                    </Link>
+                  }
+                />
+                {activity.dateCreated && (
+                  <Table.Cell
+                    content={format(
+                      new Date(activity.dateCreated),
+                      "d.M.yyyy H:mm "
+                    )}
+                  />
+                )}
               </Table.Row>
-          ))}
-
+            ))}
           </Table.Body>
 
           <Table.Footer>
             <Table.Row textAlign="center">
               <Table.HeaderCell colSpan="3">
-              <Loader active={loadingNext}/>
+                <Loader active={loadingNext} />
                 <Pagination
                   defaultActivePage={pendingActivitiesPage + 1}
                   ellipsisItem={{
@@ -87,7 +130,7 @@ export const ProfilePendingActivities = () => {
           </Table.Footer>
         </Table>
       )}
-    </Segment>
+    </Fragment>
   );
 }
 

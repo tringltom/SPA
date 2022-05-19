@@ -1,10 +1,11 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
-import agent from "../api/agent";
+
 import { IActivityFormValues } from "../models/activity";
 import { RootStore } from "./rootStore";
+import agent from "../api/agent";
 import { history } from "../..";
+import { parseDate } from "../common/form/utils/formUtil";
 import { toast } from "react-toastify";
-import { setActivityProps } from "../common/utils/commonUtil";
 
 const LIMIT = 5;
 
@@ -17,14 +18,13 @@ export default class ActivityStore {
     reaction(
       () => this.predicate.keys(),
       () => {
-        this.pendingActivitiesPage = 0;
         this.approvedActivitiesPage = 0;
-        this.pendingActivitiesRegistry.clear();
         this.approvedActivitiesRegistry.clear();
-        this.loadPendingActivities();
+        this.getApprovedActivitiesFromOtherUsers();
       }
     );
   }
+
   submitting = false;
   pendingActivitiesRegistry = new Map();
   approvedActivitiesRegistry = new Map();
@@ -35,8 +35,14 @@ export default class ActivityStore {
   pendingActivityCount = 0;
   approvedActivityCount = 0;
 
+  pendingActivity: IActivityFormValues | null = null;
+
   get pendingActivitiesArray() {
     return Array.from(this.pendingActivitiesRegistry.values());
+  }
+
+  resetPendingActivitiesArray = () => {
+    this.pendingActivitiesRegistry = new Map();
   }
 
   get approvedActivitiesArray() {
@@ -59,6 +65,18 @@ export default class ActivityStore {
     return Math.ceil(this.approvedActivityCount / LIMIT);
   }
 
+  resetPendingActivitiy = () => {
+    this.pendingActivity = null;
+  };
+
+  setPredicate = (predicate: string, value: string | Date) => {
+    if (this.predicate.has(predicate))
+      this.predicate.delete(predicate);
+    if (value !== "") {
+      this.predicate.set(predicate, value);
+    } 
+  }
+
   get pendingActivityAxiosParams() {
     const params = new URLSearchParams();
     params.append("limit", String(LIMIT));
@@ -78,11 +96,13 @@ export default class ActivityStore {
     params.append("limit", String(LIMIT));
     params.append("offset", `${this.approvedActivitiesPage ? this.approvedActivitiesPage * LIMIT : 0}`);
     this.predicate.forEach((value, key) => {
-      if (key === "startDate") {
-        params.append(key, value.toISOString());
-      } else {
-        params.append(key, value);
+      if (key.includes("Array"))
+      {
+        var arrayValue = JSON.parse("[" + value + "]");
+        arrayValue.map((el : any) => params.append(key.replace("Array", ""), el))
       }
+      else
+        params.append(key, value)
     });
     return params;
   }
@@ -90,11 +110,11 @@ export default class ActivityStore {
   create = async (values: IActivityFormValues) => {
     try {
       this.rootStore.frezeScreen();
-      const message = await agent.Activity.create(values);
+      await agent.PendingActivity.create(values);
       runInAction(() => {
         this.rootStore.userStore.user?.activityCounts.map(ac => (ac.type === values.type ? ac.available-- : ac));
         history.push("/arena");
-        toast.success(message);
+        toast.success("Uspešno kreiranje, molimo Vas da sačekate odobrenje");
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();
       });
@@ -105,16 +125,58 @@ export default class ActivityStore {
     }
   };
 
+  update = async (activityId : string, values: IActivityFormValues) => {
+    try {
+      this.rootStore.frezeScreen();
+      await agent.PendingActivity.update(activityId, values);
+      runInAction(() => {
+        history.push("/arena");
+        toast.success("Uspešna izmena, molimo Vas da sačekate odobrenje");
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
+    } catch (error) {
+      this.rootStore.unFrezeScreen();
+      this.rootStore.modalStore.closeModal();
+      throw error;
+    }
+  };
+
+  getOwnerPendingActivity = async (id: string) => {
+    this.loadingInitial = true;
+    this.rootStore.frezeScreen();
+    try {
+      const pendingActivity = await agent.PendingActivity.getOwnerPendingActivity(id);
+      runInAction(async () => {
+        let promises = await pendingActivity.urls.map((el: RequestInfo) => fetch(el).then(r => r.blob()));
+        Promise.all(promises).then((res) => {
+          runInAction(() => {
+          if (res.length > 0) pendingActivity.images = res as Blob[];
+          pendingActivity.dateStart = parseDate(pendingActivity.startDate ?? "");
+          pendingActivity.timeStart = parseDate(pendingActivity.startDate ?? "");
+          pendingActivity.dateEnd = parseDate(pendingActivity.endDate ?? "");
+          pendingActivity.timeEnd = parseDate(pendingActivity.endDate ?? "");
+          this.pendingActivity = pendingActivity as IActivityFormValues;
+          this.rootStore.unFrezeScreen();
+          this.loadingInitial = false;
+          })
+        })
+      });
+    } catch (error) {
+      this.rootStore.unFrezeScreen();
+      this.loadingInitial = false;
+    }
+  }
+
   loadPendingActivities = async () => {
     this.loadingInitial = true;
     try {
-      const activitiesEnvelope = await agent.Activity.getPendingActivities(
+      const activitiesEnvelope = await agent.PendingActivity.getPendingActivities(
         this.pendingActivityAxiosParams
       );
       const { activities, activityCount } = activitiesEnvelope;
       runInAction(() => {
         activities.forEach((activity) => {
-          setActivityProps(activity, this.rootStore.userStore.user!);
           this.pendingActivitiesRegistry.set(activity.id, activity);
         });
         this.pendingActivityCount = activityCount;
@@ -131,13 +193,15 @@ export default class ActivityStore {
    approvePendingActivity = async (activityId : string, approve : boolean) => {
     try {
       this.rootStore.frezeScreen();
-      const success = await agent.Activity.resolvePendingActivity(activityId, approve);
-      if (success){
-        toast.success("Uspešno ste odobrili/odbili aktivnost");
-        this.pendingActivitiesRegistry.delete(activityId);
-      } else{
-        toast.error("Neuspešno ste odobrili/odbili aktivnost");
-      }      
+      
+      if (approve)
+        await agent.Activity.approvePendingActivity(activityId);
+      else
+        await agent.PendingActivity.dissaprove(activityId);
+        
+      toast.success("Uspešno ste odobrili/odbili aktivnost");
+      this.pendingActivitiesRegistry.delete(activityId);
+    
       this.rootStore.modalStore.closeModal();
       this.rootStore.unFrezeScreen();
     } catch (error) {
@@ -148,11 +212,10 @@ export default class ActivityStore {
     }
   }
 
-  getApprovedActivitiesFromOtherUsers = async (userId: number) => {
+  getApprovedActivitiesFromOtherUsers = async () => {
     this.loadingInitial = true;
     try {
-      const activitiesEnvelope = await agent.Activity.getApprovedActivitiesFromOtherUsers(
-        userId,
+      const activitiesEnvelope = await agent.Activity.getActivitiesFromOtherUsers(
         this.approvedActivityAxiosParams
       );
       const { activities, activityCount } = activitiesEnvelope;
@@ -171,5 +234,31 @@ export default class ActivityStore {
         this.loadingInitial = false;
       });
     };
+  }
+
+  answerPuzzle = async (values: any) => {
+    try {
+      this.rootStore.frezeScreen();
+      this.submitting = true;
+      const result = await agent.Activity.answerPuzzle(
+        values.id,
+        values.answer
+      );
+      runInAction(() => {
+        toast.success(
+          `Tačan odogovor, osvojili ste ${result} iskustvenih poena!`
+        );
+        this.submitting = false;
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
+    } catch (error : any) {
+      runInAction(() => {
+        this.submitting = false;
+        this.rootStore.unFrezeScreen();
+        this.rootStore.modalStore.closeModal();
+        toast.error(error?.data.errors.error);
+      });
+    }
   }
 }
