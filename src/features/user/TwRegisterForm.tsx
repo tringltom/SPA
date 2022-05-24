@@ -37,12 +37,10 @@ export const TwRegisterForm = () => {
   const { register } = rootStore.userStore;
   const { openModal } = rootStore.modalStore;
 
-  const [toggleField, setToggleField] = useState(false);
-  const [toggleIcon, setToggleIcon] = useState(false);
+  const [toggleField, setToggleField] = useState(false);  
 
   const toggleType = () => {
-    setToggleField(toggleField ? false : true);
-    setToggleIcon(toggleIcon ? false : true);
+    setToggleField(toggleField ? false : true);    
   };
 
   return (
@@ -175,7 +173,7 @@ export const TwRegisterForm = () => {
                     </label>
 
                     <Icon
-                      iconName={toggleIcon ? "eyeSlash" : "eye"}
+                      iconName={toggleField ? "eyeSlash" : "eye"}
                       onClick={toggleType}
                       className="absolute w-[23px] h-[23px] top-6 right-4 md:right-5"
                     />
@@ -214,7 +212,7 @@ export const TwRegisterForm = () => {
                     </label>
 
                     <Icon
-                      iconName={toggleIcon ? "eyeSlash" : "eye"}
+                      iconName={toggleField ? "eyeSlash" : "eye"}
                       onClick={toggleType}
                       className="absolute w-[23px] h-[23px] top-6 right-4 md:right-5"
                     />

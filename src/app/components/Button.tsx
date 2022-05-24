@@ -26,7 +26,7 @@ enum Size {
 }
 
 enum Utils {
-  disabeld,
+  disabled,
   full,
 }
 
@@ -85,7 +85,7 @@ const SIZE_MAPS: Record<Size, string> = {
 };
 
 const UTIL_MAPS: Record<Utils, string> = {
-  [Utils.disabeld]: "opacity-50 cursor-not-allowed pointer-events-none",
+  [Utils.disabled]: "opacity-50 cursor-not-allowed pointer-events-none",
   [Utils.full]: "w-full",
 };
 
@@ -96,7 +96,7 @@ export const Button = (props: ButtonProps): JSX.Element => {
     VARIANT_MAPS[props.variant],
     SIZE_MAPS[props.size],
     props.fullWidth ? UTIL_MAPS[Utils.full] : "w-fit",
-    props.disabled ? UTIL_MAPS[Utils.disabeld] : null,
+    props.disabled ? UTIL_MAPS[Utils.disabled] : null,
     props.className
   );
 

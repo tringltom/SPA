@@ -27,11 +27,9 @@ const TwLoginForm = () => {
   const { openModal } = rootStore.modalStore;
 
   const [toggleField, setToggleField] = useState(false);
-  const [toggleIcon, setToggleIcon] = useState(false);
 
   const toggleType = () => {
     setToggleField(toggleField ? false : true);
-    setToggleIcon(toggleIcon ? false : true);
   };
 
   return (
@@ -129,7 +127,7 @@ const TwLoginForm = () => {
                   </label>
 
                   <Icon
-                    iconName={toggleIcon ? "eyeSlash" : "eye"}
+                    iconName={toggleField ? "eyeSlash" : "eye"}
                     onClick={toggleType}
                     className="absolute w-[23px] h-[23px] top-6 right-4 md:right-5"
                   />
@@ -168,6 +166,7 @@ const TwLoginForm = () => {
               >
                 Zaboravljena lozinka?{" "}
                 <button
+                  type="button"
                   className="text-primary underline"
                   onClick={() => openModal(<ForgotPasswordForm />)}
                 >
@@ -180,6 +179,7 @@ const TwLoginForm = () => {
               disabled={(invalid && !dirtySinceLastSubmit) || pristine}
               loading={submitting}
               size={Button.size.md}
+              type="submit"
               fullWidth
             >
               Prijavi se
@@ -208,6 +208,7 @@ const TwLoginForm = () => {
           >
             Nemaš nalog?{" "}
             <button
+              type="button"
               className="text-primary underline"
               onClick={() => openModal(<TwRegisterForm />)}
             >

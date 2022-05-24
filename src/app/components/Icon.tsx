@@ -24,7 +24,7 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
 
 const Icon = (props: IconProps) => {
 
-    const {iconName, className, onClick, onMouseEnter, onMouseLeave} = props;
+  const {iconName, className, onClick, onMouseEnter, onMouseLeave} = props;
 
   return (
     <FontAwesomeIcon className={className} icon={ICON_MAPS[iconName]} onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />

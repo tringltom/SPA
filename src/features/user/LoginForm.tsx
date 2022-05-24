@@ -3,9 +3,10 @@ import { observer } from "mobx-react-lite";
 import { Fragment, useContext } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
 import { combineValidators, isRequired } from "revalidate";
-import { Container, Divider, Form, Header } from "semantic-ui-react";
+import { Button, Container, Divider, Form, Header, Image } from "semantic-ui-react";
 import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 import { TextInputIcons } from "../../app/common/form/TextInputIcons";
+import { EkvitiColors } from "../../app/layout/EkvitiColors";
 import { IUserFormValues } from "../../app/models/user";
 import { RootStoreContext } from "../../app/stores/rootStore";
 import ForgotPasswordForm from "./ForgotPasswordForm";
@@ -14,9 +15,6 @@ import SocialLoginFacebook from "./SocialLoginFacebook";
 import SocialLoginInstagram from "./SocialLoginInstagram";
 import { styles } from "../../app/layout/TextStyle";
 import { CheckBoxInput } from "../../app/common/form/CheckBoxInput";
-import { Button } from "../../app/components/Button";
-import { Image } from "../../app/components/Image";
-import { Typography } from "../../app/components/Typography";
 
 const validate = combineValidators({
   email: isRequired({ message: "Potrebno je uneti E-mail adresu" }),
@@ -44,20 +42,18 @@ const LoginForm = () => {
         dirtySinceLastSubmit,
       }) => (
         <Fragment>
-          <Image 
-          src="/assets/LogInEkvitiLogo.png"
-          alt="Ekviti Logo"
-          imageStyle="mx-auto pb-8"
+          <Image            
+            centered
+            verticalAlign="middle"
+            src="/assets/LogInEkvitiLogo.png"
+          ></Image>
+          <Header
+            size="medium"
+            as="h2"
+            content="Dobrodošli nazad."
+            color="black"        
+            textAlign="center"
           />
-
-          <Typography
-          variant={Typography.variant.h3}
-          color={Typography.color.text}
-          align={Typography.align.center}
-          className="m-0 pb-12"          
-          >
-            Dobrodošli nazad
-          </Typography>
 
           <Form autoComplete="off" onSubmit={handleSubmit} error>
             <Field
@@ -104,10 +100,16 @@ const LoginForm = () => {
 
             <Button
               disabled={(invalid && !dirtySinceLastSubmit) || pristine}
-              loading={submitting}     
-              size={Button.size.xs}         
-              fullWidth
-            >Prijavi se</Button>
+              loading={submitting}
+              content="Prijavi se"
+              fluid
+              style={{
+                backgroundColor: EkvitiColors.primary,
+                color: "white",
+                height: "50px",
+                borderRadius: "7px",
+              }}
+            />
           </Form>
           <Divider horizontal>
             <Header as="h4">ili</Header>
