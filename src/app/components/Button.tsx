@@ -100,69 +100,35 @@ export const Button = (props: ButtonProps): JSX.Element => {
     props.className
   );
 
-  if (props.as === "link") {
-    const {
-      variant,
-      color,
-      size,
-      loading,
-      fullWidth,
-      disabled,
-      className,
-      as,
-      children,
-      startIcon,
-      endIcon,
-      ...rest
-    } = props;
+  const {
+    loading,
+    disabled,
+    children,
+    startIcon,
+    endIcon
+  } = props;
+
+  if (props.as === "link") {    
     return (
-      <Link className={allClassNames} {...rest}>
+      <Link className={allClassNames} {...props}>
         {" "}
         {loading ? <LoadingIcon /> : [startIcon, children, endIcon]}
       </Link>
     );
   } else if (props.as === "externalLink") {
-    const {
-      variant,
-      color,
-      size,
-      loading,
-      fullWidth,
-      disabled,
-      className,
-      as,
-      children,
-      startIcon,
-      endIcon,
-      ...rest
-    } = props;
     return (
       <a
         className={allClassNames}
         target="_blank"
         rel="noopener noreferrer"
-        {...rest}
+        {...props}
       >
         {loading ? <LoadingIcon /> : [startIcon, children, endIcon]}  
       </a>
     );
   } else {
-    const {
-      variant,
-      color,
-      size,
-      loading,
-      fullWidth,
-      disabled,
-      className,
-      as,
-      children,
-      startIcon,
-      endIcon,
-      ...rest
-    } = props;
     return (
-      <button disabled={disabled} className={allClassNames} {...rest}>
+      <button disabled={disabled} className={allClassNames} {...props}>
         {loading ? <LoadingIcon /> : [startIcon, children, endIcon]}    
       </button>
     );
