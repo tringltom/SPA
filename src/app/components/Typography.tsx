@@ -44,12 +44,12 @@ type Props = React.PropsWithChildren<{
 const VARIANT_MAPS: Record<Variant, VariantMapping> = {
   [Variant.h1]: { element: "h1", style: "text-6xl" },
   [Variant.h2]: { element: "h2", style: "text-4xl" },
-  [Variant.h3]: { element: "h3", style: "text-2xl" },
+  [Variant.h3]: { element: "h3", style: "text-lg sm:text-2xl" },
   [Variant.h4]: { element: "h4", style: "text-lg" },
   [Variant.h5]: { element: "h5", style: "text-base" },
   [Variant.h6]: { element: "h6", style: "text-sm" },
   [Variant.body]: { element: "p", style: "text-base" },
-  [Variant.subscript]: { element: "p", style: "text-xs md:text-sm" },
+  [Variant.subscript]: { element: "p", style: "text-xs sm:text-sm" },
 };
 
 const COLOR_MAPS: Record<Color, string> = {

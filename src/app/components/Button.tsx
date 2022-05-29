@@ -33,7 +33,7 @@ enum Utils {
 type BaseProps = React.PropsWithChildren<{
   variant: Variant;
   size: Size;
-  loading?: boolean;
+  loading?: boolean;  
   startIcon?: ReactNode;
   endIcon?: ReactNode;
   fullWidth?: boolean;
@@ -79,7 +79,7 @@ const VARIANT_MAPS: Record<Variant, string> = {
 const SIZE_MAPS: Record<Size, string> = {
   [Size.xs]: "py-2 px-3 text-xs",
   [Size.sm]: "py-2 px-3 text-sm",
-  [Size.md]: "py-5 px-5 text-xl",
+  [Size.md]: "py-4 sm:py-5 px-5 text-xl",
   [Size.lg]: "p-6 text-2xl md:text-3xl",
   [Size.inline]: "text-sm"
 };

@@ -16,6 +16,9 @@ html {
   background-color: rgb(234,234,234) !important;
 }
 
+#root {
+  height: 100%;
+}
 
 button.ui.orange.inverted.button {
   border-radius: 20px !important;

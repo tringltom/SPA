@@ -11,8 +11,8 @@ const ModalContainer = () => {
   } = rootStore.modalStore;
 
   return (
-    <Transition appear show={open} as={Fragment}>
-      <Dialog open={open} as="div" className="relative z-10" onClose={closeModal}>
+    <Transition show={open} as={Fragment}>
+      <Dialog open={open} className="relative z-10" onClose={closeModal}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -28,7 +28,7 @@ const ModalContainer = () => {
           />
         </Transition.Child>
 
-        <div className="fixed inset-0 overflow-y-auto">
+        <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center">
             <Transition.Child
               as={Fragment}
@@ -39,7 +39,7 @@ const ModalContainer = () => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-modal transform overflow-hidden rounded-2xl bg-white py-5 sm:py-8 px-5 sm:px-20 align-middle shadow-xl">
+              <Dialog.Panel className="w-full sm:max-w-modal transform overflow-hidden rounded-2xl bg-white p-6 md:py-8 md:px-20 align-middle shadow-xl">
                 {body}
               </Dialog.Panel>
             </Transition.Child>

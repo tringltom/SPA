@@ -37,40 +37,41 @@ export const TwRegisterForm = () => {
   const { register } = rootStore.userStore;
   const { openModal } = rootStore.modalStore;
 
-  const [toggleField, setToggleField] = useState(false);  
+  const [toggleField, setToggleField] = useState(false);
 
   const toggleType = () => {
-    setToggleField(toggleField ? false : true);    
+    setToggleField(toggleField ? false : true);
   };
 
   return (
-    <Form
-      onSubmit={(values: IUserFormValues) =>
-        register(values).catch((error) => ({
-          [FORM_ERROR]: error,
-        }))
-      }
-      validate={validate}
-      render={({
-        handleSubmit,
-        submitting,
-        submitError,
-        invalid,
-        pristine,
-        dirtySinceLastSubmit,
-      }) => (
-        <Fragment>          
+    <div className="max-w-[490px] mx-auto">
+      <Form
+        onSubmit={(values: IUserFormValues) =>
+          register(values).catch((error) => ({
+            [FORM_ERROR]: error,
+          }))
+        }
+        validate={validate}
+        render={({
+          handleSubmit,
+          submitting,
+          submitError,
+          invalid,
+          pristine,
+          dirtySinceLastSubmit,
+        }) => (
+          <Fragment>
             <Image
               src="/assets/LogInEkvitiLogo.png"
               alt="Ekviti Logo"
-              imageStyle="mx-auto pb-5 md:pb-8"
+              imageStyle="mx-auto pb-3 sm:pb-5"
             />
 
             <Typography
               variant={Typography.variant.h3}
               color={Typography.color.text}
               align={Typography.align.center}
-              className="m-0 pb-5 md:pb-12"
+              className="m-0 pb-3 sm:pb-5"
             >
               Napravite novi nalog.
             </Typography>
@@ -78,16 +79,16 @@ export const TwRegisterForm = () => {
             <form autoComplete="off" onSubmit={handleSubmit} noValidate>
               <Field name="username">
                 {({ input, label, meta: { error, touched } }) => (
-                  <div className="relative z-0 w-full mb-6">
+                  <div className="relative z-0 w-full mb-3 sm:mb-6">
                     <Icon
                       iconName="user"
-                      className="absolute w-[21px] h-auto top-6 left-4 md:left-5"
+                      className="absolute w-[21px] h-auto top-[16px] sm:top-6 left-4 sm:left-5"
                     />
 
                     <input
                       type="text"
                       id="username"
-                      className={`block bg-formBg rounded-md text-base md:text-xl pb-4 pt-9 pl-14 md:pl-16 h-17 w-full peer focus:outline outline-2 outline-primary ${
+                      className={`block bg-formBg rounded-md text-sm sm:text-base md:text-xl pb-2 pt-6 pl-12 sm:pl-16 h-14 sm:h-17 w-full peer focus:outline outline-2 outline-primary ${
                         touched && !!error
                           ? "outline outline-2 outline-error"
                           : ""
@@ -98,9 +99,9 @@ export const TwRegisterForm = () => {
 
                     <label
                       htmlFor="username"
-                      className={`absolute top-3 left-14 md:left-16 block ${
+                      className={`absolute top-2 left-12 sm:left-16 block ${
                         touched && !!error ? "text-error" : "text-primary"
-                      } mb-2 text-sm md:text-base font-medium text-gray-900 dark:text-gray-300`}
+                      } text-[12px] sm:text-base font-medium text-gray-900 dark:text-gray-300`}
                       {...label}
                     >
                       {touched && !!error ? error : "Korisničko ime"}
@@ -111,16 +112,16 @@ export const TwRegisterForm = () => {
 
               <Field name="email">
                 {({ input, label, meta: { error, touched } }) => (
-                  <div className="relative z-0 w-full mb-6">
+                  <div className="relative z-0 w-full mb-3 sm:mb-6">
                     <Icon
                       iconName="envelope"
-                      className="absolute w-[21px] h-auto top-6 left-4 md:left-5"
+                      className="absolute w-[21px] h-auto top-[17px] sm:top-6 left-4 sm:left-5"
                     />
 
                     <input
                       type="email"
                       id="email"
-                      className={`block bg-formBg rounded-md text-base md:text-xl pb-4 pt-9 pl-14 md:pl-16 h-17 w-full peer focus:outline outline-2 outline-primary ${
+                      className={`block bg-formBg rounded-md text-sm sm:text-base md:text-xl pb-2 pt-6 pl-12 sm:pl-16 h-14 sm:h-17 w-full peer focus:outline outline-2 outline-primary ${
                         touched && !!error
                           ? "outline outline-2 outline-error"
                           : ""
@@ -131,9 +132,9 @@ export const TwRegisterForm = () => {
 
                     <label
                       htmlFor="email"
-                      className={`absolute top-3 left-14 md:left-16 block ${
+                      className={`absolute top-2 left-12 sm:left-16 block ${
                         touched && !!error ? "text-error" : "text-primary"
-                      } mb-2 text-sm md:text-base font-medium text-gray-900 dark:text-gray-300`}
+                      } text-[12px] sm:text-base font-medium text-gray-900 dark:text-gray-300`}
                       {...label}
                     >
                       {touched && !!error ? error : "E-Mail"}
@@ -144,16 +145,16 @@ export const TwRegisterForm = () => {
 
               <Field name="password">
                 {({ input, label, meta: { error, touched } }) => (
-                  <div className="relative z-0 w-full mb-6">
+                  <div className="relative z-0 w-full mb-3 sm:mb-6">
                     <Icon
                       iconName="password"
-                      className="absolute w-[18px] h-[21px] top-6 left-4 md:left-5"
+                      className="absolute w-[18px] h-[21px] top-[17px] sm:top-6 left-4 sm:left-5"
                     />
 
                     <input
                       type={toggleField ? "text" : "password"}
                       id="password"
-                      className={`block bg-formBg rounded-md pl-14 pr-10 md:pl-16 md:pr-11 text-xl pb-4 pt-9 h-17 w-full peer ${
+                      className={`block bg-formBg rounded-md pl-12 pr-10 pb-2 pt-6 sm:pl-16 md:pr-11 text-sm sm:text-base md:text-xl h-14 sm:h-17 w-full peer ${
                         error && touched
                           ? "outline outline-2 outline-error"
                           : ""
@@ -164,9 +165,9 @@ export const TwRegisterForm = () => {
 
                     <label
                       htmlFor="password"
-                      className={`absolute top-3 left-14 md:left-16 block ${
+                      className={`absolute top-2 left-12 sm:left-16 block ${
                         error && touched ? "text-error" : "text-primary"
-                      } mb-2 text-sm md:text-base font-medium text-gray-900 dark:text-gray-300"`}
+                      } text-[12px] sm:text-base md:text-base font-medium text-gray-900 dark:text-gray-300"`}
                       {...label}
                     >
                       {error && touched ? error : "Lozinka"}
@@ -175,7 +176,7 @@ export const TwRegisterForm = () => {
                     <Icon
                       iconName={toggleField ? "eyeSlash" : "eye"}
                       onClick={toggleType}
-                      className="absolute w-[23px] h-[23px] top-6 right-4 md:right-5"
+                      className="absolute w-[23px] h-[23px] top-[17px] sm:top-6 right-4 md:right-5"
                     />
                   </div>
                 )}
@@ -183,16 +184,16 @@ export const TwRegisterForm = () => {
 
               <Field name="passwordConfirm">
                 {({ input, label, meta: { error, touched } }) => (
-                  <div className="relative z-0 w-full mb-6">
+                  <div className="relative z-0 w-full mb-3 sm:mb-6">
                     <Icon
                       iconName="password"
-                      className="absolute w-[18px] h-[21px] top-6 left-4 md:left-5"
+                      className="absolute w-[18px] h-[21px] top-[17px] sm:top-6 left-4 sm:left-5"
                     />
 
                     <input
                       type={toggleField ? "text" : "password"}
                       id="passwordConfirm"
-                      className={`block bg-formBg rounded-md pl-14 pr-10 md:pl-16 md:pr-11 text-xl pb-4 pt-9 h-17 w-full peer ${
+                      className={`block bg-formBg rounded-md pl-12 pr-10 pb-2 pt-6 sm:pl-16 md:pr-11 text-sm sm:text-base md:text-xl h-14 sm:h-17 w-full peer ${
                         error && touched
                           ? "outline outline-2 outline-error"
                           : ""
@@ -203,9 +204,9 @@ export const TwRegisterForm = () => {
 
                     <label
                       htmlFor="passwordConfirm"
-                      className={`absolute top-3 left-14 md:left-16 block ${
+                      className={`absolute top-2 left-12 sm:left-16 block ${
                         error && touched ? "text-error" : "text-primary"
-                      } mb-2 text-sm md:text-base font-medium text-gray-900 dark:text-gray-300"`}
+                      } text-[12px] sm:text-base md:text-base font-medium text-gray-900 dark:text-gray-300"`}
                       {...label}
                     >
                       {error && touched ? error : "Ponovi lozinku"}
@@ -214,7 +215,7 @@ export const TwRegisterForm = () => {
                     <Icon
                       iconName={toggleField ? "eyeSlash" : "eye"}
                       onClick={toggleType}
-                      className="absolute w-[23px] h-[23px] top-6 right-4 md:right-5"
+                      className="absolute w-[23px] h-[23px] top-[17px] sm:top-6 right-4 md:right-5"
                     />
                   </div>
                 )}
@@ -230,26 +231,26 @@ export const TwRegisterForm = () => {
                 size={Button.size.md}
                 fullWidth
               >
-                Prijavi se
+                Registruj se
               </Button>
             </form>
 
             <Typography
-            variant={Typography.variant.body}
-            color={Typography.color.text}
-            className="mt-5"
-          >
-            Već imaš nalog?{" "}
-            <button
-              className="text-primary underline"
-              onClick={() => openModal(<TwLoginForm />)}
+              variant={Typography.variant.body}
+              color={Typography.color.text}
+              className="mt-5"
             >
-              Prijava.
-            </button>
-          </Typography>
-                      
-        </Fragment>
-      )}
-    />
+              Već imaš nalog?{" "}
+              <button
+                className="text-primary underline"
+                onClick={() => openModal(<TwLoginForm />)}
+              >
+                Prijava.
+              </button>
+            </Typography>
+          </Fragment>
+        )}
+      />
+    </div>
   );
 };

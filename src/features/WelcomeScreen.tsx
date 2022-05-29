@@ -7,7 +7,6 @@ import { Typography } from "../app/components/Typography";
 import TwLoginForm from "./user/TwLoginForm";
 import { TwRegisterForm } from "./user/TwRegisterForm";
 
-
 const WelcomeScreen = () => {
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
@@ -17,8 +16,10 @@ const WelcomeScreen = () => {
   return (
     <Fragment>
       <main
-        style={{ backgroundImage: "url(/assets/WelcomeBackground.png)" }}
-        className="h-screen bg-cover bg-center grid grid-rows-[auto_min-content] items-center"
+        style={{
+          backgroundImage: "url(/assets/WelcomeBackground.png)",          
+        }}
+        className="h-full bg-cover bg-center grid grid-rows-[auto_min-content] items-center"
       >
         <div className="container mx-auto">
           <Image
@@ -60,17 +61,17 @@ const WelcomeScreen = () => {
                     size={Button.size.lg}
                     fullWidth
                     onClick={() => openModal(<TwLoginForm />, true, true)}
-                  >                    
+                  >
                     Prijavi se
                   </Button>
 
-                  <Button                  
+                  <Button
                     variant={Button.variant.primaryOutlined}
                     size={Button.size.lg}
                     fullWidth
                     onClick={() => openModal(<TwRegisterForm />, true, true)}
-                  >                    
-                    Registruj se  
+                  >
+                    Registruj se
                   </Button>
                 </div>
               </Fragment>

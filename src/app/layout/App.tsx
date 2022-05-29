@@ -60,7 +60,7 @@ const App: React.FC<RouteComponentProps> = () => {
     return <LoadingComponent content="Momenat, aplikacija se ucitava..." />;
   return (
     <Fragment>
-      <div style={{ pointerEvents: rootStore.allowEvents ? "all" : "none" }}>
+      <div style={{ pointerEvents: rootStore.allowEvents ? "all" : "none", height: "100%" }}>
         <ModalContainer />
         <ToastContainer position="bottom-right" />
         <Route exact path="/">
