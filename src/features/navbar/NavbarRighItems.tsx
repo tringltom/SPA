@@ -35,6 +35,12 @@ export const NavbarRighItems = () => {
               text="Odobrenja profila"
               icon="check circle"
             />
+            <Dropdown.Item
+              as={Link}
+              to={`/happeningCompleteApprovals`}
+              text="Odobrenja događaja"
+              icon="check circle outline"
+            />
             <Dropdown.Item onClick={logout} text="Odjava" icon="power" />
           </Dropdown.Menu>
         </Dropdown>

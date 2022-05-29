@@ -1,5 +1,5 @@
 import { ActivityTypes, IActivity, IPhoto } from '../../app/models/activity';
-import { Button, Card, Icon, Item, Label, Segment } from 'semantic-ui-react';
+import { Button, Card, Icon, Item, Segment } from 'semantic-ui-react';
 import React, { useContext } from 'react'
 
 import ModalYesNo from '../../app/common/modals/ModalYesNo';
@@ -47,15 +47,6 @@ export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activi
               <Item.Description>
                 Stvaralac: {activity.userName}
               </Item.Description>
-              {activity?.type === ActivityTypes.Happening && activity.isHost && (
-                <Item.Description>
-                  <Label
-                    basic
-                    color="orange"
-                    content="Vi ste kreirali ovaj dogadjaj"
-                  />
-                </Item.Description>
-              )}
               {activity.photos?.map((photo: IPhoto) => (
                 <Card key={photo.id} fluid>
                   <Item.Image src={photo.url || "/assets/user.png"} />

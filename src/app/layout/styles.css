@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap');
+
+html {
+  font-size: 16px!important;
+}
 
 *:not(i):not(span) {
   font-family: 'Comfortaa', cursive !important;
@@ -12,6 +16,9 @@
   background-color: rgb(234,234,234) !important;
 }
 
+#root {
+  height: 100%;
+}
 
 button.ui.orange.inverted.button {
   border-radius: 20px !important;

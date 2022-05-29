@@ -116,7 +116,7 @@ const LoginForm = () => {
           </Divider>
           <SocialLoginFacebook loading={loading} fbCallback={fbLogin} />
           <div style={{ padding: "5px" }} />
-          <SocialLoginInstagram loading={loading} fbCallback={fbLogin} />
+          <SocialLoginInstagram loading={loading} igCallback={fbLogin} />
 
           <Container style={{ marginTop: "10px", textAlign: "center" }}>
             <p

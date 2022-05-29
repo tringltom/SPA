@@ -28,6 +28,9 @@ export interface IActivityFormValues {
     photos?: IPhoto[];
     isHost: boolean;
     dateApproved?: string | null;
+    numberofAttendees: number,
+    isUserAttending: boolean,
+    isHeld : boolean
   }; 
 
   export interface IPendingActivitiesEnvelope {
@@ -41,6 +44,15 @@ export interface IActivityFormValues {
     photos?: IPhoto[];
     urls: string[];
   }; 
+
+  export interface IHappeningEnvelope {
+    happenings: IHappening[];
+    happeningCount: number;
+  };
+
+  export interface IHappening extends IActivity {
+    HappeningPhotos: IPhoto[];
+  };
 
   export interface IPhoto {
     id: string;

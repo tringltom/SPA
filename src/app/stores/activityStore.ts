@@ -1,6 +1,6 @@
+import { IActivity, IActivityFormValues } from "../models/activity";
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 
-import { IActivityFormValues } from "../models/activity";
 import { RootStore } from "./rootStore";
 import agent from "../api/agent";
 import { history } from "../..";
@@ -28,26 +28,37 @@ export default class ActivityStore {
   submitting = false;
   pendingActivitiesRegistry = new Map();
   approvedActivitiesRegistry = new Map();
+  pendingHappeningActivitiesRegistry = new Map();
+
   pendingActivitiesPage = 0;
   approvedActivitiesPage = 0;
+  pendingHappeningActivitiesPage = 0;
+
   predicate = new Map();
   loadingInitial = false;
+
   pendingActivityCount = 0;
   approvedActivityCount = 0;
+  pendingHappeningActivityCount = 0;
 
   pendingActivity: IActivityFormValues | null = null;
+  approvedActivity: IActivity | null = null;
 
   get pendingActivitiesArray() {
     return Array.from(this.pendingActivitiesRegistry.values());
-  }
+  };
 
   resetPendingActivitiesArray = () => {
     this.pendingActivitiesRegistry = new Map();
-  }
+  };
 
   get approvedActivitiesArray() {
     return Array.from(this.approvedActivitiesRegistry.values());
-  }
+  };
+
+  get pendingHappeningActivitiesArray() {
+    return Array.from(this.pendingHappeningActivitiesRegistry.values());
+  };
 
   setPendingActivitiesPage = (page: number) => {
     this.pendingActivitiesPage = page;
@@ -57,16 +68,28 @@ export default class ActivityStore {
     this.approvedActivitiesPage = page;
   };
 
+  setPendingHappeningActivitiesPage = (page: number) => {
+    this.pendingHappeningActivitiesPage = page;
+  };
+
   get totalPendingActivityPages() {
     return Math.ceil(this.pendingActivityCount / LIMIT);
-  }
+  };
 
   get totalApprovedActivityPages() {
     return Math.ceil(this.approvedActivityCount / LIMIT);
-  }
+  };
 
-  resetPendingActivitiy = () => {
+  get totalPendingHappeningActivitiesPages() {
+    return Math.ceil(this.pendingHappeningActivityCount / LIMIT);
+  };
+
+  resetPendingActivity = () => {
     this.pendingActivity = null;
+  };
+
+  resetApprovedActivity = () => {
+    this.approvedActivity = null;
   };
 
   setPredicate = (predicate: string, value: string | Date) => {
@@ -75,7 +98,7 @@ export default class ActivityStore {
     if (value !== "") {
       this.predicate.set(predicate, value);
     } 
-  }
+  };
 
   get pendingActivityAxiosParams() {
     const params = new URLSearchParams();
@@ -89,7 +112,7 @@ export default class ActivityStore {
       }
     });
     return params;
-  }
+  };
 
   get approvedActivityAxiosParams() {
     const params = new URLSearchParams();
@@ -105,7 +128,29 @@ export default class ActivityStore {
         params.append(key, value)
     });
     return params;
-  }
+  };
+
+  get pendingHappeningActivityAxiosParams() {
+    const params = new URLSearchParams();
+    params.append("limit", String(LIMIT));
+    params.append("offset", `${this.pendingActivitiesPage ? this.pendingActivitiesPage * LIMIT : 0}`);
+    this.predicate.forEach((value, key) => params.append(key, value));
+    return params;
+  };
+
+  getApprovedActivity = async (id: string) => {
+    try {
+      this.loadingInitial = true;
+      var activity = await agent.Activity.getActivity(id);
+      runInAction(() => {
+        this.approvedActivity = activity;
+        this.loadingInitial = false;
+      });
+    } catch (error) {
+      console.log(error);
+      this.loadingInitial = false;
+    }
+  };
 
   create = async (values: IActivityFormValues) => {
     try {
@@ -166,7 +211,7 @@ export default class ActivityStore {
       this.rootStore.unFrezeScreen();
       this.loadingInitial = false;
     }
-  }
+  };
 
   loadPendingActivities = async () => {
     this.loadingInitial = true;
@@ -190,18 +235,38 @@ export default class ActivityStore {
     }
   };
 
-   approvePendingActivity = async (activityId : string, approve : boolean) => {
+  loadPendingHappeningActivities = async () => {
+    this.loadingInitial = true;
+    try {
+      const happeningEnvelope = await agent.Activity.getHappeningsForApproval(
+        this.pendingActivityAxiosParams
+      );
+      const { happenings, happeningCount } = happeningEnvelope;
+      runInAction(() => {
+        happenings.forEach((happening) => {
+          this.pendingHappeningActivitiesRegistry.set(happening.id, happening);
+        });
+        this.pendingActivityCount = happeningCount;
+        this.loadingInitial = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        console.log(error);
+        this.loadingInitial = false;
+      });
+    }
+  };
+
+  approvePendingActivity = async (activityId : string, approve : boolean) => {
     try {
       this.rootStore.frezeScreen();
-      
-      if (approve)
-        await agent.Activity.approvePendingActivity(activityId);
-      else
-        await agent.PendingActivity.dissaprove(activityId);
-        
+
+      if (approve) await agent.Activity.approvePendingActivity(activityId);
+      else await agent.PendingActivity.dissaprove(activityId);
+
       toast.success("Uspešno ste odobrili/odbili aktivnost");
       this.pendingActivitiesRegistry.delete(activityId);
-    
+
       this.rootStore.modalStore.closeModal();
       this.rootStore.unFrezeScreen();
     } catch (error) {
@@ -210,7 +275,7 @@ export default class ActivityStore {
       console.log(error);
       toast.error("Neuspešno, proverite konzolu");
     }
-  }
+  };
 
   getApprovedActivitiesFromOtherUsers = async () => {
     this.loadingInitial = true;
@@ -219,7 +284,7 @@ export default class ActivityStore {
         this.approvedActivityAxiosParams
       );
       const { activities, activityCount } = activitiesEnvelope;
-      
+      console.log(activities)
       runInAction(() => {
         activities.forEach((activity) => {
           this.approvedActivitiesRegistry.set(activity.id, activity);
@@ -234,7 +299,7 @@ export default class ActivityStore {
         this.loadingInitial = false;
       });
     };
-  }
+  };
 
   answerPuzzle = async (values: any) => {
     try {
@@ -260,5 +325,73 @@ export default class ActivityStore {
         toast.error(error?.data.errors.error);
       });
     }
-  }
+  };
+
+  attendToHappening = async (id: string) => {
+    try {
+      this.submitting = true;
+      await agent.Activity.attendToHappening(id);
+      runInAction(() => {
+        this.submitting = false;
+      });
+    } catch (error : any) {
+      runInAction(() => {
+        console.log(error)
+        this.submitting = false;
+        toast.error(error?.data.errors.error);
+      });
+    }
+  };
+
+  cancelAttendenceToHappening = async (id: string) => {
+    try {
+      this.submitting = true;
+      await agent.Activity.cancelAttendenceToHappening(id);
+      runInAction(() => {
+        this.submitting = false;
+      });
+    } catch (error : any) {
+      runInAction(() => {
+        this.submitting = false;
+        toast.error(error?.data.errors.error);
+      });
+    }
+  };
+
+  completeHappening = async (id : string, values: any) => {
+    try {
+      this.rootStore.frezeScreen();
+      await agent.Activity.completeHappening(id, values.images);
+      runInAction(() => {
+        toast.success("Uspešan završetak dogadjaja, Molimo Vas sačekajte potvrdu");
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
+    } catch (error: any) {
+      runInAction(() => {
+        this.rootStore.unFrezeScreen();
+        this.rootStore.modalStore.closeModal();
+        toast.error(error?.data.errors.error);
+      });
+    }
+  };
+
+  approveHappening = async (activityId : string, approve : boolean) => {
+    try {
+      this.rootStore.frezeScreen();
+      await agent.Activity.approveHappening(activityId, approve);
+      runInAction(() => {
+        toast.success("Uspešno ste odobrili/odbili aktivnost");
+        this.pendingHappeningActivitiesRegistry.delete(activityId);
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      }); 
+    } catch (error : any) {
+      runInAction(() => {
+        this.rootStore.unFrezeScreen();
+        this.rootStore.modalStore.closeModal();
+        toast.error(error?.data.errors.error);
+      }); 
+    }
+  };
 }
