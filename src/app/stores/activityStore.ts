@@ -34,6 +34,7 @@ export default class ActivityStore {
   loadingInitial = false;
   pendingActivityCount = 0;
   approvedActivityCount = 0;
+  userId = 0;
 
   pendingActivity: IActivityFormValues | null = null;
 
@@ -93,6 +94,8 @@ export default class ActivityStore {
 
   get approvedActivityAxiosParams() {
     const params = new URLSearchParams();
+    console.log(this.userId);
+    params.append("userId", String(this.userId));
     params.append("limit", String(LIMIT));
     params.append("offset", `${this.approvedActivitiesPage ? this.approvedActivitiesPage * LIMIT : 0}`);
     this.predicate.forEach((value, key) => {
@@ -187,6 +190,33 @@ export default class ActivityStore {
         console.log(error);
         this.loadingInitial = false;
       });
+    }
+  };
+
+  loadApprovedActivitiesForUser = async (userId: number) => {
+    this.loadingInitial = true;
+    this.userId = userId;
+    try {
+      const approvedActivitiesEnvelope = await agent.Activity.getApprovedActivities(
+        this.approvedActivityAxiosParams,
+      );
+      console.log(approvedActivitiesEnvelope);
+  
+      const {activities, activityCount} = approvedActivitiesEnvelope;
+  
+      runInAction(() => {
+        activities.forEach((activity) => {
+          this.approvedActivitiesRegistry.set(activity.id, activity);
+        });
+        this.approvedActivityCount = activityCount;
+        this.loadingInitial = false;
+      });
+      //console.log(userid);
+    } catch (error) {
+      runInAction(() => {
+        console.log(error);
+        this.loadingInitial = false;
+      })
     }
   };
 

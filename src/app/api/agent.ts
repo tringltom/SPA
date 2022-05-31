@@ -121,6 +121,8 @@ const Activity = {
   getActivity : (id: string): Promise<IActivity> => requests.get(`/activities/${id}`),
   getActivitiesFromOtherUsers: (params: URLSearchParams): Promise<IActivitiesEnvelope> =>
     axios.get("/activities/others",{params: params}).then(responseBody),
+  getApprovedActivities:(params: URLSearchParams) : Promise<IActivitiesEnvelope> => 
+  axios.get("/activities/approved-activities",{params: params}).then(responseBody),
   answerPuzzle: (id: string, answer : string) : Promise<number> => requests.patch(`/activities/${id}/answer`, {answer}),
   approvePendingActivity : (id: string): Promise<IActivity> =>
     requests.post(`/activities/pending-activity/${id}`, {})
