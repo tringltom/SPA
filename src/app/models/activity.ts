@@ -28,6 +28,11 @@ export interface IActivityFormValues {
     photos?: IPhoto[];
     isHost: boolean;
     dateApproved?: string | null;
+    numberOfFavorites?: number;
+    numberOfAwesomeReviews?: number;
+    numberOfGoodReviews?: number;
+    numberOfNoneReviews?: number;
+    numberOfPoorReviews?: number;
   }; 
 
   export interface IPendingActivitiesEnvelope {

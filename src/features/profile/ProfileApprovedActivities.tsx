@@ -1,13 +1,10 @@
-import { ActivityTypes, IPendingActivity } from '../../app/models/activity';
-import { Dropdown, DropdownItemProps, Grid, Icon, Input, Loader, Pagination, Table } from 'semantic-ui-react';
+import { ActivityTypes, IActivity } from '../../app/models/activity';
+import { Dropdown, DropdownItemProps, Icon, Input, Loader, Pagination, Table } from 'semantic-ui-react';
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 
-import { GenerateActivityRoute } from './utils/GenerateActivityRoute';
-import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
-import { JsxFragment } from 'typescript';
 
 interface IProps {
     userId: string;
@@ -75,27 +72,19 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
                 <Table.HeaderCell>Tip</Table.HeaderCell>
                 <Table.HeaderCell>Naziv</Table.HeaderCell>
                 <Table.HeaderCell>Datum odobravanja</Table.HeaderCell>
+                <Table.HeaderCell>Broj uzas ocena</Table.HeaderCell>
+                <Table.HeaderCell>Broj onako ocena</Table.HeaderCell>
+                <Table.HeaderCell>Broj meeh ocena</Table.HeaderCell>
+                <Table.HeaderCell>Broj super ocena</Table.HeaderCell>
+                <Table.HeaderCell>Broj favorita/omiljenih</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
             <Table.Body>
-              {approvedActivitiesArray.map((activity: IPendingActivity) => (
+              {approvedActivitiesArray.map((activity: IActivity) => (
                 <Table.Row key={activity.id}>
                   <Table.Cell content={ActivityTypes[activity.type]} />
-                  <Table.Cell
-                    content={
-                      <Link
-                        to={{
-                          pathname: GenerateActivityRoute(
-                            activity.type,
-                            activity.id
-                          ),
-                        }}
-                      >
-                        {activity.title}
-                      </Link>
-                    }
-                  />
+                  <Table.Cell content={activity.title} />
                   {activity.dateApproved && (
                     <Table.Cell
                       content={format(
@@ -104,13 +93,33 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
                       )}
                     />
                   )}
+                  <Table.Cell
+                    icon="thumbs down"
+                    content={activity.numberOfPoorReviews}
+                  />
+                  <Table.Cell
+                    icon="thumbs up"
+                    content={activity.numberOfNoneReviews}
+                  />
+                  <Table.Cell
+                    icon="like"
+                    content={activity.numberOfGoodReviews}
+                  />
+                  <Table.Cell
+                    icon="exclamation"
+                    content={activity.numberOfAwesomeReviews}
+                  />
+                  <Table.Cell
+                    icon="favorite icon"
+                    content={activity.numberOfFavorites}
+                  />
                 </Table.Row>
               ))}
             </Table.Body>
 
             <Table.Footer>
               <Table.Row textAlign="center">
-                <Table.HeaderCell colSpan="3">
+                <Table.HeaderCell colSpan="8">
                   <Loader active={loadingNext} />
                   <Pagination
                     defaultActivePage={approvedActivitiesPage + 1}
@@ -139,7 +148,6 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
                   />
                 </Table.HeaderCell>
               </Table.Row>
-             
             </Table.Footer>
           </Table>
         )}
