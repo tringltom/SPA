@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 
 axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
 ? "https://localhost:4001"
-: "https://ekviti.rs/api";
+: "https://ekvitiapi.azurewebsites.net";
 
 axios.interceptors.request.use((config) => {
   config.withCredentials = true;
