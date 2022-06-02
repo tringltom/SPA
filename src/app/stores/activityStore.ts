@@ -196,6 +196,7 @@ export default class ActivityStore {
   loadApprovedActivitiesForUser = async (userId: number) => {
     this.loadingInitial = true;
     this.userId = userId;
+    this.approvedActivitiesRegistry.clear();
     try {
       const approvedActivitiesEnvelope = await agent.Activity.getApprovedActivities(
         this.approvedActivityAxiosParams,
@@ -211,7 +212,6 @@ export default class ActivityStore {
         this.approvedActivityCount = activityCount;
         this.loadingInitial = false;
       });
-      //console.log(userid);
     } catch (error) {
       runInAction(() => {
         console.log(error);

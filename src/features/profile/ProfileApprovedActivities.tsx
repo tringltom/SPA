@@ -110,7 +110,7 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
                     content={activity.numberOfAwesomeReviews}
                   />
                   <Table.Cell
-                    icon="favorite icon"
+                    icon="favorite"
                     content={activity.numberOfFavorites}
                   />
                 </Table.Row>
