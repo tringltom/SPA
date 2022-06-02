@@ -40,8 +40,7 @@ const ProfileHeader = () => {
                         render={({
                           handleSubmit,
                           invalid,
-                          pristine,
-                          submitting,
+                          pristine
                         }) => (
                           <Form
                             autoComplete="off"
@@ -54,8 +53,8 @@ const ProfileHeader = () => {
                               maxNumberofFiles={1}
                             />
                             <Button
-                              loading={submitting}
-                              disabled={submitting || invalid || pristine}
+                              loading={!rootStore.allowEvents}
+                              disabled={!rootStore.allowEvents || invalid || pristine}
                               color="teal"
                               content="Potvrdi"
                               type="submit"

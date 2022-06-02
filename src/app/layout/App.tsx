@@ -1,8 +1,10 @@
 import  './styles.css';
+import './style.css'
 
 import { Fragment, useEffect } from "react";
 import { Redirect, Route, RouteComponentProps, Switch, useLocation, withRouter } from "react-router-dom";
 
+import ActivityDetails from '../../features/activities/ActivityDetails';
 import Approvals from '../../features/approvals/Approvals';
 import ArenaDashboard from "../../features/arena/ArenaDashboard";
 import AvatarApprovals from '../../features/approvals/AvatarApprovals';
@@ -10,6 +12,8 @@ import ChallengeForm from "../../features/activities/ChallengeForm";
 import { ChangePasswordForm } from '../../features/user/ChangePasswordForm';
 import { Container } from "semantic-ui-react";
 import GoodDeedForm from "../../features/activities/GoodDeedForm";
+import HappeningCompleteApprovals from '../../features/approvals/HappeningCompleteApprovals';
+import HappeningConfirmation from '../../features/activities/HappeningConfirmation';
 import HappeningForm from "../../features/activities/HappeningForm";
 import JokeForm from "../../features/activities/JokeForm";
 import { LoadingComponent } from "./LoadingComponent";
@@ -41,7 +45,7 @@ const App: React.FC<RouteComponentProps> = () => {
     }
   }, [getUser, setAppLoaded, token, appLoaded, isLoggedIn]);
 
-  const pathsWithNavBar = ["/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/profile", "/approvals", "/avatarApprovals"];
+  const pathsWithNavBar = ["/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/activity", "/profile", "/approvals", "/avatarApprovals", "/happeningCompleteApprovals"];
   const location = useLocation();
 
   const ShowNavBar = () => {
@@ -56,7 +60,7 @@ const App: React.FC<RouteComponentProps> = () => {
     return <LoadingComponent content="Momenat, aplikacija se ucitava..." />;
   return (
     <Fragment>
-      <div style={{ pointerEvents: rootStore.allowEvents ? "all" : "none" }}>
+      <div style={{ pointerEvents: rootStore.allowEvents ? "all" : "none", height: "100%" }}>
         <ModalContainer />
         <ToastContainer position="bottom-right" />
         <Route exact path="/">
@@ -79,6 +83,7 @@ const App: React.FC<RouteComponentProps> = () => {
                     component={RegisterSuccess}
                   />
                   <Route path="/users/verifyEmail" component={VerifyEmail} />
+                  <Route path="/activities/attendence-confirmation" component={HappeningConfirmation} />
                   <Route
                     path="/users/verifyPasswordRecovery"
                     component={ChangePasswordForm}
@@ -90,12 +95,11 @@ const App: React.FC<RouteComponentProps> = () => {
                   <PrivateRoute path="/puzzle/:id?" component={PuzzleForm} />
                   <PrivateRoute path="/happening/:id?" component={HappeningForm} />
                   <PrivateRoute path="/challenge/:id?" component={ChallengeForm} />
+                  <PrivateRoute path="/activity/:id/:favorite/:review" component={ActivityDetails} />
                   <PrivateRoute path="/profile/:id" component={ProfilePage} />
                   <PrivateRoute path="/approvals" component={Approvals} />
-                  <PrivateRoute
-                    path="/avatarApprovals"
-                    component={AvatarApprovals}
-                  />
+                  <PrivateRoute path="/avatarApprovals" component={AvatarApprovals} />
+                  <PrivateRoute path="/happeningCompleteApprovals" component={HappeningCompleteApprovals} />
                   <Route component={NotFound} />
                 </Switch>
               </Container>

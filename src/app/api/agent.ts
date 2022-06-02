@@ -1,4 +1,4 @@
-import { ActivityTypes, IActivitiesEnvelope, IActivity, IActivityFormValues, IPendingActivitiesEnvelope, IPendingActivity } from "../models/activity";
+import { ActivityTypes, IActivitiesEnvelope, IActivity, IActivityFormValues, IHappeningEnvelope, IPendingActivitiesEnvelope, IPendingActivity } from "../models/activity";
 import { IReview, ReviewTypes } from "../models/review";
 import { IUser, IUserEnvelope, IUserFormValues, IUserImageEnvelope } from "../models/user";
 import axios, { AxiosResponse } from "axios";
@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 
 axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
 ? "https://localhost:4001"
-: "https://ekviti.rs/api";
+: "https://ekvitiapi.azurewebsites.net";
 
 axios.interceptors.request.use((config) => {
   config.withCredentials = true;
@@ -118,14 +118,30 @@ const User = {
 };
 
 const Activity = {
-  getActivity : (id: string): Promise<IActivity> => requests.get(`/activities/${id}`),
-  getActivitiesFromOtherUsers: (params: URLSearchParams): Promise<IActivitiesEnvelope> =>
+  getActivity : (id: string) : Promise<IActivity> => requests.get(`/activities/${id}`),
+  getActivitiesFromOtherUsers: (params: URLSearchParams) : Promise<IActivitiesEnvelope> =>
     axios.get("/activities/others",{params: params}).then(responseBody),
   getApprovedActivities:(params: URLSearchParams) : Promise<IActivitiesEnvelope> => 
   axios.get("/activities/approved-activities",{params: params}).then(responseBody),
-  answerPuzzle: (id: string, answer : string) : Promise<number> => requests.patch(`/activities/${id}/answer`, {answer}),
-  approvePendingActivity : (id: string): Promise<IActivity> =>
-    requests.post(`/activities/pending-activity/${id}`, {})
+  getHappeningsForApproval: (params: URLSearchParams) : Promise<IHappeningEnvelope> =>
+    axios.get("/activities/pending-happenings",{params: params}).then(responseBody),
+  answerPuzzle: (id: string, answer : string) : Promise<number> => 
+    requests.patch(`/activities/${id}/answer`, {answer}),
+  approvePendingActivity : (id: string) : Promise<IActivity> =>
+    requests.post(`/activities/pending-activity/${id}`, {}),
+  approveHappening : (id: string, approve: boolean) : Promise<void> =>
+    requests.patch(`/activities/${id}/happening-completion-approval`, {approve}),
+  attendToHappening: (id: string) : Promise<void> =>
+    requests.post(`/activities/${id}/attendence`, {}),
+  cancelAttendenceToHappening: (id: string) : Promise<void> =>
+    requests.delete(`/activities/${id}/attendence`),
+  confirmAttendenceToHappening: (id: string) : Promise<void> =>
+    requests.patch(`/activities/${id}/attendence-confirmation`, {}),
+  completeHappening: (id: string, images: Blob[]): Promise<string> => {
+    let formData = new FormData();
+    images.map((image) => formData.append('images', image));
+    return requests.postForm(`/activities/${id}/happening-completion`, formData);
+  },
 };
 
 const PendingActivity = {

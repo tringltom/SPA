@@ -1,154 +1,86 @@
-import { Fragment, useContext } from 'react';
-import { Button, Grid, GridColumn, Image, Segment } from 'semantic-ui-react';
-import { RootStoreContext } from '../app/stores/rootStore';
-import LoginForm from './user/LoginForm';
-import { RegisterForm } from './user/RegisterForm';
-import { EkvitiColors } from '../app/layout/EkvitiColors';
+import { Fragment, useContext } from "react";
+
+import { RootStoreContext } from "../app/stores/rootStore";
+import { Button } from "../app/components/Button";
+import { Image } from "../app/components/Image";
+import { Typography } from "../app/components/Typography";
+import TwLoginForm from "./user/TwLoginForm";
+import { TwRegisterForm } from "./user/TwRegisterForm";
 
 const WelcomeScreen = () => {
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
   const { isLoggedIn, user } = rootStore.userStore;
-  const token = window.localStorage.getItem('jwt');
-
-  const ButtonStyle = {
-    borderRadius: 10,
-    padding: "0",
-    fontSize: "max(1.1vw, 1.1em)",
-    height: "3.5em",
-    minWidth: "85%",
-    marginLeft: "0",
-  };
-
-  const DivWithBackgroundStyle = {
-    backgroundImage: "url(/assets/WelcomeBackground.png)",
-    backgroundPosition: "center center",
-    height: "100%",
-    width: "100%",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    marginTop: "0px",
-    marginLeft: "0px",
-    position: "fixed",
-    top: "0",
-  };
+  const token = window.localStorage.getItem("jwt");
 
   return (
     <Fragment>
-      <Grid style={DivWithBackgroundStyle}>
-        <Grid.Row style={{ padding: 0 }}>
-          <Grid.Column verticalAlign="bottom">
-            <Image
-              src="/assets/RegistrationEkvitiLogo.png"
-              style={{ minHeight: 30, maxHeight: 250 }}
-              centered
-            />
-          </Grid.Column>
-        </Grid.Row>
+      <main
+        style={{
+          backgroundImage: "url(/assets/WelcomeBackground.png)",          
+        }}
+        className="h-full bg-cover bg-center grid grid-rows-[auto_min-content] items-center"
+      >
+        <div className="container mx-auto">
+          <Image
+            imageStyle="mx-auto"
+            src="/assets/RegistrationEkvitiLogo.png"
+            alt="Ekviti Logo"
+          />
+          <Typography>Za bolje danas!</Typography>
+        </div>
 
-        <Grid.Row style={{ padding: 0, position: "relative" }}>
-          <Grid.Column style={{ padding: 0 }}>
-            <Segment
-              textAlign="center"
-              style={{
-                background: "transparent",
-                border: 0,
-                padding: 0,
-                height: "60%",
-                boxshadow: "none",
-              }}
-            >
-              <h1
-                style={{
-                  fontSize: 60,
-                  color: EkvitiColors.primary,
-                  paddingTop: 50,
-                }}
-              >
-                Za bolje danas!
-              </h1>
-            </Segment>
-
-            <Segment
-              style={{
-                border: 0,
-                padding: 0,
-                height: "40%",
-                backgroundColor: "rgb(1,183,255)",
-              }}
-              inverted
-            >
-              <Grid style={{ height: "100%" }}>
-                <GridColumn width={5}>
+        <section className="bg-primary">
+          <div className="container mx-auto">
+            {isLoggedIn && user && token ? (
+              <div className="grid grid-cols-1 px-5 md:px-0 py-10 md:py-0 md:grid-cols-welcome items-center">
+                <Image
+                  imageStyle="hidden md:block md:-translate-y-8"
+                  src="/assets/KnightRegistration.png"
+                  alt="Vitez"
+                />
+                <Typography
+                  variant={Typography.variant.h2}
+                  color={Typography.color.white}
+                  className="col-span-2"
+                >
+                  Već ste prijavljeni
+                </Typography>
+              </div>
+            ) : (
+              <Fragment>
+                <div className="grid grid-cols-1 px-5 md:px-0 py-10 md:py-0 md:grid-cols-welcome gap-5 md:gap-12 items-center">
                   <Image
+                    imageStyle="hidden md:block md:-translate-y-8"
                     src="/assets/KnightRegistration.png"
-                    style={{
-                      float: "right",
-                      top: "-1.5vw",
-                    }}
+                    alt="Vitez"
                   />
-                </GridColumn>
-                {isLoggedIn && user && token ? (
-                  <GridColumn
-                    width={6}
-                    verticalAlign="middle"
-                    textAlign="center"
-                    style={{ padding: "0 1vw 0 0" }}
+
+                  <Button
+                    variant={Button.variant.primaryOutlined}
+                    size={Button.size.lg}
+                    fullWidth
+                    onClick={() => openModal(<TwLoginForm />, true, true)}
                   >
-                    <h1
-                      style={{
-                        fontSize: 50,
-                        color: EkvitiColors.white,
-                      }}
-                    >
-                      Već ste prijavljeni
-                    </h1>
-                  </GridColumn>
-                ) : (
-                  <Fragment>
-                    <GridColumn
-                      width={3}
-                      verticalAlign="middle"
-                      style={{ padding: "0 1vw 0 0" }}
-                    >
-                      <Button
-                        floated="right"
-                        size="massive"
-                        basic
-                        inverted
-                        style={ButtonStyle}
-                        onClick={() => openModal(<LoginForm />, true, true)}
-                      >
-                        <p style={{ padding: "7px" }}>Prijavi se</p>
-                      </Button>
-                    </GridColumn>
-                    <GridColumn
-                      width={3}
-                      verticalAlign="middle"
-                      style={{ padding: "0 0 0 1vw" }}
-                    >
-                      <Button
-                        floated="left"
-                        size="massive"
-                        style={ButtonStyle}
-                        basic
-                        inverted
-                        onClick={() => openModal(<RegisterForm />, true, true)}
-                      >
-                        <p style={{ padding: "1.5px" }}>Registruj se</p>
-                      </Button>
-                    </GridColumn>
-                  </Fragment>
-                )}
-              </Grid>
-            </Segment>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+                    Prijavi se
+                  </Button>
+
+                  <Button
+                    variant={Button.variant.primaryOutlined}
+                    size={Button.size.lg}
+                    fullWidth
+                    onClick={() => openModal(<TwRegisterForm />, true, true)}
+                  >
+                    Registruj se
+                  </Button>
+                </div>
+              </Fragment>
+            )}
+          </div>
+        </section>
+      </main>
     </Fragment>
   );
-}
+};
 
 export default WelcomeScreen;
-
-
