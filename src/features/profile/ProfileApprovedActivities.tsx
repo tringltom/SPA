@@ -72,9 +72,9 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
                 <Table.HeaderCell>Tip</Table.HeaderCell>
                 <Table.HeaderCell>Naziv</Table.HeaderCell>
                 <Table.HeaderCell>Datum odobravanja</Table.HeaderCell>
-                <Table.HeaderCell>Broj uzas ocena</Table.HeaderCell>
-                <Table.HeaderCell>Broj onako ocena</Table.HeaderCell>
-                <Table.HeaderCell>Broj meeh ocena</Table.HeaderCell>
+                <Table.HeaderCell>Broj loših ocena</Table.HeaderCell>
+                <Table.HeaderCell>Broj neutralnih ocena</Table.HeaderCell>
+                <Table.HeaderCell>Broj dobrih ocena</Table.HeaderCell>
                 <Table.HeaderCell>Broj super ocena</Table.HeaderCell>
                 <Table.HeaderCell>Broj favorita/omiljenih</Table.HeaderCell>
               </Table.Row>
