@@ -2,6 +2,7 @@ import { ActivityTypes, IActivity, IPhoto } from '../../app/models/activity';
 import { Button, Card, Icon, Item, Label, Segment } from 'semantic-ui-react';
 import React, { useContext, useState } from 'react'
 
+import { ChallengeAnswerForm } from './ChallengeAnswerForm';
 import { EkvitiColors } from '../../app/layout/EkvitiColors';
 import { Link } from 'react-router-dom';
 import PuzzleAnswerForm from './PuzzleAnswerForm';
@@ -152,6 +153,9 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
       <Segment clearing>
         {activity.type === ActivityTypes.Puzzle && (
           <Button icon='microphone' content='Odgovori' floated='right' onClick={() => openModal(<PuzzleAnswerForm activityId={activity.id} />)}></Button>
+        )}
+        {activity.type === ActivityTypes.Challenge && (
+          <Button icon='hand peace' content='Odgovori' floated='right' onClick={() => openModal(<ChallengeAnswerForm activityId={activity.id} />)}></Button>
         )}
       </Segment>
       <Segment>

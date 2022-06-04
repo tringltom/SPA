@@ -1,4 +1,4 @@
-import { IActivity, IActivityFormValues } from "../models/activity";
+import { IActivity, IActivityFormValues, IChallengeAnswer } from "../models/activity";
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 
 import { RootStore } from "./rootStore";
@@ -312,6 +312,33 @@ export default class ActivityStore {
       runInAction(() => {
         toast.success(
           `Tačan odogovor, osvojili ste ${result} iskustvenih poena!`
+        );
+        this.submitting = false;
+        this.rootStore.modalStore.closeModal();
+        this.rootStore.unFrezeScreen();
+      });
+    } catch (error : any) {
+      runInAction(() => {
+        this.submitting = false;
+        this.rootStore.unFrezeScreen();
+        this.rootStore.modalStore.closeModal();
+        toast.error(error?.data.errors.error);
+      });
+    }
+  };
+
+  answerChallenge = async (values: any) => {
+    try {
+      this.rootStore.frezeScreen();
+      this.submitting = true;
+      await agent.Activity.answerChallenge(
+        values.id,
+        { description: values.description,
+          imagess:  values.images} as IChallengeAnswer
+      );
+      runInAction(() => {
+        toast.success(
+          `Odgovor poslat korisniku`
         );
         this.submitting = false;
         this.rootStore.modalStore.closeModal();

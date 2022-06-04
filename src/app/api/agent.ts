@@ -1,4 +1,4 @@
-import { ActivityTypes, IActivitiesEnvelope, IActivity, IActivityFormValues, IHappeningEnvelope, IPendingActivitiesEnvelope, IPendingActivity } from "../models/activity";
+import { ActivityTypes, IActivitiesEnvelope, IActivity, IActivityFormValues, IChallengeAnswer, IHappeningEnvelope, IPendingActivitiesEnvelope, IPendingActivity } from "../models/activity";
 import { IReview, ReviewTypes } from "../models/review";
 import { IUser, IUserEnvelope, IUserFormValues, IUserImageEnvelope } from "../models/user";
 import axios, { AxiosResponse } from "axios";
@@ -124,7 +124,9 @@ const Activity = {
   getHappeningsForApproval: (params: URLSearchParams) : Promise<IHappeningEnvelope> =>
     axios.get("/activities/pending-happenings",{params: params}).then(responseBody),
   answerPuzzle: (id: string, answer : string) : Promise<number> => 
-    requests.patch(`/activities/${id}/answer`, {answer}),
+    requests.patch(`/activities/${id}/puzzle-answer`, {answer}),
+  answerChallenge: (id: string, answer : IChallengeAnswer) : Promise<number> => 
+    requests.post(`/activities/${id}/challenge-answer`, answer),
   approvePendingActivity : (id: string) : Promise<IActivity> =>
     requests.post(`/activities/pending-activity/${id}`, {}),
   approveHappening : (id: string, approve: boolean) : Promise<void> =>

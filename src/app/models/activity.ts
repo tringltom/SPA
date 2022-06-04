@@ -54,6 +54,11 @@ export interface IActivityFormValues {
     HappeningPhotos: IPhoto[];
   };
 
+  export interface IChallengeAnswer {
+    description?: string;
+    images?: Blob[];
+  };
+
   export interface IPhoto {
     id: string;
     url: string;

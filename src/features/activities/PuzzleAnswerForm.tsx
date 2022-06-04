@@ -2,6 +2,7 @@ import { Button, Container, Form } from 'semantic-ui-react';
 import { Field, Form as FinalForm } from "react-final-form";
 import { combineValidators, composeValidators, hasLengthLessThan, isRequired } from 'revalidate';
 
+import ModalYesNo from '../../app/common/modals/ModalYesNo';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { TextInput } from '../../app/common/form/TextInput';
 import { observer } from 'mobx-react-lite';
@@ -19,13 +20,24 @@ const validate = combineValidators({
 const PuzzleAnswerForm : React.FC<{activityId: string}> = ({activityId})  => {
   const rootStore = useContext(RootStoreContext);
   const { answerPuzzle, submitting } = rootStore.activityStore;
+  const { openModal } = rootStore.modalStore;
 
   return (
     <Container>
       <FinalForm
         validate={validate}
         onSubmit={(values) => {
-          answerPuzzle(values);
+          openModal(
+            <ModalYesNo
+              handleConfirmation={() =>
+                answerPuzzle(values)
+              }
+              content="Odogovor na Izazov"
+              icon="hand peace"
+            />,
+            false
+          );
+          
         }}
         render={({ handleSubmit, invalid, pristine }) => (
           <Form autoComplete="off" onSubmit={handleSubmit} error>
