@@ -21,6 +21,23 @@ export interface IActivityFormValues {
     activities: IActivity[];
     activityCount: number;
   };
+
+  export interface IApprovedActivitiesEnvelope {
+    activities: IApprovedActivity[];
+    activityCount: number;
+  };
+
+  export interface IApprovedActivity {
+    type: ActivityTypes;
+    title: string;
+    dateApproved?: string | null;
+    numberOfFavorites?: number;
+    numberOfAwesomeReviews?: number;
+    numberOfGoodReviews?: number;
+    numberOfNoneReviews?: number;
+    numberOfPoorReviews?: number;
+    [key: string]: any;
+  }
   
   export interface IActivity extends IActivityFormValues {
     id: string;
@@ -28,11 +45,6 @@ export interface IActivityFormValues {
     photos?: IPhoto[];
     isHost: boolean;
     dateApproved?: string | null;
-    numberOfFavorites?: number;
-    numberOfAwesomeReviews?: number;
-    numberOfGoodReviews?: number;
-    numberOfNoneReviews?: number;
-    numberOfPoorReviews?: number;
     numberofAttendees: number,
     isUserAttending: boolean,
     isHeld : boolean

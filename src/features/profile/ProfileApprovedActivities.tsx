@@ -13,7 +13,6 @@ interface IProps {
 const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
     const rootStore = useContext(RootStoreContext);
     const {setPredicate} = rootStore.activityStore;
-    
   
     const {
         loadingInitial,
@@ -25,7 +24,6 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
     } = rootStore.activityStore;
 
     const [loadingNext, setLoadingNext] = useState(false);
-    
     
     useEffect(() => {
         setApprovedActivitiesPage(0);

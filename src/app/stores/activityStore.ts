@@ -43,7 +43,6 @@ export default class ActivityStore {
 
   pendingActivity: IActivityFormValues | null = null;
   approvedActivity: IActivity | null = null;
-  userId = 0;
 
   get pendingActivitiesArray() {
     return Array.from(this.pendingActivitiesRegistry.values());
@@ -117,7 +116,6 @@ export default class ActivityStore {
 
   get approvedActivityAxiosParams() {
     const params = new URLSearchParams();
-    params.append("userId", String(this.userId));
     params.append("limit", String(LIMIT));
     params.append("offset", `${this.approvedActivitiesPage ? this.approvedActivitiesPage * LIMIT : 0}`);
     this.predicate.forEach((value, key) => {
@@ -261,10 +259,9 @@ export default class ActivityStore {
 
   loadApprovedActivitiesForUser = async (userId: number) => {
     this.loadingInitial = true;
-    this.userId = userId;
     this.approvedActivitiesRegistry.clear();
     try {
-      const approvedActivitiesEnvelope = await agent.Activity.getApprovedActivities(
+      const approvedActivitiesEnvelope = await agent.Activity.getApprovedActivities(userId,
         this.approvedActivityAxiosParams,
       );
       console.log(approvedActivitiesEnvelope);

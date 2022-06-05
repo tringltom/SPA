@@ -1,4 +1,4 @@
-import { ActivityTypes, IActivitiesEnvelope, IActivity, IActivityFormValues, IHappeningEnvelope, IPendingActivitiesEnvelope, IPendingActivity } from "../models/activity";
+import { ActivityTypes, IActivitiesEnvelope, IActivity, IActivityFormValues, IApprovedActivitiesEnvelope, IHappeningEnvelope, IPendingActivitiesEnvelope, IPendingActivity } from "../models/activity";
 import { IReview, ReviewTypes } from "../models/review";
 import { IUser, IUserEnvelope, IUserFormValues, IUserImageEnvelope } from "../models/user";
 import axios, { AxiosResponse } from "axios";
@@ -121,8 +121,8 @@ const Activity = {
   getActivity : (id: string) : Promise<IActivity> => requests.get(`/activities/${id}`),
   getActivitiesFromOtherUsers: (params: URLSearchParams) : Promise<IActivitiesEnvelope> =>
     axios.get("/activities/others",{params: params}).then(responseBody),
-  getApprovedActivities:(params: URLSearchParams) : Promise<IActivitiesEnvelope> => 
-  axios.get("/activities/approved-activities",{params: params}).then(responseBody),
+  getApprovedActivities:(id: number, params: URLSearchParams) : Promise<IApprovedActivitiesEnvelope> => 
+    axios.get(`/activities/approved-activities/${id}`,{params: params}).then(responseBody),
   getHappeningsForApproval: (params: URLSearchParams) : Promise<IHappeningEnvelope> =>
     axios.get("/activities/pending-happenings",{params: params}).then(responseBody),
   answerPuzzle: (id: string, answer : string) : Promise<number> => 
