@@ -122,7 +122,7 @@ const Activity = {
   getActivitiesFromOtherUsers: (params: URLSearchParams) : Promise<IActivitiesEnvelope> =>
     axios.get("/activities/others",{params: params}).then(responseBody),
   getApprovedActivities:(id: number, params: URLSearchParams) : Promise<IApprovedActivitiesEnvelope> => 
-    axios.get(`/activities/approved-activities/${id}`,{params: params}).then(responseBody),
+    axios.get(`/activities/approved-activities/user/${id}`,{params: params}).then(responseBody),
   getHappeningsForApproval: (params: URLSearchParams) : Promise<IHappeningEnvelope> =>
     axios.get("/activities/pending-happenings",{params: params}).then(responseBody),
   answerPuzzle: (id: string, answer : string) : Promise<number> => 
