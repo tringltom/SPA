@@ -257,6 +257,32 @@ export default class ActivityStore {
     }
   };
 
+  loadApprovedActivitiesForUser = async (userId: number) => {
+    this.loadingInitial = true;
+    this.approvedActivitiesRegistry.clear();
+    try {
+      const approvedActivitiesEnvelope = await agent.Activity.getApprovedActivities(userId,
+        this.approvedActivityAxiosParams,
+      );
+      console.log(approvedActivitiesEnvelope);
+  
+      const {activities, activityCount} = approvedActivitiesEnvelope;
+  
+      runInAction(() => {
+        activities.forEach((activity) => {
+          this.approvedActivitiesRegistry.set(activity.id, activity);
+        });
+        this.approvedActivityCount = activityCount;
+        this.loadingInitial = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        console.log(error);
+        this.loadingInitial = false;
+      })
+    }
+  };
+  
   approvePendingActivity = async (activityId : string, approve : boolean) => {
     try {
       this.rootStore.frezeScreen();

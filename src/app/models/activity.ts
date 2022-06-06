@@ -21,6 +21,23 @@ export interface IActivityFormValues {
     activities: IActivity[];
     activityCount: number;
   };
+
+  export interface IApprovedActivitiesEnvelope {
+    activities: IApprovedActivity[];
+    activityCount: number;
+  };
+
+  export interface IApprovedActivity {
+    type: ActivityTypes;
+    title: string;
+    dateApproved?: string | null;
+    numberOfFavorites?: number;
+    numberOfAwesomeReviews?: number;
+    numberOfGoodReviews?: number;
+    numberOfNoneReviews?: number;
+    numberOfPoorReviews?: number;
+    [key: string]: any;
+  }
   
   export interface IActivity extends IActivityFormValues {
     id: string;
