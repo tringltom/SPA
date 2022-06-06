@@ -1,5 +1,5 @@
-import { Button, Card, Grid, Icon, Item, Loader, Segment } from 'semantic-ui-react';
-import { IHappening, IPhoto } from '../../app/models/activity';
+import { Button, Card, Divider, Grid, Header, Icon, Item, Loader, Segment } from 'semantic-ui-react';
+import { IChallenge, IHappening, IPhoto } from '../../app/models/activity';
 import React, { useContext, useEffect, useState } from 'react'
 
 import InfiniteScroll from 'react-infinite-scroller';
@@ -9,35 +9,38 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 
-const HappeningCompleteApprovals: React.FC = () => {
+const ChallengeCompleteApprovals = () => {
+
   const rootStore = useContext(RootStoreContext);
+  
   const {
-    loadPendingHappeningActivities,
+    loadChallengeConfirmedAnswers,
     loadingInitial,
-    setPendingHappeningActivitiesPage,
-    pendingHappeningActivitiesPage,
-    totalPendingHappeningActivitiesPages,
-    pendingHappeningActivitiesArray,
-    approveHappening
+    setChallengeApprovalPage,
+    challengeApprovalPage,
+    totalChallengeApprovalPages,
+    challengeApprovalArray,
+    approveChallenge
   } = rootStore.activityStore;
+  
   const { openModal } = rootStore.modalStore;
   
   const [loadingNext, setLoadingNext] = useState(false);
 
   const handleGetNext = () => {
     setLoadingNext(true);
-    setPendingHappeningActivitiesPage(pendingHappeningActivitiesPage + 1);
-    loadPendingHappeningActivities().then(() => setLoadingNext(false));
+    setChallengeApprovalPage(challengeApprovalPage + 1);
+    loadChallengeConfirmedAnswers().then(() => setLoadingNext(false));
   };
 
   useEffect(() => {
-    loadPendingHappeningActivities();
-  }, [loadPendingHappeningActivities]);
+    loadChallengeConfirmedAnswers();
+  }, [loadChallengeConfirmedAnswers]);
 
   return (
     <Grid>
       <Grid.Column width={16}>
-        {loadingInitial && pendingHappeningActivitiesPage === 0 ? (
+        {loadingInitial && challengeApprovalPage === 0 ? (
           <PendingActivityListItemPlaceholder />
         ) : (
           <InfiniteScroll
@@ -45,11 +48,11 @@ const HappeningCompleteApprovals: React.FC = () => {
             loadMore={handleGetNext}
             hasMore={
               !loadingNext &&
-              pendingHappeningActivitiesPage + 1 < totalPendingHappeningActivitiesPages
+              challengeApprovalPage + 1 < totalChallengeApprovalPages
             }
             initialLoad={false}
           >
-            {pendingHappeningActivitiesArray.map((activity: IHappening) => (
+            {challengeApprovalArray.map((activity: IChallenge) => (
             <Segment.Group key={activity.id}>
               <Segment>
                 <Item.Group>
@@ -95,7 +98,10 @@ const HappeningCompleteApprovals: React.FC = () => {
                 </Segment>
               )}
               <Segment secondary>{activity.description}</Segment>
-              {activity.happeningPhotos?.map((photo: IPhoto) => (
+              <Divider horizontal></Divider>
+              <Header textAlign='center'>Odgovor:</Header>
+              <Segment>{activity.challengeDesription}</Segment>
+              {activity.challengePhotos?.map((photo: IPhoto) => (
                         <Card key={photo.id} fluid>
                           <Item.Image src={photo.url || "/assets/user.png"} />
                         </Card>
@@ -109,9 +115,9 @@ const HappeningCompleteApprovals: React.FC = () => {
                     openModal(
                       <ModalYesNo
                         handleConfirmation={async () =>
-                          await approveHappening(activity.id, true)
+                          await approveChallenge(activity.challengeAnswerId, true)
                         }
-                        content="Dozvoliti aktivnost"
+                        content="Dozvoliti rešenje izazova"
                         icon="thumbs up"
                       />,
                       false
@@ -126,9 +132,9 @@ const HappeningCompleteApprovals: React.FC = () => {
                     openModal(
                       <ModalYesNo
                         handleConfirmation={async () =>
-                          await approveHappening(activity.id, false)
+                          await approveChallenge(activity.challengeAnswerId, false)
                         }
-                        content="Odbiti aktivnost"
+                        content="Odbiti ređenje izazova"
                         icon="thumbs down"
                       />,
                       false
@@ -145,7 +151,7 @@ const HappeningCompleteApprovals: React.FC = () => {
         <Loader active={loadingNext} />
       </Grid.Column>
     </Grid>
-  );
+  )
 }
 
-export default observer(HappeningCompleteApprovals);
+export default observer(ChallengeCompleteApprovals);

@@ -21,7 +21,7 @@ const ActivityList: React.FC<{approved: boolean}> = ({approved}) => {
   return (
     <Fragment>
       <Item.Group divided>
-        {approved && !loadingInitial && !loadingReviews && !loadingFavorites
+        {approved && !loadingReviews && !loadingFavorites
           ? approvedActivitiesArray.map((activity: IActivity) => (
               // eslint-disable-next-line
               <ApprovedActivityListItem
