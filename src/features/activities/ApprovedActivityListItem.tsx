@@ -151,7 +151,7 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
       )}
       <Segment secondary>{activity.description}</Segment>
       <Segment clearing>
-        {/*activity.isHost &&*/ !activity.isChallengeAnswered && activity.type === ActivityTypes.Challenge && (
+        {activity.isHost && !activity.isChallengeAnswered && activity.type === ActivityTypes.Challenge && (
           <Button icon='pencil' content='Izaberi odgovor' floated='left' as={Link} to={`/challengeAnswers/${activity.id}`}></Button>
         )}
         {activity.type === ActivityTypes.Puzzle && (
