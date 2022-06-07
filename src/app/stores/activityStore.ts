@@ -1,4 +1,4 @@
-import { IActivity, IActivityFormValues, IChallengeAnswer, IChallengeAnswerEnvelope, IChallengeAnswerForm } from "../models/activity";
+import { IActivity, IActivityFormValues, IChallengeAnswerForm } from "../models/activity";
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 
 import { RootStore } from "./rootStore";

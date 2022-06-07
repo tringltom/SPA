@@ -1,6 +1,6 @@
 import { Button, Card, Divider, Grid, Header, Icon, Item, Loader, Segment } from 'semantic-ui-react';
-import { IChallenge, IHappening, IPhoto } from '../../app/models/activity';
-import React, { useContext, useEffect, useState } from 'react'
+import { IChallenge, IPhoto } from '../../app/models/activity';
+import { useContext, useEffect, useState } from 'react'
 
 import InfiniteScroll from 'react-infinite-scroller';
 import ModalYesNo from '../../app/common/modals/ModalYesNo';

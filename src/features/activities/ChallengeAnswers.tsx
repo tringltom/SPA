@@ -1,4 +1,4 @@
-import { Button, Card, Container, Grid, Header, Image, Item, Label, Segment } from 'semantic-ui-react';
+import { Button, Card, Container, Grid, Item, Label, Segment } from 'semantic-ui-react';
 import React, { useContext, useEffect, useState } from 'react'
 
 import { ChallengeAnswersPlaceholder } from './ChallengeAnswersPlaceholder';
@@ -30,7 +30,7 @@ const ChallengeAnswers : React.FC<RouteComponentProps<DetailParams>>= ({match}) 
 
   useEffect(() => {
     loadChallengeAnswers(challengeId);
-  }, [loadChallengeAnswers]);
+  }, [loadChallengeAnswers, challengeId]);
 
   return (
     <Container>

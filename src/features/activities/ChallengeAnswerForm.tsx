@@ -1,6 +1,6 @@
 import { Button, Container, Form } from 'semantic-ui-react';
 import { Field, Form as FinalForm } from "react-final-form";
-import { combineValidators, composeValidators, hasLengthLessThan, isRequired, isRequiredIf } from 'revalidate';
+import { combineValidators, composeValidators, hasLengthLessThan, isRequiredIf } from 'revalidate';
 
 import { FileInput } from '../../app/common/form/FileInput';
 import ModalYesNo from '../../app/common/modals/ModalYesNo';
