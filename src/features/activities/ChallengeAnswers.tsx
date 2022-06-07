@@ -49,7 +49,6 @@ const ChallengeAnswers : React.FC<RouteComponentProps<DetailParams>>= ({match}) 
                 <Item.Group>
                   <Item>
                     <Item.Content>
-                      <Item.Header>Korisnik: {challengeAnswer.userName}</Item.Header>
                       {challengeAnswer.confirmed && <Item.Meta><Label color='red' content="potvrdjen"/></Item.Meta>}
                       <Item.Description>
                        {challengeAnswer.description}

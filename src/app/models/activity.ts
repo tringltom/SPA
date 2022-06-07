@@ -74,8 +74,6 @@ export interface IActivityFormValues {
 
   export interface IChallengeAnswer {
     id: string,
-    userName: string,
-    userId: string,
     description?: string,
     confirmed: boolean,
     challengePhotos?: IPhoto[],
