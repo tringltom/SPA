@@ -10,7 +10,7 @@ import { observer } from 'mobx-react-lite';
 const ActivityList: React.FC<{approved: boolean}> = ({approved}) => {
   const rootStore = useContext(RootStoreContext);
 
-  const { pendingActivitiesArray, approvedActivitiesArray, loadingInitial, resetPendingActivitiesArray } = rootStore.activityStore;
+  const { pendingActivitiesArray, approvedActivitiesArray, resetPendingActivitiesArray } = rootStore.activityStore;
   const { reviewsForCurrentUserArray, loading: loadingReviews } = rootStore.reviewStore;
   const { favoritesArray, loading: loadingFavorites } = rootStore.favoriteStore;
 
@@ -21,7 +21,7 @@ const ActivityList: React.FC<{approved: boolean}> = ({approved}) => {
   return (
     <Fragment>
       <Item.Group divided>
-        {approved && !loadingInitial && !loadingReviews && !loadingFavorites
+        {approved && !loadingReviews && !loadingFavorites
           ? approvedActivitiesArray.map((activity: IActivity) => (
               // eslint-disable-next-line
               <ApprovedActivityListItem
