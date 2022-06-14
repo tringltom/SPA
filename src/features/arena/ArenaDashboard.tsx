@@ -16,8 +16,6 @@ const ArenaDashboard = () => {
   const [loadingNext, setLoadingNext] = useState(false);
   const [showArena, setshowArena] = useState(false);  
 
-  //const location = useLocation();
-
   const AnimationSettings = {
     transition: { duration: 0.5 },
     initial: { opacity: 0, y: '50%' },
