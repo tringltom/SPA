@@ -1,4 +1,4 @@
-import { ActivityTypes, IActivitiesEnvelope, IActivity, IActivityFormValues, IApprovedActivitiesEnvelope, IHappeningEnvelope, IPendingActivitiesEnvelope, IPendingActivity } from "../models/activity";
+import { ActivityTypes, IActivitiesEnvelope, IActivity, IActivityFormValues, IApprovedActivitiesEnvelope, IChallengeAnswerEnvelope, IChallengeAnswerForm, IChallengeEnvelope, IHappeningEnvelope, IPendingActivitiesEnvelope, IPendingActivity } from "../models/activity";
 import { IReview, ReviewTypes } from "../models/review";
 import { IUser, IUserEnvelope, IUserFormValues, IUserImageEnvelope } from "../models/user";
 import axios, { AxiosResponse } from "axios";
@@ -125,8 +125,29 @@ const Activity = {
     axios.get(`/activities/approved-activities/user/${id}`,{params: params}).then(responseBody),
   getHappeningsForApproval: (params: URLSearchParams) : Promise<IHappeningEnvelope> =>
     axios.get("/activities/pending-happenings",{params: params}).then(responseBody),
+  getChallengeAnswers: (activityId: string, params: URLSearchParams) : Promise<IChallengeAnswerEnvelope> =>
+    axios.get(`/activities/me/challenge-answers/activity/${activityId}`,{params: params}).then(responseBody),
+  getChallengeConfirmedAnswers: (params: URLSearchParams) : Promise<IChallengeEnvelope> =>
+    axios.get("/activities/pending-challenges",{params: params}).then(responseBody),
   answerPuzzle: (id: string, answer : string) : Promise<number> => 
-    requests.patch(`/activities/${id}/answer`, {answer}),
+    requests.patch(`/activities/${id}/puzzle-answer`, {answer}),
+  answerChallenge: (id: string, answer : IChallengeAnswerForm): Promise<void> => {
+    let formData = new FormData();
+    Object.keys(answer).forEach((key) => {
+      if (key === "images") {
+        answer[key]?.map((image) => formData.append(key, image));
+      } else {
+        formData.append(key, answer[key]);
+      }
+    });
+    return requests.postForm(`/activities/${id}/challenge-answer`, formData);
+  },
+  confirmChallengeAnswer: (id: string) : Promise<void> => 
+    requests.patch(`/activities/challenge-confirmation/${id}`, {}),
+  approveChallengeAnswer: (id: string) : Promise<void> => 
+    requests.post(`/activities/challenge-answer-approval/${id}`, {}),
+  disapproveChallengeAnswer: (id: string) : Promise<void> => 
+    requests.patch(`/activities/challenge-answer-disapproval/${id}`, {}),
   approvePendingActivity : (id: string) : Promise<IActivity> =>
     requests.post(`/activities/pending-activity/${id}`, {}),
   approveHappening : (id: string, approve: boolean) : Promise<void> =>
