@@ -533,7 +533,7 @@ export default class ActivityStore {
       await agent.Activity.completeHappening(id, values.images);
       runInAction(() => {
         toast.success(
-          "Uspešan završetak dogadjaja, Molimo Vas sačekajte potvrdu"
+          "Uspešan završetak događaja, Molimo Vas sačekajte potvrdu"
         );
         this.rootStore.modalStore.closeModal();
         this.rootStore.unFrezeScreen();
