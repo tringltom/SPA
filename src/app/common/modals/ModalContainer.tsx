@@ -12,7 +12,7 @@ const ModalContainer = () => {
 
   return (
     <Transition show={open} as={Fragment}>
-      <Dialog open={open} className="relative z-10" onClose={closeModal}>
+      <Dialog className="relative z-10" onClose={closeModal}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -39,7 +39,7 @@ const ModalContainer = () => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full sm:max-w-modal transform overflow-hidden rounded-2xl bg-white p-6 md:py-8 md:px-20 align-middle shadow-xl">
+              <Dialog.Panel className="w-full sm:max-w-modal transform overflow-hidden rounded-2xl bg-white p-6 md:py-8 md:px-20 align-middle shadow-xl transition-all">
                 {body}
               </Dialog.Panel>
             </Transition.Child>

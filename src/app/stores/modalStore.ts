@@ -23,7 +23,6 @@ export default class ModalStore {
   };
 
   @action closeModal = () => {
-    this.modal.open = false;
-    this.modal.body = null;
+    this.modal.open = false;    
   };
 }

@@ -80,6 +80,7 @@ const App: React.FC<RouteComponentProps> = () => {
       <div style={{ pointerEvents: rootStore.allowEvents ? "all" : "none", height: "100%" }}>
         <ModalContainer />
         <ToastContainer position="bottom-right" />
+
         <Route exact path="/">
           {" "}
           {isLoggedIn ? (
@@ -88,6 +89,7 @@ const App: React.FC<RouteComponentProps> = () => {
             <WelcomeScreen />
           )}
         </Route>
+
         <Route
           path={"/(.+)"}
           render={() => (
