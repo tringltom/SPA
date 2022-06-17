@@ -36,8 +36,8 @@ const AvatarApprovals = () => {
         >
           <Grid>
           {userImagestoApproveArray?.map((user, element) => (
-            <Grid.Row centered>
-            <Segment.Group key={element}>
+            <Grid.Row centered key={element}>
+            <Segment.Group>
               <Segment>
                 <Header as="h2" style={{ textAlign: "center" }}>
                   {user.userName}
