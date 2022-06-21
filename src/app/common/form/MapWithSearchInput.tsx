@@ -1,43 +1,16 @@
 import "@reach/combobox/styles.css";
 
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxList,
-  ComboboxOption,
-  ComboboxPopover,
-} from "@reach/combobox";
 import { Form, FormFieldProps, Input, Label } from "semantic-ui-react";
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { ICoords, LatLngLiteral, MapMouseEvent, MapType } from '../../models/googleMaps'
 import React, { useEffect, useState } from 'react'
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
-} from "use-places-autocomplete";
+import { getGeocode } from "use-places-autocomplete";
 
 import { FieldRenderProps } from "react-final-form";
+import { MapLocation } from "./MapLocation";
 
 interface IProps
   extends FieldRenderProps<Input, HTMLElement>,
     FormFieldProps {}
-
-const center = {
-  lat: 44.7470721,
-  lng: 20.4518071
-};
-
-const mapOptions = {
-    center: center,
-    disableDefaultUI: true,
-    zoom: 15,
-    zoomControl: true
-};
-
-const containerStyle = {
-    width: '400px',
-    height: '400px'
-};
 
 export const MapWithSearchInput: React.FC<IProps> = ({input,
   type,
@@ -96,71 +69,21 @@ export const MapWithSearchInput: React.FC<IProps> = ({input,
 
     return (
       <Form.Field error={touched && !!error} type={type}>
-            <LoadScript
-              //googleMapsApiKey="AIzaSyBpNUqI_P-ouHh0KR24n0gLRUD4VUfX5v0&libraries=places"
-              googleMapsApiKey="AIzaSyAGraVkB2T6hAEWpq7DefFBzn9YkkWgg7I&libraries=places&language=sr-Latn"
-            >
-            <GoogleMap
-            options={mapOptions}
-            mapContainerStyle={containerStyle}
-            onClick={onMapClick}
-            onLoad={onMapLoad}
-            >
-            <Search panTo={panTo} addressCombo={addressCombo}/>
-            {marker !== null && 
-                (
-                <Marker position={{ lat: marker.lat, lng: marker.lng }}/>
-                )}
-            </GoogleMap>
-            </LoadScript>
-              {touched && !marker && error && (
+            <MapLocation 
+            width="400px"
+            height="400px"
+            onMapClick={onMapClick}
+            onMapLoad={onMapLoad}
+            marker={marker}
+            showSearch={true}
+            addressCombo={addressCombo}
+            panTo={panTo}
+             />
+            {touched && !marker && error && (
             <Label basic color="red">
               {error}
             </Label>
       )}       
       </Form.Field>
     );
-}
-
-interface IPanToProps {
-  panTo: (latLng: LatLngLiteral, address: string) => void,
-  addressCombo : string
-}
-
-const Search: React.FC<IPanToProps> = ({panTo, addressCombo}) => {
-  const { ready, value, suggestions: {status, data},
-  setValue, clearSuggestions} = usePlacesAutocomplete();
-
-  useEffect(() => {
-    setValue(addressCombo, false)
-
-  }, [addressCombo, setValue])
-
-  return <div className="autoCompleteSearch">
-    <Combobox
-      onSelect={async (address) => {
-        setValue(address, false);
-        clearSuggestions();
-        try {
-            const results = await getGeocode({address});
-            const { lat , lng } = await getLatLng(results[0]);
-            panTo({lat, lng}, address);
-        } catch(error){
-          console.log(error);
-        }
-    }}
-    >
-        <ComboboxInput value={value}  onChange={(e) => {
-          setValue(e.target.value);
-        }}
-        disabled={!ready}
-        placeholder="Unesite Adresu"/>
-        <ComboboxPopover>
-          <ComboboxList>
-            {status === "OK" && data.map(({place_id, description}) => 
-            (<ComboboxOption key={place_id} value={description} />))}
-          </ComboboxList> 
-        </ComboboxPopover>
-      </Combobox>
-  </div>
 }
