@@ -11,6 +11,7 @@ import { ReviewTypes } from '../../app/models/review';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { RouteComponentProps } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
+import { Notify } from './Notify';
 
 const validate = combineValidators({images: isRequired({message: 'Slika je neophodna'})});
 
@@ -103,6 +104,9 @@ const ActivityDetails : React.FC<RouteComponentProps<DetailParams>>= ({match}) =
                   />
                 </Segment>
               )}
+            <Segment>
+              <Notify/>
+            </Segment>
           </Segment>
         )}
       </Grid.Column>
