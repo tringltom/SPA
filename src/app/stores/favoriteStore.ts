@@ -13,8 +13,7 @@ export default class FavoriteStore {
 
   favoriteRegistry = new Map();
   loading = false;
-  resolvingFavourite = false;
-  removingFavorite = false;
+  resolvingFavourite = false;  
 
   get favoritesArray() {
     return Array.from(this.favoriteRegistry.values());
@@ -36,21 +35,6 @@ export default class FavoriteStore {
     } catch (error) {
       toast.error("Došlo je do problema sa dodelom u omiljene aktivnosti");
       this.resolvingFavourite = false;
-    }
-  };
-
-  removeFavoriteActivity = async (activityId: number) => {
-    this.removingFavorite = true;
-    try {        
-        await agent.Favorite.removeFavoriteActivity(activityId);
-      runInAction(() => {
-        this.favoriteRegistry.delete(activityId);
-        this.removingFavorite = false;
-      });
-      toast.success('Uspešno ste uklonili omiljenu aktivnost')
-    } catch (error) {
-      toast.error("Došlo je do problema sa uklanjanjem omiljene aktivnosti");
-      this.removingFavorite = false;
     }
   };
 

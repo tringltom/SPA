@@ -12,7 +12,8 @@ interface IProps {
 const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
     const rootStore = useContext(RootStoreContext);
     const {setPredicate} = rootStore.profileStore;
-    const { removeFavoriteActivity, removingFavorite } = rootStore.favoriteStore;
+    //const { removeFavoriteActivity, removingFavorite } = rootStore.favoriteStore;
+    const { resolveFavoriteActivity, resolvingFavourite } = rootStore.favoriteStore;
   
     const {
         loadingInitial,
@@ -26,13 +27,13 @@ const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
     const [loadingNext, setLoadingNext] = useState(false);
 
     const handleClick = (activity: any) => {        
-        removeFavoriteActivity(activity)
+        resolveFavoriteActivity(activity, false)
     }
     
     useEffect(() => {
         setFavoritedActivitiesPage(0);
         loadFavoritedActivitiesForUser(Number(userId));        
-    }, [setFavoritedActivitiesPage, loadFavoritedActivitiesForUser, userId, removingFavorite]);    
+    }, [setFavoritedActivitiesPage, loadFavoritedActivitiesForUser, userId, resolvingFavourite]);    
 
     const handleGetNext = (data: any) => {
         setLoadingNext(true);
@@ -108,7 +109,7 @@ const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
                     content={activity.numberOfFavorites}
                   />
                   <Table.Cell                    
-                    content={<Button icon="times" loading={removingFavorite} onClick={() => handleClick(activity.id)} />}
+                    content={<Button icon="times" loading={resolvingFavourite} onClick={() => handleClick(activity.id)} />}
                   />
                 </Table.Row>
               ))}
