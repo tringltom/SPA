@@ -5,13 +5,13 @@ import { combineValidators, isRequired } from 'revalidate';
 
 import { ActivityTypes } from '../../app/models/activity';
 import { ApprovedActivityListItem } from './ApprovedActivityListItem';
+import Chat from './Chat';
 import { EkvitiColors } from '../../app/layout/EkvitiColors';
 import { FileInput } from '../../app/common/form/FileInput';
 import { ReviewTypes } from '../../app/models/review';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { RouteComponentProps } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import { Notify } from './Notify';
 
 const validate = combineValidators({images: isRequired({message: 'Slika je neophodna'})});
 
@@ -53,8 +53,8 @@ const ActivityDetails : React.FC<RouteComponentProps<DetailParams>>= ({match}) =
               review={review}
             />
             {approvedActivity.type === ActivityTypes.Happening &&
-              !approvedActivity.isHeld && (
-                approvedActivity.isHost &&
+              !approvedActivity.isHeld &&
+              approvedActivity.isHost && (
                 <Segment clearing>
                   <Button
                     floated="right"
@@ -104,9 +104,7 @@ const ActivityDetails : React.FC<RouteComponentProps<DetailParams>>= ({match}) =
                   />
                 </Segment>
               )}
-            <Segment>
-              <Notify/>
-            </Segment>
+            <Chat />
           </Segment>
         )}
       </Grid.Column>
