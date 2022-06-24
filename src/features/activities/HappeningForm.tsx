@@ -15,6 +15,7 @@ import { TextInput } from "../../app/common/form/TextInput";
 import { combineDateAndTime } from "../../app/common/form/utils/formUtil";
 import get from 'lodash/get';
 import { observer } from "mobx-react-lite";
+import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
 
 const isDateGreater = (otherField: string)  => createValidator(
   message => (value: any, allValues: any) => {
@@ -156,7 +157,7 @@ const HappeningForm : React.FC<RouteComponentProps<DetailParams>>= ({match}) => 
             placeholder="Opis događaja (nije potreban ukoliko priložite sliku)"
           />
           <Divider horizontal>Lokacija događaja</Divider>
-          {/* <Field name="coords" component={MapWithSearchInput} /> */}
+          <Field name="coords" component={MapWithSearchInput} />
           <Divider horizontal>Početak događaja</Divider>
           <Form.Group>
             <Field
