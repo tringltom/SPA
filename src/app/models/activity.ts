@@ -27,10 +27,26 @@ export interface IActivityFormValues {
     activityCount: number;
   };
 
+  export interface IFavoritedActivitiesEnvelope {
+    activities: IFavoritedActivity[];
+    activityCount: number;
+  };
+
   export interface IApprovedActivity {
     type: ActivityTypes;
     title: string;
     dateApproved?: string | null;
+    numberOfFavorites?: number;
+    numberOfAwesomeReviews?: number;
+    numberOfGoodReviews?: number;
+    numberOfNoneReviews?: number;
+    numberOfPoorReviews?: number;
+    [key: string]: any;
+  }
+
+  export interface IFavoritedActivity {
+    type: ActivityTypes;
+    title: string;    
     numberOfFavorites?: number;
     numberOfAwesomeReviews?: number;
     numberOfGoodReviews?: number;

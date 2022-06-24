@@ -1,39 +1,43 @@
 import { ActivityTypes, IActivity } from '../../app/models/activity';
-import { Dropdown, DropdownItemProps, Icon, Input, Loader, Pagination, Table } from 'semantic-ui-react';
+import { Button, Dropdown, DropdownItemProps, Icon, Input, Loader, Pagination, Table } from 'semantic-ui-react';
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 
 interface IProps {
     userId: string;
   }
 
-const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
+const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
     const rootStore = useContext(RootStoreContext);
     const {setPredicate} = rootStore.profileStore;
+    const { removeFavoriteActivity, removingFavorite } = rootStore.favoriteStore;
   
     const {
         loadingInitial,
-        setApprovedActivitiesPage,
-        approvedActivitiesPage,
-        totalApprovedActivityPages,
-        approvedActivitiesArray,
-        loadApprovedActivitiesForUser
-    } = rootStore.profileStore;
+        setFavoritedActivitiesPage,
+        favoritedActivitiesPage,
+        totalFavoritedActivitiyPages,
+        favoritedActivitiesArray,
+        loadFavoritedActivitiesForUser
+    } = rootStore.profileStore;    
 
     const [loadingNext, setLoadingNext] = useState(false);
+
+    const handleClick = (activity: any) => {        
+        removeFavoriteActivity(activity)
+    }
     
     useEffect(() => {
-        setApprovedActivitiesPage(0);
-        loadApprovedActivitiesForUser(Number(userId));
-    }, [setApprovedActivitiesPage, loadApprovedActivitiesForUser, userId]);
+        setFavoritedActivitiesPage(0);
+        loadFavoritedActivitiesForUser(Number(userId));        
+    }, [setFavoritedActivitiesPage, loadFavoritedActivitiesForUser, userId, removingFavorite]);    
 
     const handleGetNext = (data: any) => {
         setLoadingNext(true);
-        setApprovedActivitiesPage(data.activePage - 1);
-        loadApprovedActivitiesForUser(Number(userId)).then(() => setLoadingNext(false));
+        setFavoritedActivitiesPage(data.activePage - 1);
+        loadFavoritedActivitiesForUser(Number(userId)).then(() => setLoadingNext(false));
     }
 
     const options = Object.keys(ActivityTypes).map((key: any, el) => {
@@ -68,29 +72,21 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Tip</Table.HeaderCell>
-                <Table.HeaderCell>Naziv</Table.HeaderCell>
-                <Table.HeaderCell>Datum odobravanja</Table.HeaderCell>
+                <Table.HeaderCell>Naziv</Table.HeaderCell>                
                 <Table.HeaderCell>Broj loših ocena</Table.HeaderCell>
                 <Table.HeaderCell>Broj neutralnih ocena</Table.HeaderCell>
                 <Table.HeaderCell>Broj dobrih ocena</Table.HeaderCell>
                 <Table.HeaderCell>Broj super ocena</Table.HeaderCell>
                 <Table.HeaderCell>Broj favorita/omiljenih</Table.HeaderCell>
+                <Table.HeaderCell>Ukloni favorita</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
             <Table.Body>
-              {approvedActivitiesArray.map((activity: IActivity) => (
+              {favoritedActivitiesArray.map((activity: IActivity) => (
                 <Table.Row key={activity.id}>
                   <Table.Cell content={ActivityTypes[activity.type]} />
                   <Table.Cell content={activity.title} />
-                  {activity.dateApproved && (
-                    <Table.Cell
-                      content={format(
-                        new Date(activity.dateApproved),
-                        "d.M.yyyy H:mm "
-                      )}
-                    />
-                  )}
                   <Table.Cell
                     icon="thumbs down"
                     content={activity.numberOfPoorReviews}
@@ -111,6 +107,9 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
                     icon="favorite"
                     content={activity.numberOfFavorites}
                   />
+                  <Table.Cell                    
+                    content={<Button icon="times" loading={removingFavorite} onClick={() => handleClick(activity.id)} />}
+                  />
                 </Table.Row>
               ))}
             </Table.Body>
@@ -120,7 +119,7 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
                 <Table.HeaderCell colSpan="8">
                   <Loader active={loadingNext} />
                   <Pagination
-                    defaultActivePage={approvedActivitiesPage + 1}
+                    defaultActivePage={favoritedActivitiesPage + 1}
                     ellipsisItem={{
                       content: <Icon name="ellipsis horizontal" />,
                       icon: true,
@@ -141,7 +140,7 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
                       content: <Icon name="angle right" />,
                       icon: true,
                     }}
-                    totalPages={totalApprovedActivityPages}
+                    totalPages={totalFavoritedActivitiyPages}
                     onPageChange={(e, data) => handleGetNext(data)}
                   />
                 </Table.HeaderCell>
@@ -153,4 +152,4 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
     );
 }
 
-export default observer (ProfileApprovedActivities);
+export default observer (ProfileFavoriteActivities);
