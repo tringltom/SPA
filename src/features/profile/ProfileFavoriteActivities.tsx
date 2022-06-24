@@ -11,8 +11,7 @@ interface IProps {
 
 const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
     const rootStore = useContext(RootStoreContext);
-    const {setPredicate} = rootStore.profileStore;
-    //const { removeFavoriteActivity, removingFavorite } = rootStore.favoriteStore;
+    const {setPredicate} = rootStore.profileStore;    
     const { resolveFavoriteActivity, resolvingFavourite } = rootStore.favoriteStore;
   
     const {
