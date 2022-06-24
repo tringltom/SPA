@@ -15,6 +15,7 @@ import { TextInput } from "../../app/common/form/TextInput";
 import { combineDateAndTime } from "../../app/common/form/utils/formUtil";
 import get from 'lodash/get';
 import { observer } from "mobx-react-lite";
+import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
 
 const isDateGreater = (otherField: string)  => createValidator(
   message => (value: any, allValues: any) => {
@@ -139,7 +140,7 @@ const ChallengeForm : React.FC<RouteComponentProps<DetailParams>>= ({match}) => 
             placeholder="Opis (nije potreban ukoliko priložite sliku)"
           />
           <Divider horizontal>Lokacija izazova</Divider>
-          {/* <Field name="coords" component={MapWithSearchInput} /> */}
+          <Field name="coords" component={MapWithSearchInput} />
           <Divider horizontal>Početak Izazova</Divider>
           <Form.Group>
             <Field
