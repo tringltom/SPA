@@ -47,6 +47,7 @@ export default class FavoriteStore {
         this.favoriteRegistry.delete(activityId);
         this.removingFavorite = false;
       });
+      toast.success('Uspešno ste uklonili omiljenu aktivnost')
     } catch (error) {
       toast.error("Došlo je do problema sa uklanjanjem omiljene aktivnosti");
       this.removingFavorite = false;
