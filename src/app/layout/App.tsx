@@ -8,6 +8,8 @@ import ActivityDetails from '../../features/activities/ActivityDetails';
 import Approvals from '../../features/approvals/Approvals';
 import ArenaDashboard from "../../features/arena/ArenaDashboard";
 import AvatarApprovals from '../../features/approvals/AvatarApprovals';
+import ChallengeAnswers from '../../features/activities/ChallengeAnswers';
+import ChallengeCompleteApprovals from '../../features/approvals/ChallengeCompleteApprovals';
 import ChallengeForm from "../../features/activities/ChallengeForm";
 import { ChangePasswordForm } from '../../features/user/ChangePasswordForm';
 import { Container } from "semantic-ui-react";
@@ -45,7 +47,22 @@ const App: React.FC<RouteComponentProps> = () => {
     }
   }, [getUser, setAppLoaded, token, appLoaded, isLoggedIn]);
 
-  const pathsWithNavBar = ["/puzzle", "/joke", "/quote", "/happening", "/challenge", "/gooddeed", "/activity", "/profile", "/approvals", "/avatarApprovals", "/happeningCompleteApprovals"];
+  const pathsWithNavBar = [
+    "/puzzle",
+    "/joke",
+    "/quote", 
+    "/happening", 
+    "/challenge", 
+    "/gooddeed", 
+    "/activity", 
+    "/profile", 
+    "/approvals", 
+    "/avatarApprovals",
+    "/happeningCompleteApprovals", 
+    "/challengeAnswers",
+    "/challengeCompleteApprovals"
+  ];
+  
   const location = useLocation();
 
   const ShowNavBar = () => {
@@ -63,6 +80,7 @@ const App: React.FC<RouteComponentProps> = () => {
       <div style={{ pointerEvents: rootStore.allowEvents ? "all" : "none", height: "100%" }}>
         <ModalContainer />
         <ToastContainer position="bottom-right" />
+
         <Route exact path="/">
           {" "}
           {isLoggedIn ? (
@@ -71,6 +89,7 @@ const App: React.FC<RouteComponentProps> = () => {
             <WelcomeScreen />
           )}
         </Route>
+
         <Route
           path={"/(.+)"}
           render={() => (
@@ -100,6 +119,8 @@ const App: React.FC<RouteComponentProps> = () => {
                   <PrivateRoute path="/approvals" component={Approvals} />
                   <PrivateRoute path="/avatarApprovals" component={AvatarApprovals} />
                   <PrivateRoute path="/happeningCompleteApprovals" component={HappeningCompleteApprovals} />
+                  <PrivateRoute path="/challengeAnswers/:id" component={ChallengeAnswers} />
+                  <PrivateRoute path="/challengeCompleteApprovals" component={ChallengeCompleteApprovals} />
                   <Route component={NotFound} />
                 </Switch>
               </Container>

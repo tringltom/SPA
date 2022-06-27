@@ -6,6 +6,7 @@ import { Image } from "../app/components/Image";
 import { Typography } from "../app/components/Typography";
 import TwLoginForm from "./user/TwLoginForm";
 import { TwRegisterForm } from "./user/TwRegisterForm";
+import { motion } from "framer-motion/dist/framer-motion";
 
 const WelcomeScreen = () => {
   const rootStore = useContext(RootStoreContext);
@@ -13,73 +14,82 @@ const WelcomeScreen = () => {
   const { isLoggedIn, user } = rootStore.userStore;
   const token = window.localStorage.getItem("jwt");
 
-  return (
-    <Fragment>
-      <main
-        style={{
-          backgroundImage: "url(/assets/WelcomeBackground.png)",          
-        }}
-        className="h-full bg-cover bg-center grid grid-rows-[auto_min-content] items-center"
-      >
-        <div className="container mx-auto">
-          <Image
-            imageStyle="mx-auto"
-            src="/assets/RegistrationEkvitiLogo.png"
-            alt="Ekviti Logo"
-          />
-          <Typography>Za bolje danas!</Typography>
-        </div>
+  const AnimationSettings = {
+    transition: { duration: 0.5 },
+    initial: { opacity: 0, y: '-50%' },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: '50%' },    
+  };
 
-        <section className="bg-primary">
+  return (
+    <motion.div {...AnimationSettings} className="h-full">
+      <Fragment>
+        <main
+          style={{
+            backgroundImage: "url(/assets/WelcomeBackground.png)",          
+          }}
+          className="h-full bg-cover bg-center grid grid-rows-[auto_min-content] items-center"
+        >
           <div className="container mx-auto">
-            {isLoggedIn && user && token ? (
-              <div className="grid grid-cols-1 px-5 md:px-0 py-10 md:py-0 md:grid-cols-welcome items-center">
-                <Image
-                  imageStyle="hidden md:block md:-translate-y-8"
-                  src="/assets/KnightRegistration.png"
-                  alt="Vitez"
-                />
-                <Typography
-                  variant={Typography.variant.h2}
-                  color={Typography.color.white}
-                  className="col-span-2"
-                >
-                  Već ste prijavljeni
-                </Typography>
-              </div>
-            ) : (
-              <Fragment>
-                <div className="grid grid-cols-1 px-5 md:px-0 py-10 md:py-0 md:grid-cols-welcome gap-5 md:gap-12 items-center">
+            <Image
+              imageStyle="mx-auto"
+              src="/assets/RegistrationEkvitiLogo.png"
+              alt="Ekviti Logo"
+            />
+            <Typography>Za bolje danas!</Typography>
+          </div>
+
+          <section className="bg-primary">
+            <div className="container mx-auto">
+              {isLoggedIn && user && token ? (
+                <div className="grid grid-cols-1 px-5 md:px-0 py-10 md:py-0 md:grid-cols-welcome items-center">
                   <Image
                     imageStyle="hidden md:block md:-translate-y-8"
                     src="/assets/KnightRegistration.png"
                     alt="Vitez"
                   />
-
-                  <Button
-                    variant={Button.variant.primaryOutlined}
-                    size={Button.size.lg}
-                    fullWidth
-                    onClick={() => openModal(<TwLoginForm />, true, true)}
+                  <Typography
+                    variant={Typography.variant.h2}
+                    color={Typography.color.white}
+                    className="col-span-2"
                   >
-                    Prijavi se
-                  </Button>
-
-                  <Button
-                    variant={Button.variant.primaryOutlined}
-                    size={Button.size.lg}
-                    fullWidth
-                    onClick={() => openModal(<TwRegisterForm />, true, true)}
-                  >
-                    Registruj se
-                  </Button>
+                    Već ste prijavljeni
+                  </Typography>
                 </div>
-              </Fragment>
-            )}
-          </div>
-        </section>
-      </main>
-    </Fragment>
+              ) : (
+                <Fragment>
+                  <div className="grid grid-cols-1 px-5 md:px-0 py-10 md:py-0 md:grid-cols-welcome gap-5 md:gap-12 items-center">
+                    <Image
+                      imageStyle="hidden md:block md:-translate-y-8"
+                      src="/assets/KnightRegistration.png"
+                      alt="Vitez"
+                    />
+
+                    <Button
+                      variant={Button.variant.primaryOutlined}
+                      size={Button.size.lg}
+                      fullWidth
+                      onClick={() => openModal(<TwLoginForm />, true, true)}
+                    >
+                      Prijavi se
+                    </Button>
+
+                    <Button
+                      variant={Button.variant.primaryOutlined}
+                      size={Button.size.lg}
+                      fullWidth
+                      onClick={() => openModal(<TwRegisterForm />, true, true)}
+                    >
+                      Registruj se
+                    </Button>
+                  </div>
+                </Fragment>
+              )}
+            </div>
+          </section>
+        </main>
+      </Fragment>
+    </motion.div>
   );
 };
 

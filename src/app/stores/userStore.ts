@@ -190,7 +190,11 @@ export default class UserStore {
       this.rootStore.unFrezeScreen();
     }
     this.rootStore.commonStore.setToken(null);
-    this.user = null;
+    runInAction(() => {
+      this.rootStore.activityStore.approvedActivitiesRegistry.clear()
+      this.rootStore.activityStore.approvedActivitiesPage = 0;
+      this.user = null;
+    });    
     history.push("/");
   };
 
