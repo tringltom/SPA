@@ -3,6 +3,7 @@ import { configure, makeAutoObservable, runInAction } from "mobx";
 import ActivityStore from "./activityStore";
 import CommonStore from "./commonStore";
 import FavoriteStore from "./favoriteStore";
+import HubStore from "./Hub";
 import ModalStore from "./modalStore";
 import ProfileStore from "./profileStore";
 import ReviewStore from "./reviewStore";
@@ -21,6 +22,7 @@ export class RootStore {
   reviewStore: ReviewStore;
   favoriteStore: FavoriteStore;
   profileStore: ProfileStore;
+  hubStore: HubStore;
 
   constructor() {
     this.userStore = new UserStore(this);
@@ -30,6 +32,7 @@ export class RootStore {
     this.reviewStore = new ReviewStore(this);
     this.favoriteStore = new FavoriteStore(this);
     this.profileStore = new ProfileStore(this);
+    this.hubStore = new HubStore(this);
     makeAutoObservable(this);
   };
 

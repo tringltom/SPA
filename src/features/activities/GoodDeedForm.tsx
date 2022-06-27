@@ -12,6 +12,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { TextAreaInput } from "../../app/common/form/TextAreaInput";
 import { TextInput } from "../../app/common/form/TextInput";
 import { observer } from "mobx-react-lite";
+import { MapWithSearchInput } from "../../app/common/form/MapWithSearchInput";
 
 const validate = combineValidators({
   title: composeValidators(
@@ -99,7 +100,7 @@ const GoodDeedForm : React.FC<RouteComponentProps<DetailParams>>= ({match}) => {
             placeholder="Opis"
           />
           <Divider horizontal>Lokacija dobrog dela</Divider>
-          {/* <Field name="coords" component={MapWithSearchInput} /> */}
+          <Field name="coords" component={MapWithSearchInput} />
           <Divider horizontal></Divider>
           {submitError && <ErrorMessage error={submitError} />}
           <Button

@@ -9,9 +9,7 @@ import { IUserFavoriteActivity } from "../models/Favorites";
 import { history } from '../..';
 import { toast } from "react-toastify";
 
-axios.defaults.baseURL = process.env.NODE_ENV !== 'production'
-? "https://localhost:4001"
-: "https://ekvitiapi.azurewebsites.net";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.request.use((config) => {
   config.withCredentials = true;
