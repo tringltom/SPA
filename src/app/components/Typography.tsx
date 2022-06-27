@@ -10,6 +10,8 @@ enum Variant {
   h5,
   h6,
   body,
+  bodyL,
+  bodyXl,
   subscript
 }
 
@@ -49,6 +51,8 @@ const VARIANT_MAPS: Record<Variant, VariantMapping> = {
   [Variant.h5]: { element: "h5", style: "text-base" },
   [Variant.h6]: { element: "h6", style: "text-sm" },
   [Variant.body]: { element: "p", style: "text-base" },
+  [Variant.bodyL]: { element: "p", style: "text-xl" },
+  [Variant.bodyXl]: { element: "p", style: "text-3xl" },
   [Variant.subscript]: { element: "p", style: "text-xs sm:text-sm" },
 };
 

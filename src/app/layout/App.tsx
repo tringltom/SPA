@@ -27,10 +27,10 @@ import QuoteForm from "../../features/activities/QuoteForm";
 import RegisterSuccess from "../../features/user/RegisterSuccess";
 import { RootStoreContext } from "../stores/rootStore";
 import { ToastContainer } from "react-toastify";
-import VerifyEmail from "../../features/user/VerifyEmail";
 import WelcomeScreen from "../../features/WelcomeScreen";
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
+import TwVerifyEmail from '../../features/user/TwVerifyEmail';
 
 const App: React.FC<RouteComponentProps> = () => {
   const rootStore = useContext(RootStoreContext);
@@ -82,7 +82,7 @@ const App: React.FC<RouteComponentProps> = () => {
                     path="/users/registerSuccess"
                     component={RegisterSuccess}
                   />
-                  <Route path="/users/verifyEmail" component={VerifyEmail} />
+                  <Route path="/users/verifyEmail" component={TwVerifyEmail} />
                   <Route path="/activities/attendence-confirmation" component={HappeningConfirmation} />
                   <Route
                     path="/users/verifyPasswordRecovery"

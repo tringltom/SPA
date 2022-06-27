@@ -22,6 +22,7 @@ enum Size {
   sm,
   md,
   lg,
+  xlCentered,
   inline
 }
 
@@ -81,6 +82,7 @@ const SIZE_MAPS: Record<Size, string> = {
   [Size.sm]: "py-2 px-3 text-sm",
   [Size.md]: "py-4 sm:py-5 px-5 text-xl",
   [Size.lg]: "p-6 text-2xl md:text-3xl",
+  [Size.xlCentered]: "shadow-[0_8px_10px_-6px_rgba(1,183,255,1)] py-[20px] text-[19px] w-[73%] mx-auto mt-10 sm:mt-0 font-bold",
   [Size.inline]: "text-sm"
 };
 
