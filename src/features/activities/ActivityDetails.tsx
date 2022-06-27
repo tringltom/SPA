@@ -5,6 +5,7 @@ import { combineValidators, isRequired } from 'revalidate';
 
 import { ActivityTypes } from '../../app/models/activity';
 import { ApprovedActivityListItem } from './ApprovedActivityListItem';
+import Chat from './Chat';
 import { EkvitiColors } from '../../app/layout/EkvitiColors';
 import { FileInput } from '../../app/common/form/FileInput';
 import { ReviewTypes } from '../../app/models/review';
@@ -52,8 +53,8 @@ const ActivityDetails : React.FC<RouteComponentProps<DetailParams>>= ({match}) =
               review={review}
             />
             {approvedActivity.type === ActivityTypes.Happening &&
-              !approvedActivity.isHeld && (
-                approvedActivity.isHost &&
+              !approvedActivity.isHeld &&
+              approvedActivity.isHost && (
                 <Segment clearing>
                   <Button
                     floated="right"
@@ -103,6 +104,7 @@ const ActivityDetails : React.FC<RouteComponentProps<DetailParams>>= ({match}) =
                   />
                 </Segment>
               )}
+            <Chat />
           </Segment>
         )}
       </Grid.Column>

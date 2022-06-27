@@ -49,6 +49,7 @@ export interface IActivityFormValues {
     isUserAttending: boolean,
     isHeld : boolean,
     isChallengeAnswered: boolean,
+    comments: IComment[]
   }; 
 
   export interface IPendingActivitiesEnvelope {
@@ -105,6 +106,15 @@ export interface IActivityFormValues {
   export interface IPhoto {
     id: string,
     url: string,
+  };
+
+  export interface IComment {
+    id: string,
+    body: string,
+    createdAt: string,
+    userName: string,
+    userId:string,
+    image: IPhoto
   };
 
   export enum ActivityTypes{
