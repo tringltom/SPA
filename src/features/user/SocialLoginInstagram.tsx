@@ -1,5 +1,4 @@
 import Icon from "../../app/components/Icon";
-import InstagramLogin from "@amraneze/react-instagram-login";
 import React from "react";
 import { observer } from "mobx-react-lite";
 
@@ -12,7 +11,7 @@ interface IProps {
 const SocialLoginInstagram: React.FC<IProps> = ({ igCallback, loading }) => {
   return (
     <div>
-      <InstagramLogin
+      {/* <InstagramLogin
         clientId="TO DO"
         onSuccess={igCallback}
         onFailure={igCallback}
@@ -28,7 +27,7 @@ const SocialLoginInstagram: React.FC<IProps> = ({ igCallback, loading }) => {
             Prijava putem Instagrama
           </button>
         )}
-      />
+      /> */}
     </div>
   );
 };
