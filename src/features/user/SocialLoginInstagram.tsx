@@ -1,7 +1,7 @@
-import { observer } from "mobx-react-lite";
-import React from "react";
-import InstagramLogin from "instagram-login-react";
 import Icon from "../../app/components/Icon";
+import InstagramLogin from "@amraneze/react-instagram-login";
+import React from "react";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   igCallback: (response: any) => void;
