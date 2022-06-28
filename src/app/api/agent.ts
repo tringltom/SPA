@@ -1,4 +1,4 @@
-import { ActivityTypes, IActivitiesEnvelope, IActivity, IActivityFormValues, IApprovedActivitiesEnvelope, IChallengeAnswerEnvelope, IChallengeAnswerForm, IChallengeEnvelope, IHappeningEnvelope, IPendingActivitiesEnvelope, IPendingActivity } from "../models/activity";
+import { ActivityTypes, IActivitiesEnvelope, IActivity, IActivityFormValues, IApprovedActivitiesEnvelope, IChallengeAnswerEnvelope, IChallengeAnswerForm, IChallengeEnvelope, IFavoritedActivitiesEnvelope, IHappeningEnvelope, IPendingActivitiesEnvelope, IPendingActivity } from "../models/activity";
 import { IReview, ReviewTypes } from "../models/review";
 import { IUser, IUserEnvelope, IUserFormValues, IUserImageEnvelope } from "../models/user";
 import axios, { AxiosResponse } from "axios";
@@ -121,6 +121,8 @@ const Activity = {
     axios.get("/activities/others",{params: params}).then(responseBody),
   getApprovedActivities:(id: number, params: URLSearchParams) : Promise<IApprovedActivitiesEnvelope> => 
     axios.get(`/activities/approved-activities/user/${id}`,{params: params}).then(responseBody),
+  getFavoritedActivities:(id: number, params: URLSearchParams) : Promise<IFavoritedActivitiesEnvelope> => 
+    axios.get(`/activities/favorited-activities/user/${id}`,{params: params}).then(responseBody),
   getHappeningsForApproval: (params: URLSearchParams) : Promise<IHappeningEnvelope> =>
     axios.get("/activities/pending-happenings",{params: params}).then(responseBody),
   getChallengeAnswers: (activityId: string, params: URLSearchParams) : Promise<IChallengeAnswerEnvelope> =>
