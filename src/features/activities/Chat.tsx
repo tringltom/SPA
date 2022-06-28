@@ -53,7 +53,7 @@ const Chat = () => {
         <Comment.Group>
           {approvedActivity && approvedActivity.comments && approvedActivity.comments.map((comment) => (
           <Comment key={comment.id}>
-          <Comment.Avatar src={comment.image.url || '/assets/user.png'} />
+          <Comment.Avatar src={comment.image?.url || '/assets/user.png'} />
           <Comment.Content>
             <Comment.Author as={Link} to={`/profile/${comment.userId}`}>{comment.userName}</Comment.Author>
             <Comment.Metadata>
