@@ -24,11 +24,20 @@ export default class ProfileStore {
     );
   };
 
-  loadingInitial = false;
-  pendingActivitiesPage = 0;
-  predicate = new Map();
   pendingActivitiesRegistry = new Map();
+  approvedActivitiesRegistry = new Map();
+  favoritedActivitiesRegistry = new Map();
+
+  pendingActivitiesPage = 0;
+  approvedActivitiesPage = 0;
+  favoritedActivitiesPage = 0;
+  
+  predicate = new Map();
+  loadingInitial = false;
+
   pendingActivityCount = 0;
+  approvedActivityCount = 0;
+  favoritedActivityCount = 0;
 
   skillData : ISkillData | null = null;
   skillMap : Map<string, boolean> = new Map<string, boolean>();
@@ -52,9 +61,53 @@ export default class ProfileStore {
     return params;
   }
 
+  get approvedActivityAxiosParams() {
+    const params = new URLSearchParams();
+    params.append("limit", String(LIMIT));
+    params.append(
+      "offset",
+      `${this.approvedActivitiesPage ? this.approvedActivitiesPage * LIMIT : 0}`
+    );
+    this.predicate.forEach((value, key) => {
+      if (key.includes("Array")) {
+        var arrayValue = JSON.parse("[" + value + "]");
+        arrayValue.map((el: any) =>
+          params.append(key.replace("Array", ""), el)
+        );
+      } else params.append(key, value);
+    });
+    return params;
+  }
+
+  get favoritedActivityAxiosParams() {
+    const params = new URLSearchParams();
+    params.append("limit", String(LIMIT));
+    params.append(
+      "offset",
+      `${this.favoritedActivitiesPage ? this.favoritedActivitiesPage * LIMIT : 0}`
+    );
+    this.predicate.forEach((value, key) => {
+      if (key.includes("Array")) {
+        var arrayValue = JSON.parse("[" + value + "]");
+        arrayValue.map((el: any) =>
+          params.append(key.replace("Array", ""), el)
+        );
+      } else params.append(key, value);
+    });
+    return params;
+  }
+
   get pendingActivitiesArray() {
     return Array.from(this.pendingActivitiesRegistry.values());
   };
+
+  get approvedActivitiesArray() {
+    return Array.from(this.approvedActivitiesRegistry.values());
+  }
+
+  get favoritedActivitiesArray() {
+    return Array.from(this.favoritedActivitiesRegistry.values());
+  }
 
   get totalPendingActivityPages() {
     return Math.ceil(this.pendingActivityCount / LIMIT);
@@ -63,6 +116,22 @@ export default class ProfileStore {
   setPendingActivitiesPage = (page: number) => {
     this.pendingActivitiesPage = page;
   };
+
+  setApprovedActivitiesPage = (page: number) => {
+    this.approvedActivitiesPage = page;
+  };
+
+  setFavoritedActivitiesPage = (page: number) => {
+    this.favoritedActivitiesPage = page;
+  }
+
+  get totalApprovedActivityPages() {
+    return Math.ceil(this.approvedActivityCount / LIMIT);
+  }
+
+  get totalFavoritedActivitiyPages() {
+    return Math.ceil(this.favoritedActivityCount / LIMIT);
+  }
 
   setPredicate = (predicate: string, value: string | Date) => {
     if (this.predicate.has(predicate))
@@ -94,6 +163,57 @@ export default class ProfileStore {
       });
     }
   };
+
+  loadApprovedActivitiesForUser = async (userId: number) => {
+    this.loadingInitial = true;
+    this.approvedActivitiesRegistry.clear();
+    try {
+      const approvedActivitiesEnvelope =
+        await agent.Activity.getApprovedActivities(
+          userId,
+          this.approvedActivityAxiosParams
+        );
+      const { activities, activityCount } = approvedActivitiesEnvelope;
+      runInAction(() => {
+        activities.forEach((activity) => {
+          this.approvedActivitiesRegistry.set(activity.id, activity);
+        });
+        this.approvedActivityCount = activityCount;
+        this.loadingInitial = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        console.log(error);
+        this.loadingInitial = false;
+      });
+    }
+  };
+
+  loadFavoritedActivitiesForUser = async (userId: number) => {
+    this.loadingInitial = true;
+    this.favoritedActivitiesRegistry.clear();
+    try {
+      const favoritedActivitiesEnvelope =
+        await agent.Activity.getFavoritedActivities(
+          userId,
+          this.favoritedActivityAxiosParams
+        );
+      const { activities, activityCount } = favoritedActivitiesEnvelope;
+      runInAction(() => {
+        activities.forEach((activity) => {
+          this.favoritedActivitiesRegistry.set(activity.id, activity);
+        });
+        this.favoritedActivityCount = activityCount;
+        this.loadingInitial = false;
+      });      
+    } catch (error) {
+      runInAction(() => {
+        console.log(error);
+        this.loadingInitial = false;
+      });
+    }
+  };
+
 
   setUserAbout = async (about: string) => {
     try {

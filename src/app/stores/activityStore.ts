@@ -27,13 +27,13 @@ export default class ActivityStore {
 
   submitting = false;
   pendingActivitiesRegistry = new Map();
-  approvedActivitiesRegistry = new Map();
+  approvedActivitiesRegistry = new Map();  
   pendingHappeningActivitiesRegistry = new Map();
   challengeAnswersRegistry = new Map();
   challengeApprovalRegistry = new Map();
 
   pendingActivitiesPage = 0;
-  approvedActivitiesPage = 0;
+  approvedActivitiesPage = 0;  
   pendingHappeningActivitiesPage = 0;
   challengeAnswersPage = 0;
   challengeApprovalPage = 0;
@@ -42,7 +42,7 @@ export default class ActivityStore {
   loadingInitial = false;
 
   pendingActivityCount = 0;
-  approvedActivityCount = 0;
+  approvedActivityCount = 0;  
   pendingHappeningActivityCount = 0;
   challengeAnswerCount = 0;
   challengeApprovalCount = 0;

@@ -9,13 +9,13 @@ import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
 
 const validate = combineValidators({
-    answer: composeValidators(
-      isRequired({ message: "Odgovor je neophodan" }),
-      hasLengthLessThan(100)({
-        message: "Za odgovor je dozvoljeno maksimalno 100 karaktera",
-      })
-    )()
-  });
+  answer: composeValidators(
+    isRequired({ message: "Odgovor je neophodan" }),
+    hasLengthLessThan(100)({
+      message: "Za odgovor je dozvoljeno maksimalno 100 karaktera",
+    })
+  )(),
+});
 
 const PuzzleAnswerForm : React.FC<{activityId: string}> = ({activityId})  => {
   const rootStore = useContext(RootStoreContext);
