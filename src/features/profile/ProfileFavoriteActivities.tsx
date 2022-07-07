@@ -4,14 +4,14 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
+import { debounce } from 'lodash';
 
 interface IProps {
     userId: string;
   }
 
 const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
-    const rootStore = useContext(RootStoreContext);
-    const {setPredicate} = rootStore.profileStore;    
+    const rootStore = useContext(RootStoreContext);    
     const { resolveFavoriteActivity, resolvingFavourite } = rootStore.favoriteStore;
   
     const {
@@ -20,8 +20,15 @@ const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
         favoritedActivitiesPage,
         totalFavoritedActivitiyPages,
         favoritedActivitiesArray,
-        loadFavoritedActivitiesForUser
+        loadFavoritedActivitiesForUser,
+        setPredicate,
+        setUserId
     } = rootStore.profileStore;    
+
+    setUserId(Number(userId))
+
+    const updateQuery = (e: any) => setPredicate("title", e.target.value)
+    const handleSearch = debounce(updateQuery, 500)
 
     const [loadingNext, setLoadingNext] = useState(false);
 
@@ -63,7 +70,7 @@ const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
           icon="spinner"
           iconPosition="left"
           placeholder="Pretraži aktivnosti..."
-          onChange={(e) => setPredicate("title", e.target.value)}
+          onChange={handleSearch}
         />
         {loadingInitial && !loadingNext ? (
           <Loader active inline="centered" />

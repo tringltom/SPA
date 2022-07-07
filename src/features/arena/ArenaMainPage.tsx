@@ -1,5 +1,6 @@
 import { Dropdown, DropdownItemProps, Grid, Input, Loader } from 'semantic-ui-react'
 import { useContext, useEffect, useState } from 'react';
+import { debounce } from 'lodash';
 
 import ActivityList from '../activities/ActivityList';
 import { ActivityTypes } from '../../app/models/activity';
@@ -35,6 +36,9 @@ const ArenaMainPage: React.FC<IProps> = ({initialLoad}) => {
       getApprovedActivitiesFromOtherUsers().then(() => setLoadingNext(false));
     }
 
+    const updateQuery = (e: any) => setPredicate("title", e.target.value)
+    const handleSearch = debounce(updateQuery, 500)
+
     const options = Object.keys(ActivityTypes).map((key: any, el) => {
       if (ActivityTypes[el + 1] !== undefined)
         return {key: key, text: ActivityTypes[el + 1], value: Number(key)}
@@ -59,7 +63,7 @@ const ArenaMainPage: React.FC<IProps> = ({initialLoad}) => {
             icon="thumbs up"
             iconPosition="left"
             placeholder="Pretraži aktivnosti..."
-            onChange={(e) => setPredicate("title", e.target.value)}
+            onChange={handleSearch}
           />
           {(loadingInitial && approvedActivitiesPage === 0) ||
           loadingReviews ||

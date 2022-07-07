@@ -5,6 +5,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
+import { debounce } from 'lodash';
 
 interface IProps {
     userId: string;
@@ -12,7 +13,6 @@ interface IProps {
 
 const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
     const rootStore = useContext(RootStoreContext);
-    const {setPredicate} = rootStore.profileStore;
   
     const {
         loadingInitial,
@@ -20,8 +20,12 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
         approvedActivitiesPage,
         totalApprovedActivityPages,
         approvedActivitiesArray,
-        loadApprovedActivitiesForUser
+        loadApprovedActivitiesForUser,
+        setPredicate,
+        setUserId
     } = rootStore.profileStore;
+
+    setUserId(Number(userId))    
 
     const [loadingNext, setLoadingNext] = useState(false);
     
@@ -36,7 +40,10 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
         loadApprovedActivitiesForUser(Number(userId)).then(() => setLoadingNext(false));
     }
 
-    const options = Object.keys(ActivityTypes).map((key: any, el) => {
+  const updateQuery = (e: any) => setPredicate("title", e.target.value)
+  const handleSearch = debounce(updateQuery, 500)
+
+    const options = Object.keys(ActivityTypes).map((key: any, el) => {        
         if (ActivityTypes[el + 1] !== undefined)
           return {key: key, text: ActivityTypes[el + 1], value: Number(key)}
         return undefined
@@ -59,7 +66,7 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
           icon="spinner"
           iconPosition="left"
           placeholder="Pretraži aktivnosti..."
-          onChange={(e) => setPredicate("title", e.target.value)}
+          onChange={handleSearch}
         />
         {loadingInitial && !loadingNext ? (
           <Loader active inline="centered" />
