@@ -51,23 +51,27 @@ const TwVerifyEmail: React.FC<RouteComponentProps> = ({ location }) => {
       case Status.Failed:
         return (
           <div className="text-center">
-            <Typography variant={Typography.variant.bodyL}>
-                Potvrda neuspešna,<br/> možete opet da zatražite potvrdu pošte</Typography>
+            <Typography variant={Typography.variant.body} className="md:pb-5">
+                Potvrda neuspešna, možete opet da <br className="hidden sm:block" />zatražite potvrdu pošte</Typography>
             <Button
               onClick={handleConfirmEmailResend}
-              size={Button.size.xlCentered}
-              fullWidth
+              variant={Button.variant.primary}              
+              size={Button.size.md}
+              className="shadow-[0_8px_10px_-6px_rgba(1,183,255,1)]"
+              fullWidth            
             >Pošalji potvrdu</Button>
           </div>
         );
       case Status.Success:
         return (
           <div className="text-center">
-            <Typography variant={Typography.variant.bodyL}>
-                Vaša registracija je uspešna,<br/> možete da se prijavite</Typography>
+            <Typography variant={Typography.variant.body} className="md:pb-5">
+                Vaša registracija je uspešna,<br className="hidden sm:block" /> možete da se prijavite</Typography>
             <Button
               onClick={() => openModal(<TwLoginForm />)}
-              size={Button.size.xlCentered}
+              variant={Button.variant.primary}              
+              size={Button.size.md}
+              className="shadow-[0_8px_10px_-6px_rgba(1,183,255,1)]"
               fullWidth
             >Prijavi se</Button>
           </div>
@@ -76,21 +80,19 @@ const TwVerifyEmail: React.FC<RouteComponentProps> = ({ location }) => {
   };
 
   return (
-      <div className="w-full h-full top-0 left-0 fixed bg-[#7D36DC] grid"> 
-        <div className="h-[80%] w-[87.5%] md:w-[650px] m-auto bg-white rounded-lg self-center"
-             >
+      <div className="flex min-h-screen items-center justify-center p-4 text-center bg-[#7D36DC]"> 
+        <div className="w-full sm:max-w-modal transform overflow-hidden rounded-2xl bg-white p-6 md:py-8 md:px-20 align-middle shadow-xl transition-all">
           <Image
-            imageStyle="mx-auto py-14 sm:py-20 w-[55%]"
-            src="/assets/LogInEkvitiLogo.png"
+            imageStyle="mx-auto w-[170px]"
+            src="/assets/ekviti-logo.svg"
             alt="Ekviti logo"
           />
           <Image
-            imageStyle="mx-auto mb-2"
+            imageStyle="mx-auto py-8"
             src="/assets/KnightRegistration.png"
             alt="Vitez"
           />
-          <Typography variant={Typography.variant.bodyXl} color={Typography.color.text}
-                className={"sm:text-3xl my-0 py-8 font-bold"}>
+          <Typography variant={Typography.variant.h3} color={Typography.color.text} className="m-0 pb-5">
               Potvrda e-maila</Typography>
           <Fragment>{getBody()}</Fragment>
         </div>
