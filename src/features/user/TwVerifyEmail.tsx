@@ -92,7 +92,7 @@ const TwVerifyEmail: React.FC<RouteComponentProps> = ({ location }) => {
             src="/assets/KnightRegistration.png"
             alt="Vitez"
           />
-          <Typography variant={Typography.variant.h3} color={Typography.color.text} className="m-0 pb-5">
+          <Typography variant={Typography.variant.h3} color={Typography.color.text}>
               Potvrda e-maila</Typography>
           <Fragment>{getBody()}</Fragment>
         </div>
