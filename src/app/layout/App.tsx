@@ -88,7 +88,7 @@ const App: React.FC<RouteComponentProps> = () => {
           {isLoggedIn ? (
             <Redirect to={{ pathname: "/arena", state: "/" }} />
           ) : (
-            <Redirect to={{ pathname: "/users/verifyEmail", state: "/" }} />
+            <WelcomeScreen/>
           )}
         </Route>
 
