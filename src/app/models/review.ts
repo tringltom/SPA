@@ -4,6 +4,7 @@ export interface IReview {
     activityId: number,
     activityTypeId: ActivityTypes
     reviewTypeId: ReviewTypes
+    userId: number
   };
 
   export enum ReviewTypes{

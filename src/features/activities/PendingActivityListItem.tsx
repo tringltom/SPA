@@ -44,7 +44,7 @@ export const PendingActivityListItem: React.FC<{activity: IActivity}> = ({activi
           <Item>
             <Item.Content>
               <Item.Header>{activity.title}</Item.Header>
-              <Item.Description>
+              <Item.Description as='a' href={`/profile/${activity.userId}`}>
                 Stvaralac: {activity.userName}
               </Item.Description>
               {activity.photos?.map((photo: IPhoto) => (

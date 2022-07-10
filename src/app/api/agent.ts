@@ -106,6 +106,7 @@ const Session = {
 const User = {
   getRankedUsers: (params: URLSearchParams): Promise<IUserEnvelope> =>
     axios.get('/users', {params: params}).then(responseBody),
+  getUser:(id: number): Promise<IUser> => requests.get(`/users/${id}`),
   getImagesForApproval: (params: URLSearchParams): Promise<IUserImageEnvelope> => 
     axios.get('/users/pending-images', {params: params}).then(responseBody),
   updateAbout: (about: string): Promise<string> => requests.patch("/users/me/about", {about}),
