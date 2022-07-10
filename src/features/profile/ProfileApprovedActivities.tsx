@@ -23,16 +23,15 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
         loadApprovedActivitiesForUser,
         setPredicate,
         setUserId
-    } = rootStore.profileStore;
-
-    setUserId(Number(userId))    
+    } = rootStore.profileStore;     
 
     const [loadingNext, setLoadingNext] = useState(false);
     
     useEffect(() => {
+        setUserId(Number(userId))   
         setApprovedActivitiesPage(0);
         loadApprovedActivitiesForUser(Number(userId));
-    }, [setApprovedActivitiesPage, loadApprovedActivitiesForUser, userId]);
+    }, [setApprovedActivitiesPage, loadApprovedActivitiesForUser, userId, setUserId]);
 
     const handleGetNext = (data: any) => {
         setLoadingNext(true);

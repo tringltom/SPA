@@ -23,9 +23,7 @@ const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
         loadFavoritedActivitiesForUser,
         setPredicate,
         setUserId
-    } = rootStore.profileStore;    
-
-    setUserId(Number(userId))
+    } = rootStore.profileStore;        
 
     const updateQuery = (e: any) => setPredicate("title", e.target.value)
     const handleSearch = debounce(updateQuery, 500)
@@ -37,9 +35,10 @@ const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
     }
     
     useEffect(() => {
+        setUserId(Number(userId))
         setFavoritedActivitiesPage(0);
         loadFavoritedActivitiesForUser(Number(userId));        
-    }, [setFavoritedActivitiesPage, loadFavoritedActivitiesForUser, userId, resolvingFavourite]);    
+    }, [setFavoritedActivitiesPage, loadFavoritedActivitiesForUser, userId, resolvingFavourite, setUserId]);    
 
     const handleGetNext = (data: any) => {
         setLoadingNext(true);
