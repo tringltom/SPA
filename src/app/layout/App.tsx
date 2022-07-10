@@ -33,6 +33,7 @@ import VerifyEmail from "../../features/user/VerifyEmail";
 import WelcomeScreen from "../../features/WelcomeScreen";
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
+import { LoadScript } from '@react-google-maps/api';
 
 const App: React.FC<RouteComponentProps> = () => {
   const rootStore = useContext(RootStoreContext);
@@ -79,6 +80,7 @@ const App: React.FC<RouteComponentProps> = () => {
     <Fragment>
       <div style={{ pointerEvents: rootStore.allowEvents ? "all" : "none", height: "100%" }}>
         <ModalContainer />
+        <LoadScript googleMapsApiKey="AIzaSyAmBJgthOUogdV-itdhFZoN1U30ifQ2Lys&libraries=places&language=sr-Latn">
         <ToastContainer position="bottom-right" />
 
         <Route exact path="/">
@@ -127,6 +129,7 @@ const App: React.FC<RouteComponentProps> = () => {
             </Fragment>
           )}
         />
+        </LoadScript>
       </div>
     </Fragment>
   );

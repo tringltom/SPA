@@ -5,6 +5,7 @@ import ProfileSkills from './ProfileSkills';
 import {Tab} from 'semantic-ui-react';
 import { useContext } from 'react';
 import { RootStoreContext } from '../../app/stores/rootStore';
+import ProfileFavoriteActivities from './ProfileFavoriteActivities';
 
 interface IProps {
   userId: string;
@@ -22,7 +23,7 @@ const ProfileContent: React.FC<IProps> = ({ userId }) => {
         {menuItem: 'Veštine', render: () => <Tab.Pane><ProfileSkills userId={userId} isProfileOwner={isProfileOwner()}/></Tab.Pane>},
         {menuItem: 'Aktivnosti na čekanju', render: () =><Tab.Pane active={isProfileOwner()}><ProfilePendingActivities/></Tab.Pane>},
         {menuItem: 'Odobrene aktivnosti', render: () => <Tab.Pane><ProfileApprovedActivities userId={userId}/></Tab.Pane>},
-        {menuItem: 'Omiljene aktivnosti', render: () => <Tab.Pane>Omiljene aktivnosti</Tab.Pane>},
+        {menuItem: 'Omiljene aktivnosti', render: () => <Tab.Pane><ProfileFavoriteActivities userId={userId} /></Tab.Pane>},
     ]
 
     return (

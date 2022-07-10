@@ -1,1 +1,1 @@
-declare module 'instagram-login-react';
+declare module '@amraneze/react-instagram-login';

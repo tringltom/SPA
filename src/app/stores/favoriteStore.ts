@@ -13,7 +13,7 @@ export default class FavoriteStore {
 
   favoriteRegistry = new Map();
   loading = false;
-  resolvingFavourite = false;
+  resolvingFavourite = false;  
 
   get favoritesArray() {
     return Array.from(this.favoriteRegistry.values());

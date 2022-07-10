@@ -29,10 +29,26 @@ export interface IActivityFormValues {
     activityCount: number;
   };
 
+  export interface IFavoritedActivitiesEnvelope {
+    activities: IFavoritedActivity[];
+    activityCount: number;
+  };
+
   export interface IApprovedActivity {
     type: ActivityTypes;
     title: string;
     dateApproved?: string | null;
+    numberOfFavorites?: number;
+    numberOfAwesomeReviews?: number;
+    numberOfGoodReviews?: number;
+    numberOfNoneReviews?: number;
+    numberOfPoorReviews?: number;
+    [key: string]: any;
+  }
+
+  export interface IFavoritedActivity {
+    type: ActivityTypes;
+    title: string;    
     numberOfFavorites?: number;
     numberOfAwesomeReviews?: number;
     numberOfGoodReviews?: number;
@@ -50,6 +66,7 @@ export interface IActivityFormValues {
     isUserAttending: boolean,
     isHeld : boolean,
     isChallengeAnswered: boolean,
+    comments: IComment[]
   }; 
 
   export interface IPendingActivitiesEnvelope {
@@ -105,6 +122,15 @@ export interface IActivityFormValues {
   export interface IPhoto {
     id: string,
     url: string,
+  };
+
+  export interface IComment {
+    id: string,
+    body: string,
+    createdAt: string,
+    userName: string,
+    userId:string,
+    image: IPhoto
   };
 
   export enum ActivityTypes{

@@ -1,7 +1,6 @@
-import { observer } from "mobx-react-lite";
-import React from "react";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import Icon from "../../app/components/Icon";
+import React from "react";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   fbCallback: (response: any) => void;
@@ -11,7 +10,7 @@ interface IProps {
 const SocialLoginFacebook: React.FC<IProps> = ({ fbCallback, loading }) => {
   return (
     <div className="mb-3 sm:mb-5">
-      <FacebookLogin
+      {/* <FacebookLogin
         appId="TO DO"
         fields="name,email,picture"
         callback={fbCallback}
@@ -27,7 +26,7 @@ const SocialLoginFacebook: React.FC<IProps> = ({ fbCallback, loading }) => {
             Prijava putem Fejsbuka
           </button>
         )}
-      />
+      /> */}
     </div>
   );
 };
