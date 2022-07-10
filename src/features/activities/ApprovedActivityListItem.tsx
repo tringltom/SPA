@@ -91,16 +91,24 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
         <Item.Group>
           <Item>
             <Item.Content>
-              <Item.Header><Link
-                      to={{
-                        pathname: `/activity/${activity.id}/${favorite}/${review}`
-                      }}
-                    >
-                      {activity.title}
-                    </Link></Item.Header>
-              <Item.Description>
-                Stvaralac: {activity.userName}
-              </Item.Description>
+              <Item.Header>
+                <Link
+                  to={{
+                    pathname: `/activity/${activity.id}/${favorite}/${review}`,
+                  }}
+                >
+                  {activity.title}
+                </Link>
+              </Item.Header>
+              <Item.Header>
+                <Link
+                  to={{
+                    pathname: `/profile/${activity.userId}`,
+                  }}
+                >
+                  Stvaralac: {activity.userName}
+                </Link>
+              </Item.Header>
               {activity?.type === ActivityTypes.Happening && activity.isHost && (
                 <Item.Description>
                   <Label
@@ -115,10 +123,24 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
                   <Item.Image src={photo.url || "/assets/user.png"} />
                 </Card>
               ))}
-              {attendences > 0 && <Label basic style={{ color: EkvitiColors.primary }} content={`Broj učesnika: ${attendences}`}/>}
-              {activity.type === ActivityTypes.Happening 
-                && !activity.isHeld 
-                && <Button toggle loading={loadingAttendence} floated='right' style={{ color: EkvitiColors.secondary}} content={isAttending ? "Otkaži" : "Dolazim"} onClick={toggleAttendence}/>}
+              {attendences > 0 && (
+                <Label
+                  basic
+                  style={{ color: EkvitiColors.primary }}
+                  content={`Broj učesnika: ${attendences}`}
+                />
+              )}
+              {activity.type === ActivityTypes.Happening &&
+                !activity.isHeld && (
+                  <Button
+                    toggle
+                    loading={loadingAttendence}
+                    floated="right"
+                    style={{ color: EkvitiColors.secondary }}
+                    content={isAttending ? "Otkaži" : "Dolazim"}
+                    onClick={toggleAttendence}
+                  />
+                )}
             </Item.Content>
           </Item>
         </Item.Group>
@@ -151,20 +173,57 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
       )}
       <Segment secondary>{activity.description}</Segment>
       <Segment clearing>
-        {activity.isHost && !activity.isChallengeAnswered && activity.type === ActivityTypes.Challenge && (
-          <Button icon='pencil' content='Izaberi odgovor' floated='left' as={Link} to={`/challengeAnswers/${activity.id}`}></Button>
-        )}
+        {activity.isHost &&
+          !activity.isChallengeAnswered &&
+          activity.type === ActivityTypes.Challenge && (
+            <Button
+              icon="pencil"
+              content="Izaberi odgovor"
+              floated="left"
+              as={Link}
+              to={`/challengeAnswers/${activity.id}`}
+            ></Button>
+          )}
         {activity.type === ActivityTypes.Puzzle && (
-          <Button icon='microphone' content='Odgovori' floated='right' onClick={() => openModal(<PuzzleAnswerForm activityId={activity.id} />)}></Button>
+          <Button
+            icon="microphone"
+            content="Odgovori"
+            floated="right"
+            onClick={() =>
+              openModal(<PuzzleAnswerForm activityId={activity.id} />)
+            }
+          ></Button>
         )}
-        {!activity.isHost && !activity.isChallengeAnswered && activity.type === ActivityTypes.Challenge && (
-          <Button icon='hand peace' content='Odgovori' floated='right' onClick={() => openModal(<ChallengeAnswerForm activityId={activity.id} />)}></Button>
-        )}
+        {!activity.isHost &&
+          !activity.isChallengeAnswered &&
+          activity.type === ActivityTypes.Challenge && (
+            <Button
+              icon="hand peace"
+              content="Odgovori"
+              floated="right"
+              onClick={() =>
+                openModal(<ChallengeAnswerForm activityId={activity.id} />)
+              }
+            ></Button>
+          )}
       </Segment>
-      <Segment>
-        <Button icon='favorite' loading={resolvingFavourite} active={isFavorite} onClick={toggleFavorite}/>
-        <ReviewButtonsComponent buttonData={buttonData} activeButton={activeButton} handleReviewClick={handleReviewClick} loading={reviewing} float='right'/>
-      </Segment>
+      {userId != Number(activity.userId) && (
+        <Segment>
+          <Button
+            icon="favorite"
+            loading={resolvingFavourite}
+            active={isFavorite}
+            onClick={toggleFavorite}
+          />
+          <ReviewButtonsComponent
+            buttonData={buttonData}
+            activeButton={activeButton}
+            handleReviewClick={handleReviewClick}
+            loading={reviewing}
+            float="right"
+          />
+        </Segment>
+      )}
     </Segment.Group>
   );
 }

@@ -4,6 +4,7 @@ import React, { useContext } from 'react'
 import { IUser } from '../../app/models/user';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 
 interface IProps {
     users: IUser[] | null ;
@@ -12,7 +13,7 @@ interface IProps {
 const ArenaList: React.FC<IProps> = ({users}) => {
   const rootStore = useContext(RootStoreContext);
   const {setPredicate} = rootStore.userStore;
-
+  
     return (
       <Segment clearing>
         <Input
@@ -35,7 +36,13 @@ const ArenaList: React.FC<IProps> = ({users}) => {
                   style={{ marginBottom: 3 }}
                 />
                 <Item.Content>
-                  <Item.Header as="a">{user.userName}</Item.Header>
+                 <Link 
+                  to={{
+                    // pathname: `/users/getUserProfile/${user.id}`,
+                     pathname : `/profile/${user.id}`,
+                    }}>
+                      {user.userName}
+                    </Link>
                   <Item.Meta>
                     Trenutni broj iskustvenih poena : {user?.currentXp}
                   </Item.Meta>

@@ -12,6 +12,7 @@ export default class UserStore {
   refreshTokenTimeout: any;
   rootStore: RootStore;
   user: IUser | null = null;
+  userProfile: IUser | null = null;
   loading = false;
 
   constructor(rootStore: RootStore) {
@@ -179,6 +180,15 @@ export default class UserStore {
         this.startRefreshTokenTimer(user);
     } catch (error) {}
   };
+
+  getUserProfile = async (userId: number) => {
+    try {
+      const userProfile = await agent.User.getUser(userId);
+      runInAction(() => {
+        this.userProfile = userProfile;
+      });
+    } catch (error) {}
+  }
 
   logout = async () => {
     try {
