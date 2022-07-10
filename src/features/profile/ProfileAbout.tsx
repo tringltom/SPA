@@ -8,22 +8,25 @@ import ModalYesNo from '../../app/common/modals/ModalYesNo';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { TextAreaInput } from '../../app/common/form/TextAreaInput';
 
+interface IProps {
+  isProfileOwner: boolean | undefined;
+}
 const validate = combineValidators({about: hasLengthLessThan(2000)({message: 'Za opis je dozvoljeno maksimalno 2000 karaktera'})});
 
-export const ProfileAbout = () => {
+export const ProfileAbout: React.FC<IProps> = ({ isProfileOwner }) => {
   const rootStore = useContext(RootStoreContext);
   const { user } = rootStore.userStore;
   const { setUserAbout } = rootStore.profileStore;
   const { openModal } = rootStore.modalStore;
-
+console.log(isProfileOwner);
   const [edit, setEdit] = useState(false);
 
   return (
     <Segment clearing>
       <Header as="h2" textAlign="center" content="O Korisniku" />
-      {!edit && 
+      {!edit && isProfileOwner && (
         <Fragment>
-          <p style={{textAlign:"justify"}}>{user?.about}</p>
+          <p style={{ textAlign: "justify" }}>{user?.about}</p>
           <Button
             floated="right"
             content="Izmeni"
@@ -31,12 +34,12 @@ export const ProfileAbout = () => {
             onClick={() => setEdit(true)}
           />
         </Fragment>
-      }
+      )}
       {edit && (
         <FinalForm
           validate={validate}
           initialValues={user}
-          onSubmit={(values : IUser) => {
+          onSubmit={(values: IUser) => {
             openModal(
               <ModalYesNo
                 handleConfirmation={() =>
@@ -76,4 +79,4 @@ export const ProfileAbout = () => {
       )}
     </Segment>
   );
-}
+};
