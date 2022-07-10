@@ -77,6 +77,7 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
                   {activity.title}
                 </Link>
               </Item.Header>
+              <p></p>
               <Item.Header>
                 <Link
                   to={{

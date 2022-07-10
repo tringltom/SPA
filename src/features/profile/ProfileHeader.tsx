@@ -2,18 +2,25 @@ import { Button, Container, Form, Grid, Header, Icon, Item, Segment } from 'sema
 import { Field, Form as FinalForm } from "react-final-form";
 import { combineValidators, isRequired } from 'revalidate';
 import { useContext, useState } from 'react';
-
 import { FileInput } from '../../app/common/form/FileInput';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
+import { IUser } from '../../app/models/user';
+
+interface IProps {
+  user: IUser | null;
+};
 
 const validate = combineValidators({images: isRequired({message: 'Slika je neophodna'})});
 
-const ProfileHeader = () => {
+const ProfileHeader : React.FC<IProps> = ({ user }) => {
+
   const rootStore = useContext(RootStoreContext);
-  const { user } = rootStore.userStore;
   const { openModal } = rootStore.modalStore;
   const { setUserImage } = rootStore.profileStore;
+  const { user: loggedInUser} = rootStore.userStore;
+
+  const isLoggedInUser = () => user?.id === loggedInUser?.id;
 
   const [hovered, setHovered] = useState(false);
 
@@ -27,9 +34,9 @@ const ProfileHeader = () => {
                 avatar
                 size="small"
                 src={user?.image?.url || "/assets/user.png"}
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
-                onClick={() =>
+                onMouseEnter={() => {if (isLoggedInUser()) setHovered(true);}}
+                onMouseLeave={() => {if (isLoggedInUser())setHovered(false);}}
+                onClick={() => {if (isLoggedInUser())
                   openModal(
                     <Container>
                       <FinalForm
@@ -66,8 +73,8 @@ const ProfileHeader = () => {
                     </Container>,
                     true,
                     false
-                  )
-                }
+                  );
+                }}
                 label={
                   hovered ? (
                     <Icon

@@ -4,15 +4,18 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 
 interface IProps {
     userId: string;
+    isProfileOwner: boolean | undefined;
   }
 
-const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
+const ProfileFavoriteActivities: React.FC<IProps> = ({ userId, isProfileOwner }) => {
     const rootStore = useContext(RootStoreContext);
     const {setPredicate} = rootStore.profileStore;    
     const { resolveFavoriteActivity, resolvingFavourite } = rootStore.favoriteStore;
+    const {reviewsForCurrentUserArray} = rootStore.reviewStore;
   
     const {
         loadingInitial,
@@ -72,13 +75,15 @@ const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Tip</Table.HeaderCell>
-                <Table.HeaderCell>Naziv</Table.HeaderCell>                
+                <Table.HeaderCell>Naziv</Table.HeaderCell>
                 <Table.HeaderCell>Broj loših ocena</Table.HeaderCell>
                 <Table.HeaderCell>Broj neutralnih ocena</Table.HeaderCell>
                 <Table.HeaderCell>Broj dobrih ocena</Table.HeaderCell>
                 <Table.HeaderCell>Broj super ocena</Table.HeaderCell>
                 <Table.HeaderCell>Broj favorita/omiljenih</Table.HeaderCell>
-                <Table.HeaderCell>Ukloni favorita</Table.HeaderCell>
+                {isProfileOwner && (
+                  <Table.HeaderCell>Ukloni favorita</Table.HeaderCell>
+                )}
               </Table.Row>
             </Table.Header>
 
@@ -86,7 +91,21 @@ const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
               {favoritedActivitiesArray.map((activity: IActivity) => (
                 <Table.Row key={activity.id}>
                   <Table.Cell content={ActivityTypes[activity.type]} />
-                  <Table.Cell content={activity.title} />
+                  <Table.Cell
+                    content={
+                      <Link
+                        to={{
+                          pathname: `/activity/${activity.id}/${true}/${
+                            reviewsForCurrentUserArray.find(
+                              (ra) => ra.activityId === +activity.id
+                            )?.reviewTypeId
+                          }`,
+                        }}
+                      >
+                        {activity.title}
+                      </Link>
+                    }
+                  />
                   <Table.Cell
                     icon="thumbs down"
                     content={activity.numberOfPoorReviews}
@@ -107,9 +126,17 @@ const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
                     icon="favorite"
                     content={activity.numberOfFavorites}
                   />
-                  <Table.Cell                    
-                    content={<Button icon="times" loading={resolvingFavourite} onClick={() => handleClick(activity.id)} />}
-                  />
+                  {isProfileOwner && (
+                    <Table.Cell
+                      content={
+                        <Button
+                          icon="times"
+                          loading={resolvingFavourite}
+                          onClick={() => handleClick(activity.id)}
+                        />
+                      }
+                    />
+                  )}
                 </Table.Row>
               ))}
             </Table.Body>

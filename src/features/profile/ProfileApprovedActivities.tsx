@@ -6,7 +6,6 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
-import { GenerateActivityRoute } from './utils/GenerateActivityRoute';
 
 interface IProps {
     userId: string;
