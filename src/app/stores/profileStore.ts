@@ -11,7 +11,7 @@ const LIMIT = 5;
 export default class ProfileStore {
   rootStore: RootStore;
   constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
+    this.rootStore = rootStore;    
     makeAutoObservable(this);   
 
     reaction(
@@ -19,7 +19,13 @@ export default class ProfileStore {
       () => {
         this.pendingActivitiesPage = 0;
         this.pendingActivitiesRegistry.clear();
-        this.loadPendingActivitiesForUser();
+        this.loadPendingActivitiesForUser();  
+        this.approvedActivitiesPage = 0;
+        this.approvedActivitiesRegistry.clear();
+        this.loadApprovedActivitiesForUser(this.userId);
+        this.favoritedActivitiesPage = 0;
+        this.favoritedActivitiesRegistry.clear();
+        this.loadFavoritedActivitiesForUser(this.userId)
       }
     );
   };
@@ -39,9 +45,11 @@ export default class ProfileStore {
   approvedActivityCount = 0;
   favoritedActivityCount = 0;
 
+  userId = 0;
+
   skillData : ISkillData | null = null;
   skillMap : Map<string, boolean> = new Map<string, boolean>();
-  initialSkillMap : Map<string, boolean> = new Map<string, boolean>();
+  initialSkillMap : Map<string, boolean> = new Map<string, boolean>();  
   
   get pendingActivityAxiosParams() {
     const params = new URLSearchParams();
@@ -62,14 +70,14 @@ export default class ProfileStore {
   }
 
   get approvedActivityAxiosParams() {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams();    
     params.append("limit", String(LIMIT));
     params.append(
       "offset",
       `${this.approvedActivitiesPage ? this.approvedActivitiesPage * LIMIT : 0}`
     );
     this.predicate.forEach((value, key) => {
-      if (key.includes("Array")) {
+      if (key.includes("Array")) {        
         var arrayValue = JSON.parse("[" + value + "]");
         arrayValue.map((el: any) =>
           params.append(key.replace("Array", ""), el)
@@ -112,6 +120,10 @@ export default class ProfileStore {
   get totalPendingActivityPages() {
     return Math.ceil(this.pendingActivityCount / LIMIT);
   };
+
+  setUserId = (userId: number) => {
+    this.userId = userId;
+  }
 
   setPendingActivitiesPage = (page: number) => {
     this.pendingActivitiesPage = page;

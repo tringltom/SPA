@@ -1,4 +1,4 @@
-import { Route, RouteComponentProps, RouteProps } from 'react-router-dom'
+import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom'
 
 import { ActivityTypes } from '../models/activity'
 import React from 'react'
@@ -19,7 +19,7 @@ const PrivateRoute: React.FC<IProps> = ({component: Component, type, ...rest}) =
     return (
       <Route
         {...rest}
-        render={(props) => isLoggedIn && <Component {...props} />}
+        render={(props) => isLoggedIn ? <Component {...props} /> : <Redirect to="/" />}
       />
     );
 }
