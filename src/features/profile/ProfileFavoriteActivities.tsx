@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 interface IProps {
     userId: string;
-    isProfileOwner: boolean | undefined;
+    isProfileOwner: boolean | null;
   }
 
 const ProfileFavoriteActivities: React.FC<IProps> = ({ userId, isProfileOwner }) => {
@@ -95,11 +95,10 @@ const ProfileFavoriteActivities: React.FC<IProps> = ({ userId, isProfileOwner })
                     content={
                       <Link
                         to={{
-                          pathname: `/activity/${activity.id}/${true}/${
+                          pathname: `/activity/${activity.id}/true/${
                             reviewsForCurrentUserArray.find(
-                              (ra) => ra.activityId === +activity.id
-                            )?.reviewTypeId
-                          }`,
+                              (ra) => +ra.activityId === +activity.id
+                            )?.reviewTypeId}`,
                         }}
                       >
                         {activity.title}

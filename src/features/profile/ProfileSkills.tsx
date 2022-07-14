@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite';
 
 interface IProps {
   userId: string;
-  isProfileOwner: boolean | undefined;
+  isProfileOwner: boolean | null;
 }
 
 const ProfileSkills: React.FC<IProps> = ({ userId, isProfileOwner }) => {

@@ -13,7 +13,7 @@ interface IProps {
 
 const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
     const rootStore = useContext(RootStoreContext);
-    const {setPredicate} = rootStore.activityStore;
+    const {setPredicate} = rootStore.profileStore;
     const {favoritesArray} = rootStore.favoriteStore;
     const {reviewsForCurrentUserArray} = rootStore.reviewStore;
   

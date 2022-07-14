@@ -36,13 +36,13 @@ const ArenaList: React.FC<IProps> = ({users}) => {
                   style={{ marginBottom: 3 }}
                 />
                 <Item.Content>
-                 <Link 
-                  to={{
-                    // pathname: `/users/getUserProfile/${user.id}`,
-                     pathname : `/profile/${user.id}`,
-                    }}>
-                      {user.userName}
-                    </Link>
+                  <Link
+                    to={{
+                      pathname: `/profile/${user.id}`,
+                    }}
+                  >
+                    {user.userName}
+                  </Link>
                   <Item.Meta>
                     Trenutni broj iskustvenih poena : {user?.currentXp}
                   </Item.Meta>

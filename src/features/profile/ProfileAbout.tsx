@@ -9,7 +9,7 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { TextAreaInput } from '../../app/common/form/TextAreaInput';
 
 interface IProps {
-  isProfileOwner: boolean | undefined;
+  isProfileOwner: boolean | null;
 }
 const validate = combineValidators({about: hasLengthLessThan(2000)({message: 'Za opis je dozvoljeno maksimalno 2000 karaktera'})});
 
@@ -18,7 +18,6 @@ export const ProfileAbout: React.FC<IProps> = ({ isProfileOwner }) => {
   const { user } = rootStore.userStore;
   const { setUserAbout } = rootStore.profileStore;
   const { openModal } = rootStore.modalStore;
-console.log(isProfileOwner);
   const [edit, setEdit] = useState(false);
 
   return (
