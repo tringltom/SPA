@@ -9,18 +9,17 @@ import { IUser } from '../../app/models/user';
 
 interface IProps {
   user: IUser | null;
+  isProfileOwner: boolean | null;
 };
 
 const validate = combineValidators({images: isRequired({message: 'Slika je neophodna'})});
 
-const ProfileHeader : React.FC<IProps> = ({ user }) => {
+const ProfileHeader : React.FC<IProps> = ({ user, isProfileOwner }) => {
 
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
   const { setUserImage } = rootStore.profileStore;
-  const { user: loggedInUser} = rootStore.userStore;
 
-  const isLoggedInUser = () => user?.id === loggedInUser?.id;
 
   const [hovered, setHovered] = useState(false);
 
@@ -34,9 +33,9 @@ const ProfileHeader : React.FC<IProps> = ({ user }) => {
                 avatar
                 size="small"
                 src={user?.image?.url || "/assets/user.png"}
-                onMouseEnter={() => {if (isLoggedInUser()) setHovered(true);}}
-                onMouseLeave={() => {if (isLoggedInUser())setHovered(false);}}
-                onClick={() => {if (isLoggedInUser())
+                onMouseEnter={() => {if (isProfileOwner) setHovered(true);}}
+                onMouseLeave={() => {if (isProfileOwner)setHovered(false);}}
+                onClick={() => {if (isProfileOwner)
                   openModal(
                     <Container>
                       <FinalForm

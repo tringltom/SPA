@@ -16,7 +16,6 @@ const ProfileSkills: React.FC<IProps> = ({ userId, isProfileOwner }) => {
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
   const { skillData, skillMap, initialSkillMap, loadSkills, loadingInitial, resetSkills, updateSkills } = rootStore.profileStore;
-  const { user } = rootStore.userStore;
 
 
   const isSecondTreeActive = () => {

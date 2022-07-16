@@ -14,6 +14,7 @@ export default class UserStore {
   user: IUser | null = null;
   userProfile: IUser | null = null;
   loading = false;
+  isProfileOwner = false;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -188,6 +189,20 @@ export default class UserStore {
         this.userProfile = userProfile;
       });
     } catch (error) {}
+  }
+
+  getIsProfileOwner = async (userId: number) => {
+    try{
+      if (userId === this.user?.id) {
+        this.isProfileOwner = true;
+      } else {
+        this.isProfileOwner = false;
+      }
+    }
+    catch (error) {
+      console.log(error);
+    }
+
   }
 
   logout = async () => {

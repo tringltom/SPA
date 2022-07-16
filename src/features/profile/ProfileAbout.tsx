@@ -1,6 +1,6 @@
 import { Button, Form, Header, Segment } from 'semantic-ui-react'
 import { Field, Form as FinalForm } from "react-final-form";
-import { Fragment, useContext, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import { combineValidators, hasLengthLessThan } from 'revalidate';
 
 import { IUser } from '../../app/models/user';
@@ -9,23 +9,30 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { TextAreaInput } from '../../app/common/form/TextAreaInput';
 
 interface IProps {
+  userId: string;
   isProfileOwner: boolean | null;
 }
 const validate = combineValidators({about: hasLengthLessThan(2000)({message: 'Za opis je dozvoljeno maksimalno 2000 karaktera'})});
 
-export const ProfileAbout: React.FC<IProps> = ({ isProfileOwner }) => {
+export const ProfileAbout: React.FC<IProps> = ({ userId, isProfileOwner }) => {
   const rootStore = useContext(RootStoreContext);
-  const { user } = rootStore.userStore;
+  const { userProfile, getUserProfile } = rootStore.userStore;
   const { setUserAbout } = rootStore.profileStore;
   const { openModal } = rootStore.modalStore;
   const [edit, setEdit] = useState(false);
+  
+
+  useEffect(() => {
+    getUserProfile(Number(userId));
+  }, [getUserProfile]);
+  
 
   return (
     <Segment clearing>
       <Header as="h2" textAlign="center" content="O Korisniku" />
       {!edit && isProfileOwner && (
         <Fragment>
-          <p style={{ textAlign: "justify" }}>{user?.about}</p>
+          <p style={{ textAlign: "justify" }}>{userProfile?.about}</p>
           <Button
             floated="right"
             content="Izmeni"
@@ -34,10 +41,10 @@ export const ProfileAbout: React.FC<IProps> = ({ isProfileOwner }) => {
           />
         </Fragment>
       )}
-      {edit && (
+      {edit && isProfileOwner && (
         <FinalForm
           validate={validate}
-          initialValues={user}
+          initialValues={userProfile}
           onSubmit={(values: IUser) => {
             openModal(
               <ModalYesNo
@@ -54,7 +61,7 @@ export const ProfileAbout: React.FC<IProps> = ({ isProfileOwner }) => {
               <Field
                 name="about"
                 rows={20}
-                value={user?.about}
+                value={userProfile?.about}
                 component={TextAreaInput}
               />
               <Button

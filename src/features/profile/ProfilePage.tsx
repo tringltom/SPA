@@ -14,9 +14,11 @@ interface DetailParams {
 const ProfilePage : React.FC<RouteComponentProps<DetailParams>> = ({ match }) => {
   const userId = match.params.id;
   const rootStore = useContext(RootStoreContext);
-  const {userProfile, getUserProfile, user} = rootStore.userStore;
+  const {userProfile, getUserProfile, getIsProfileOwner, isProfileOwner} = rootStore.userStore;
 
-  const isProfileOwner = () => Number(userId) === user?.id;
+  useEffect(() => {
+    getIsProfileOwner(Number(userId));
+  },[getIsProfileOwner,userId]);
 
   useEffect(() => {
     getUserProfile(Number(userId));
@@ -25,8 +27,8 @@ const ProfilePage : React.FC<RouteComponentProps<DetailParams>> = ({ match }) =>
   return (
     <Grid>
       <GridColumn width={16}>
-        <ProfileHeader user={userProfile}/>
-        <ProfileContent userId={userId} isProfileOwner={isProfileOwner()}/>
+        <ProfileHeader user={userProfile} isProfileOwner={isProfileOwner}/>
+        <ProfileContent userId={userId} isProfileOwner={isProfileOwner}/>
       </GridColumn>
     </Grid>
   );
