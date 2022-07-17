@@ -8,12 +8,10 @@ import ModalYesNo from '../../app/common/modals/ModalYesNo';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { TextAreaInput } from '../../app/common/form/TextAreaInput';
 
-interface IProps {
-  userId: string;
-}
+
 const validate = combineValidators({about: hasLengthLessThan(2000)({message: 'Za opis je dozvoljeno maksimalno 2000 karaktera'})});
 
-export const ProfileAbout: React.FC<IProps> = ({ }) => {
+export const ProfileAbout = () => {
   const rootStore = useContext(RootStoreContext);
   const { userProfile, isProfileOwner } = rootStore.userStore;
   const { setUserAbout } = rootStore.profileStore;
