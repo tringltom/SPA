@@ -9,13 +9,13 @@ import { observer } from 'mobx-react-lite';
 
 interface IProps {
   userId: string;
-  isProfileOwner: boolean | null;
 }
 
-const ProfileSkills: React.FC<IProps> = ({ userId, isProfileOwner }) => {
+const ProfileSkills: React.FC<IProps> = ({ userId }) => {
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
   const { skillData, skillMap, initialSkillMap, loadSkills, loadingInitial, resetSkills, updateSkills } = rootStore.profileStore;
+  const {isProfileOwner} = rootStore.userStore;
 
 
   const isSecondTreeActive = () => {

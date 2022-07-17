@@ -9,13 +9,13 @@ import { debounce } from 'lodash';
 
 interface IProps {
     userId: string;
-    isProfileOwner: boolean | null;
   }
 
-const ProfileFavoriteActivities: React.FC<IProps> = ({ userId, isProfileOwner }) => {
+const ProfileFavoriteActivities: React.FC<IProps> = ({ userId }) => {
     const rootStore = useContext(RootStoreContext);
     const { resolveFavoriteActivity, resolvingFavourite } = rootStore.favoriteStore;
     const {reviewsForCurrentUserArray} = rootStore.reviewStore;
+    const {isProfileOwner} = rootStore.userStore;
   
     const {
         loadingInitial,

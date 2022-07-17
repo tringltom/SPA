@@ -10,21 +10,15 @@ import { TextAreaInput } from '../../app/common/form/TextAreaInput';
 
 interface IProps {
   userId: string;
-  isProfileOwner: boolean | null;
 }
 const validate = combineValidators({about: hasLengthLessThan(2000)({message: 'Za opis je dozvoljeno maksimalno 2000 karaktera'})});
 
-export const ProfileAbout: React.FC<IProps> = ({ userId, isProfileOwner }) => {
+export const ProfileAbout: React.FC<IProps> = ({ userId }) => {
   const rootStore = useContext(RootStoreContext);
-  const { userProfile, getUserProfile } = rootStore.userStore;
+  const { userProfile, isProfileOwner } = rootStore.userStore;
   const { setUserAbout } = rootStore.profileStore;
   const { openModal } = rootStore.modalStore;
   const [edit, setEdit] = useState(false);
-  
-
-  useEffect(() => {
-    getUserProfile(Number(userId));
-  }, [getUserProfile]);
   
 
   return (

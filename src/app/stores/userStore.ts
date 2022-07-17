@@ -191,18 +191,8 @@ export default class UserStore {
     } catch (error) {}
   }
 
-  getIsProfileOwner = async (userId: number) => {
-    try{
-      if (userId === this.user?.id) {
-        this.isProfileOwner = true;
-      } else {
-        this.isProfileOwner = false;
-      }
-    }
-    catch (error) {
-      console.log(error);
-    }
-
+  checkIsProfileOwner = async (userId: number) => {
+    this.isProfileOwner = userId === this.user?.id;
   }
 
   logout = async () => {
