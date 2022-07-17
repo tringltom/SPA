@@ -9,8 +9,7 @@ import { observer } from 'mobx-react-lite';
 
 const validate = combineValidators({images: isRequired({message: 'Slika je neophodna'})});
 
-const ProfileHeader  = () => {
-
+const ProfileHeader = () => {
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
   const { setUserImage } = rootStore.profileStore;

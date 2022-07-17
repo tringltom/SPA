@@ -16,7 +16,6 @@ const ProfilePage : React.FC<RouteComponentProps<DetailParams>> = ({ match }) =>
   const rootStore = useContext(RootStoreContext);
   const {getUserProfile} = rootStore.userStore;
 
-
   useEffect(() => {
     getUserProfile(Number(userId));
   }, [getUserProfile, userId]);
