@@ -13,7 +13,7 @@ interface IProps {
 }
 const validate = combineValidators({about: hasLengthLessThan(2000)({message: 'Za opis je dozvoljeno maksimalno 2000 karaktera'})});
 
-export const ProfileAbout: React.FC<IProps> = ({ userId }) => {
+export const ProfileAbout: React.FC<IProps> = ({ }) => {
   const rootStore = useContext(RootStoreContext);
   const { userProfile, isProfileOwner } = rootStore.userStore;
   const { setUserAbout } = rootStore.profileStore;
