@@ -12,7 +12,9 @@ export default class UserStore {
   refreshTokenTimeout: any;
   rootStore: RootStore;
   user: IUser | null = null;
+  userProfile: IUser | null = null;
   loading = false;
+  isProfileOwner = false;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -179,6 +181,20 @@ export default class UserStore {
         this.startRefreshTokenTimer(user);
     } catch (error) {}
   };
+
+  getUserProfile = async (userId: number) => {
+    try {
+      const userProfile = await agent.User.getUser(userId);
+      runInAction(() => {
+        this.userProfile = userProfile;
+        this.setIsProfileOwner(userId);
+      });
+    } catch (error) {}
+  }
+
+  setIsProfileOwner = async (userId: number) => {
+    this.isProfileOwner = userId === this.user?.id;
+  }
 
   logout = async () => {
     try {

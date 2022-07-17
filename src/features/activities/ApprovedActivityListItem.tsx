@@ -77,9 +77,16 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
                   {activity.title}
                 </Link>
               </Item.Header>
-              <Item.Description>
-                Stvaralac: {activity.userName}
-              </Item.Description>
+              <p></p>
+              <Item.Header>
+                <Link
+                  to={{
+                    pathname: `/profile/${activity.userId}`,
+                  }}
+                >
+                  Stvaralac: {activity.userName}
+                </Link>
+              </Item.Header>
               {activity?.type === ActivityTypes.Happening && activity.isHost && (
                 <Item.Description>
                   <Label
@@ -173,21 +180,23 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
             ></Button>
           )}
       </Segment>
-      <Segment>
-        <Button
-          icon="favorite"
-          loading={resolvingFavourite}
-          active={isFavorite}
-          onClick={toggleFavorite}
-        />
-        <ReviewButtonsComponent
-          buttonData={buttonData}
-          activeButton={activeButton}
-          handleReviewClick={handleReviewClick}
-          loading={reviewing}
-          float="right"
-        />
-      </Segment>
+      {userId != Number(activity.userId) && (
+        <Segment>
+          <Button
+            icon="favorite"
+            loading={resolvingFavourite}
+            active={isFavorite}
+            onClick={toggleFavorite}
+          />
+          <ReviewButtonsComponent
+            buttonData={buttonData}
+            activeButton={activeButton}
+            handleReviewClick={handleReviewClick}
+            loading={reviewing}
+            float="right"
+          />
+        </Segment>
+      )}
     </Segment.Group>
   );
 }

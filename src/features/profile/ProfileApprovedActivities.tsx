@@ -5,6 +5,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 import { debounce } from 'lodash';
 
 interface IProps {
@@ -13,6 +14,9 @@ interface IProps {
 
 const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
     const rootStore = useContext(RootStoreContext);
+    
+    const {favoritesArray} = rootStore.favoriteStore;
+    const {reviewsForCurrentUserArray} = rootStore.reviewStore;
   
     const {
         loadingInitial,
@@ -88,7 +92,19 @@ const ProfileApprovedActivities: React.FC<IProps> = ({ userId }) => {
               {approvedActivitiesArray.map((activity: IActivity) => (
                 <Table.Row key={activity.id}>
                   <Table.Cell content={ActivityTypes[activity.type]} />
-                  <Table.Cell content={activity.title} />
+                  <Table.Cell
+                  content={
+                    <Link
+                    to={{
+                      pathname: `/activity/${activity.id}/${ !!favoritesArray.find((fa) => fa.activityId === +activity.id)}/${reviewsForCurrentUserArray.find(
+                        (ra) => ra.activityId === +activity.id
+                      )?.reviewTypeId}`,
+                    }}
+                  >
+                    {activity.title}
+                  </Link>
+                  }
+                />
                   {activity.dateApproved && (
                     <Table.Cell
                       content={format(

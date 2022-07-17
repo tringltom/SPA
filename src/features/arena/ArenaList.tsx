@@ -4,6 +4,7 @@ import React, { useContext } from 'react'
 import { IUser } from '../../app/models/user';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 import { debounce } from 'lodash';
 
 interface IProps {
@@ -13,6 +14,7 @@ interface IProps {
 const ArenaList: React.FC<IProps> = ({users}) => {
   const rootStore = useContext(RootStoreContext);
   const {setPredicate} = rootStore.userStore;
+  
 
   const updateQuery = (e: any) => setPredicate("userName", e.target.value)
   const handleSearch = debounce(updateQuery, 500)
@@ -39,7 +41,13 @@ const ArenaList: React.FC<IProps> = ({users}) => {
                   style={{ marginBottom: 3 }}
                 />
                 <Item.Content>
-                  <Item.Header as="a">{user.userName}</Item.Header>
+                  <Link
+                    to={{
+                      pathname: `/profile/${user.id}`,
+                    }}
+                  >
+                    {user.userName}
+                  </Link>
                   <Item.Meta>
                     Trenutni broj iskustvenih poena : {user?.currentXp}
                   </Item.Meta>
