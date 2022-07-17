@@ -13,7 +13,7 @@ const ProfileHeader = () => {
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
   const { setUserImage } = rootStore.profileStore;
-  const {isProfileOwner, userProfile} = rootStore.userStore;
+  const { isProfileOwner, userProfile } = rootStore.userStore;
 
   const [hovered, setHovered] = useState(false);
 
