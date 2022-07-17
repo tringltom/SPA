@@ -14,13 +14,12 @@ interface DetailParams {
 const ProfilePage : React.FC<RouteComponentProps<DetailParams>> = ({ match }) => {
   const userId = match.params.id;
   const rootStore = useContext(RootStoreContext);
-  const {getUserProfile, checkIsProfileOwner} = rootStore.userStore;
+  const {getUserProfile} = rootStore.userStore;
 
 
   useEffect(() => {
     getUserProfile(Number(userId));
-    checkIsProfileOwner(Number(userId));
-  }, [getUserProfile, checkIsProfileOwner, userId]);
+  }, [getUserProfile, userId]);
 
   return (
     <Grid>
