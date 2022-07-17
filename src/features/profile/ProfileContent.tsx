@@ -3,8 +3,6 @@ import ProfilePendingActivities from './ProfilePendingActivities';
 import ProfileApprovedActivities from './ProfileApprovedActivities'
 import ProfileSkills from './ProfileSkills';
 import {Tab} from 'semantic-ui-react';
-import { useContext } from 'react';
-import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileFavoriteActivities from './ProfileFavoriteActivities';
 
 interface IProps {

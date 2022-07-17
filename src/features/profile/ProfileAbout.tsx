@@ -1,6 +1,6 @@
 import { Button, Form, Header, Segment } from 'semantic-ui-react'
 import { Field, Form as FinalForm } from "react-final-form";
-import { Fragment, useContext, useEffect, useState } from 'react'
+import { Fragment, useContext, useState } from 'react'
 import { combineValidators, hasLengthLessThan } from 'revalidate';
 
 import { IUser } from '../../app/models/user';
