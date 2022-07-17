@@ -187,6 +187,7 @@ export default class UserStore {
       const userProfile = await agent.User.getUser(userId);
       runInAction(() => {
         this.userProfile = userProfile;
+        this.checkIsProfileOwner(userId);
       });
     } catch (error) {}
   }
