@@ -4,6 +4,8 @@ import React, { useContext } from 'react'
 import { IUser } from '../../app/models/user';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
+import { debounce } from 'lodash';
 
 interface IProps {
     users: IUser[] | null ;
@@ -12,6 +14,10 @@ interface IProps {
 const ArenaList: React.FC<IProps> = ({users}) => {
   const rootStore = useContext(RootStoreContext);
   const {setPredicate} = rootStore.userStore;
+  
+
+  const updateQuery = (e: any) => setPredicate("userName", e.target.value)
+  const handleSearch = debounce(updateQuery, 500)
 
     return (
       <Segment clearing>
@@ -20,7 +26,7 @@ const ArenaList: React.FC<IProps> = ({users}) => {
           icon="users"
           iconPosition="left"
           placeholder="Pretraži korisnike..."
-          onChange={(e) => setPredicate("userName", e.target.value)}
+          onChange={handleSearch}
         />
         <Item.Group divided>
           {users?.length! > 0 &&
@@ -35,7 +41,13 @@ const ArenaList: React.FC<IProps> = ({users}) => {
                   style={{ marginBottom: 3 }}
                 />
                 <Item.Content>
-                  <Item.Header as="a">{user.userName}</Item.Header>
+                  <Link
+                    to={{
+                      pathname: `/profile/${user.id}`,
+                    }}
+                  >
+                    {user.userName}
+                  </Link>
                   <Item.Meta>
                     Trenutni broj iskustvenih poena : {user?.currentXp}
                   </Item.Meta>
@@ -87,7 +99,7 @@ const ArenaList: React.FC<IProps> = ({users}) => {
                     </StatisticGroup>
                   </Item.Description>
                   <Item.Extra>
-                    <Button floated="right" content="Pogledaj" color="blue" />
+                    <Button data-cy="submit" floated="right" content="Pogledaj" color="blue" />
                   </Item.Extra>
                 </Item.Content>
               </Item>

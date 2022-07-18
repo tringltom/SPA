@@ -14,6 +14,8 @@ export interface IActivityFormValues {
     dateEnd: Date | null,
     timeStart: Date | null,
     timeEnd: Date | null,
+    userId: string,
+    userName: string,
     [key: string]: any,
   };
 
@@ -57,7 +59,6 @@ export interface IActivityFormValues {
   
   export interface IActivity extends IActivityFormValues {
     id: string,
-    userName: string,
     photos?: IPhoto[],
     isHost: boolean,
     dateApproved?: string | null,
@@ -75,7 +76,6 @@ export interface IActivityFormValues {
 
   export interface IPendingActivity extends IActivityFormValues {
     id: string,
-    userName: string,
     photos?: IPhoto[],
     urls: string[],
   }; 

@@ -183,13 +183,13 @@ const TwLoginForm = () => {
                 loading={submitting}
                 size={Button.size.md}
                 type="submit"
-                fullWidth
+                fullWidth              
               >
                 Prijavi se
               </Button>
             </form>
 
-            <div className="relative flex gap-3 py-3 sm:py-5 items-center">
+            {/* <div className="relative flex gap-3 py-3 sm:py-5 items-center">
               <div className="flex-grow border-t-2 border-divider"></div>
               <Typography
                 className="normal-case m-0"
@@ -199,7 +199,7 @@ const TwLoginForm = () => {
                 ili
               </Typography>
               <div className="flex-grow border-t-2 border-divider"></div>
-            </div>
+            </div> */}
 
             <SocialLoginFacebook loading={loading} fbCallback={fbLogin} />
             <SocialLoginInstagram loading={loading} igCallback={fbLogin} />
