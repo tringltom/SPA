@@ -1,4 +1,4 @@
-Projekat je realizovan u React.js sa Mobx storovima.
+Projekat je realizovan u React.ts sa Mobx storovima.
 ::: mermaid
  graph TD;
  Store --> Agent
