@@ -1,14 +1,15 @@
 Projekat je konstruisan kao REST API u .net Core 3.1 frejmwrku.
 ::: mermaid
  graph TD;
+ Store --> Agent
  Agent --> Models 
- Agent --> Store --> Models
+ Store --> Models
  Store --> Layout --> Components
  Layout --> Assets
  Layout --> Models
  Layout --> Features --> Models
  Features --> Assets
- Features --> Typings- custom
+ Features --> TypingsCustom
  Features --> Components
  Features --> Common --> Models
  Common --> Components;
