@@ -8,6 +8,7 @@ Projekat je konstruisan kao REST API u .net Core 3.1 frejmwrku.
  Layout --> Models
  Layout --> Features --> Models
  Features --> Assets
+ Features --> Typings- custom
  Features --> Components
  Features --> Common --> Models
  Common --> Components;
