@@ -4,7 +4,8 @@ Projekat je konstruisan kao REST API u .net Core 3.1 frejmwrku.
  Store --> Agent
  Agent --> Models 
  Store --> Models
- Store --> Layout --> Components
+ Layout --> Store
+ Layout --> Components
  Layout --> Assets
  Layout --> Models
  Layout --> Features --> Models
