@@ -6,7 +6,7 @@ import agent from "../api/agent";
 import { history } from "../..";
 import { toast } from "react-toastify";
 
-const LIMIT = 3;
+const LIMIT = 6;
 
 export default class UserStore {
   refreshTokenTimeout: any;
