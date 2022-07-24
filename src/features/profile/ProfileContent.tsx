@@ -1,12 +1,12 @@
 import { ProfileAbout } from './ProfileAbout';
-import ProfilePendingActivities from './ProfilePendingActivities';
 import ProfileApprovedActivities from './ProfileApprovedActivities'
-import ProfileSkills from './ProfileSkills';
-import {Tab} from 'semantic-ui-react';
 import ProfileFavoriteActivities from './ProfileFavoriteActivities';
+import ProfilePendingActivities from './ProfilePendingActivities';
+import ProfileSkills from './ProfileSkills';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { useContext, useEffect } from 'react';
+import {Tab} from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
+import { useContext } from 'react';
 
 interface IProps {
   userId: string;

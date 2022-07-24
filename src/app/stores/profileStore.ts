@@ -310,7 +310,7 @@ export default class ProfileStore {
       
       Object.keys(ActivityTypes).forEach((key: any, el) => {
         if (ActivityTypes[el + 1] !== undefined) 
-          skillLevel.push( {type: key, level: 1} as ISkillLevel)
+          skillLevel.push( {type: key, level: 0} as ISkillLevel)
       });
 
       const skillData: ISkillData = {
