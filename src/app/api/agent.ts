@@ -122,8 +122,7 @@ const Activity = {
     axios.get("/activities/others",{params: params}).then(responseBody),
   getApprovedActivities:(id: number, params: URLSearchParams) : Promise<IApprovedActivitiesEnvelope> => 
     axios.get(`/activities/approved-activities/user/${id}`,{params: params}).then(responseBody),
-  getFavoritedActivities:(id: number, params: URLSearchParams) : Promise<IFavoritedActivitiesEnvelope> => 
-    axios.get(`/activities/favorited-activities/user/${id}`,{params: params}).then(responseBody),
+  
   getHappeningsForApproval: (params: URLSearchParams) : Promise<IHappeningEnvelope> =>
     axios.get("/activities/pending-happenings",{params: params}).then(responseBody),
   getChallengeAnswers: (activityId: string, params: URLSearchParams) : Promise<IChallengeAnswerEnvelope> =>
@@ -211,6 +210,8 @@ const Review = {
 const Favorite = {
   get: () : Promise<IUserFavoriteActivity> => requests.get(`favorites/me/ids`),
   getOwnerFavoriteActivityIds: () : Promise<number[]> => requests.get(`favorites/me/ids`),
+  getFavoritedActivities:(id: number, params: URLSearchParams) : Promise<IFavoritedActivitiesEnvelope> => 
+    axios.get(`/favorites/favorited-activities/user/${id}`,{params: params}).then(responseBody),
   removeFavoriteActivity: (id: number): Promise<void> => requests.delete(`/favorites/${id}`),
   createFavoriteActivity: (id: number) : Promise<IUserFavoriteActivity> => requests.post(`favorites/${id}`, {})
 }

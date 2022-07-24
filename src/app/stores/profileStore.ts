@@ -206,7 +206,7 @@ export default class ProfileStore {
     this.favoritedActivitiesRegistry.clear();
     try {
       const favoritedActivitiesEnvelope =
-        await agent.Activity.getFavoritedActivities(
+        await agent.Favorite.getFavoritedActivities(
           userId,
           this.favoritedActivityAxiosParams
         );
