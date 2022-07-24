@@ -5,13 +5,13 @@ import React, { useContext, useState } from 'react'
 import { ChallengeAnswerForm } from './ChallengeAnswerForm';
 import { EkvitiColors } from '../../app/layout/EkvitiColors';
 import { Link } from 'react-router-dom';
+import { MapLocation } from '../../app/common/form/MapLocation';
 import PuzzleAnswerForm from './PuzzleAnswerForm';
 import { ReviewButtonsComponent } from '../../app/common/form/ReviewButtonsComponent';
 import { ReviewTypes } from '../../app/models/review';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import { getButtonData } from '../../app/layout/ReviewButtonData';
-import { MapLocation } from '../../app/common/form/MapLocation';
 
 export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:boolean, review: ReviewTypes | null}> = ({activity, favorite, review}) => {
 
@@ -180,7 +180,7 @@ export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:b
             ></Button>
           )}
       </Segment>
-      {userId != Number(activity.userId) && (
+      {userId !== Number(activity.userId) && (
         <Segment>
           <Button
             icon="favorite"
