@@ -23,7 +23,7 @@ click Components"https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Persiste
 click Assets "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Spa/220/Assets"
 click Features "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Spa/221/Features"
 click TypingsCustom "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Domain"
-click Common "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Domain"
+click Common "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Spa/218/Common"
 click Components "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Domain"
 :::
 
