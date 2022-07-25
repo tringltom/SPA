@@ -15,7 +15,7 @@ Projekat je realizovan u React.ts sa Mobx storovima.
  Features --> Common --> Models
  Common --> Components;
 
-click API "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/API"
+click Store "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Spa/223/Store"
 click Infrastructure "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/190/Infrastructure"
 click Application "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Application"
 click DAL "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/DAL"
