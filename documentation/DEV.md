@@ -16,11 +16,15 @@ Projekat je realizovan u React.ts sa Mobx storovima.
  Common --> Components;
 
 click Store "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Spa/223/Store"
-click Infrastructure "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/190/Infrastructure"
-click Application "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Application"
-click DAL "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/DAL"
-click Persistence "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Persistence"
-click Domain "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Domain"
+click Agent "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/190/Infrastructure"
+click Models "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Application"
+click Layout "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Spa/224/Layout"
+click Components"https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Persistence"
+click Assets "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Domain"
+click Features "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Domain"
+click TypingsCustom "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Domain"
+click Common "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Domain"
+click Components "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Domain"
 :::
 
 
