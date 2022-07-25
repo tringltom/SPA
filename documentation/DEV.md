@@ -16,7 +16,7 @@ Projekat je realizovan u React.ts sa Mobx storovima.
  Common --> Components;
 
 click Store "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Spa/223/Store"
-click Agent "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/190/Infrastructure"
+click Agent "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Spa/222/Agent"
 click Models "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Application"
 click Layout "https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Spa/224/Layout"
 click Components"https://dev.azure.com/3MPOS/Ekviti/_wiki/wikis/Api/189/Persistence"
