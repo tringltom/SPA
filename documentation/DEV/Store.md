@@ -1,4 +1,4 @@
-Glavne komponente sa stilovima u celoj aplikaciji
+Storovi sadrze globalne promenjljive i funkcije, koje odredjene komponente mogu da koriste posmatrajuci njihove promene i time da se re-renderuju
 
 [[_TOC_]]
 
