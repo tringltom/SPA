@@ -1,0 +1,1 @@
+Ovde su definisani svi interfejsi koji se koriste u aplikaciji. Korisceni su interfejsi umesto klasa jer koristimo samo za type check ne i za kreiranje objekata 
