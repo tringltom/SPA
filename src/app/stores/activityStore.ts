@@ -28,24 +28,15 @@ export default class ActivityStore {
   submitting = false;
   pendingActivitiesRegistry = new Map();
   approvedActivitiesRegistry = new Map();  
-  pendingHappeningActivitiesRegistry = new Map();
-  challengeAnswersRegistry = new Map();
-  challengeApprovalRegistry = new Map();
 
   pendingActivitiesPage = 0;
   approvedActivitiesPage = 0;  
-  pendingHappeningActivitiesPage = 0;
-  challengeAnswersPage = 0;
-  challengeApprovalPage = 0;
 
   predicate = new Map();
   loadingInitial = false;
 
   pendingActivityCount = 0;
   approvedActivityCount = 0;  
-  pendingHappeningActivityCount = 0;
-  challengeAnswerCount = 0;
-  challengeApprovalCount = 0;
 
   pendingActivity: IActivityFormValues | null = null;
   approvedActivity: IActivity | null = null;
@@ -62,18 +53,6 @@ export default class ActivityStore {
     return Array.from(this.approvedActivitiesRegistry.values());
   }
 
-  get pendingHappeningActivitiesArray() {
-    return Array.from(this.pendingHappeningActivitiesRegistry.values());
-  }
-
-  get challengeAnswerArray() {
-    return Array.from(this.challengeAnswersRegistry.values());
-  }
-
-  get challengeApprovalArray() {
-    return Array.from(this.challengeApprovalRegistry.values());
-  }
-
   setPendingActivitiesPage = (page: number) => {
     this.pendingActivitiesPage = page;
   };
@@ -82,36 +61,12 @@ export default class ActivityStore {
     this.approvedActivitiesPage = page;
   };
 
-  setPendingHappeningActivitiesPage = (page: number) => {
-    this.pendingHappeningActivitiesPage = page;
-  };
-
-  setChallengeAnswersPage = (page: number) => {
-    this.challengeAnswersPage = page;
-  };
-
-  setChallengeApprovalPage = (page: number) => {
-    this.challengeApprovalPage = page;
-  };
-
   get totalPendingActivityPages() {
     return Math.ceil(this.pendingActivityCount / LIMIT);
   }
 
   get totalApprovedActivityPages() {
     return Math.ceil(this.approvedActivityCount / LIMIT);
-  }
-
-  get totalPendingHappeningActivitiesPages() {
-    return Math.ceil(this.pendingHappeningActivityCount / LIMIT);
-  }
-
-  get totalChallengeAnswerPages() {
-    return Math.ceil(this.challengeAnswerCount / LIMIT);
-  }
-
-  get totalChallengeApprovalPages() {
-    return Math.ceil(this.challengeApprovalCount / LIMIT);
   }
 
   resetPendingActivity = () => {
@@ -164,16 +119,16 @@ export default class ActivityStore {
     return params;
   }
 
-  get pendingHappeningActivityAxiosParams() {
-    const params = new URLSearchParams();
-    params.append("limit", String(LIMIT));
-    params.append(
-      "offset",
-      `${this.pendingActivitiesPage ? this.pendingActivitiesPage * LIMIT : 0}`
-    );
-    this.predicate.forEach((value, key) => params.append(key, value));
-    return params;
-  }
+  // get pendingHappeningActivityAxiosParams() {
+  //   const params = new URLSearchParams();
+  //   params.append("limit", String(LIMIT));
+  //   params.append(
+  //     "offset",
+  //     `${this.pendingActivitiesPage ? this.pendingActivitiesPage * LIMIT : 0}`
+  //   );
+  //   this.predicate.forEach((value, key) => params.append(key, value));
+  //   return params;
+  // }
 
   getApprovedActivity = async (id: string) => {
     try {
@@ -282,50 +237,6 @@ export default class ActivityStore {
     }
   };
 
-  loadPendingHappeningActivities = async () => {
-    this.loadingInitial = true;
-    try {
-      const happeningEnvelope = await agent.Activity.getHappeningsForApproval(
-        this.pendingActivityAxiosParams
-      );
-      const { happenings, happeningCount } = happeningEnvelope;
-      runInAction(() => {
-        happenings.forEach((happening) => {
-          this.pendingHappeningActivitiesRegistry.set(happening.id, happening);
-        });
-        this.pendingActivityCount = happeningCount;
-        this.loadingInitial = false;
-      });
-    } catch (error) {
-      runInAction(() => {
-        console.log(error);
-        this.loadingInitial = false;
-      });
-    }
-  };
-
-  loadChallengeAnswers = async (activityId: string) => {
-    this.loadingInitial = true;
-    try {
-      const challengeAnswersEnvelope = await agent.Activity.getChallengeAnswers(
-        activityId,
-        this.pendingActivityAxiosParams
-      );
-      const { challengeAnswers, challengeAnswerCount } = challengeAnswersEnvelope;
-      runInAction(() => {
-        challengeAnswers.forEach((challengeAnswer) => {
-          this.challengeAnswersRegistry.set(challengeAnswer.id, challengeAnswer);
-        });
-        this.pendingActivityCount = challengeAnswerCount;
-      });
-    } catch (error) {
-      runInAction(() => {
-        console.log(error);
-        this.loadingInitial = false;
-      });
-    }
-  };
-
   loadApprovedActivitiesForUser = async (userId: number) => {
     this.loadingInitial = true;
     this.approvedActivitiesRegistry.clear();
@@ -341,32 +252,6 @@ export default class ActivityStore {
           this.approvedActivitiesRegistry.set(activity.id, activity);
         });
         this.approvedActivityCount = activityCount;
-        this.loadingInitial = false;
-      });
-    } catch (error) {
-      runInAction(() => {
-        console.log(error);
-        this.loadingInitial = false;
-      });
-    }
-  };
-
-  loadChallengeConfirmedAnswers = async () => {
-    this.loadingInitial = true;
-    try {
-      const challengeAnswersEnvelope =
-        await agent.Activity.getChallengeConfirmedAnswers(
-          this.pendingActivityAxiosParams
-        );
-      const { challenges, challengeCount } = challengeAnswersEnvelope;
-      runInAction(() => {
-        challenges.forEach((challenge) => {
-          this.challengeApprovalRegistry.set(
-            challenge.challengeAnswerId,
-            challenge
-          );
-        });
-        this.pendingActivityCount = challengeCount;
         this.loadingInitial = false;
       });
     } catch (error) {
@@ -440,148 +325,6 @@ export default class ActivityStore {
     } catch (error: any) {
       runInAction(() => {
         this.submitting = false;
-        this.rootStore.unFrezeScreen();
-        this.rootStore.modalStore.closeModal();
-        toast.error(error?.data.errors.error);
-      });
-    }
-  };
-
-  answerChallenge = async (values: any) => {
-    try {
-      this.rootStore.frezeScreen();
-      this.submitting = true;
-      await agent.Activity.answerChallenge(values.id, {
-        description: values.description ?? "",
-        images: values.images,
-      } as IChallengeAnswerForm);
-      runInAction(() => {
-        toast.success("Odgovor poslat korisniku");
-        this.submitting = false;
-        this.rootStore.modalStore.closeModal();
-        this.rootStore.unFrezeScreen();
-      });
-    } catch (error: any) {
-      runInAction(() => {
-        this.submitting = false;
-        this.rootStore.unFrezeScreen();
-        this.rootStore.modalStore.closeModal();
-        toast.error(error?.data.errors.error);
-      });
-    }
-  };
-
-  confirmChallengeAnswer = async (id: any) => {
-    try {
-      this.rootStore.frezeScreen();
-      this.submitting = true;
-      await agent.Activity.confirmChallengeAnswer(id);
-      runInAction(() => {
-        this.challengeAnswersRegistry.forEach((challengeAnswer) => {
-          challengeAnswer.confirmed = false;
-        });
-        this.challengeAnswersRegistry.get(id).confirmed = true;
-        toast.success("Uspešno ste odabrali odgovor");
-        this.submitting = false;
-        this.rootStore.modalStore.closeModal();
-        this.rootStore.unFrezeScreen();
-      });
-    } catch (error: any) {
-      runInAction(() => {
-        this.submitting = false;
-        this.rootStore.unFrezeScreen();
-        this.rootStore.modalStore.closeModal();
-        toast.error(error?.data.errors.error);
-      });
-    }
-  };
-
-  attendToHappening = async (id: string) => {
-    try {
-      this.submitting = true;
-      await agent.Activity.attendToHappening(id);
-      runInAction(() => {
-        this.submitting = false;
-      });
-    } catch (error: any) {
-      runInAction(() => {
-        console.log(error);
-        this.submitting = false;
-        toast.error(error?.data.errors.error);
-      });
-    }
-  };
-
-  cancelAttendenceToHappening = async (id: string) => {
-    try {
-      this.submitting = true;
-      await agent.Activity.cancelAttendenceToHappening(id);
-      runInAction(() => {
-        this.submitting = false;
-      });
-    } catch (error: any) {
-      runInAction(() => {
-        this.submitting = false;
-        toast.error(error?.data.errors.error);
-      });
-    }
-  };
-
-  completeHappening = async (id: string, values: any) => {
-    try {
-      this.rootStore.frezeScreen();
-      await agent.Activity.completeHappening(id, values.images);
-      runInAction(() => {
-        toast.success(
-          "Uspešan završetak događaja, Molimo Vas sačekajte potvrdu"
-        );
-        this.rootStore.modalStore.closeModal();
-        this.rootStore.unFrezeScreen();
-      });
-    } catch (error: any) {
-      runInAction(() => {
-        this.rootStore.unFrezeScreen();
-        this.rootStore.modalStore.closeModal();
-        toast.error(error?.data.errors.error);
-      });
-    }
-  };
-
-  approveHappening = async (activityId: string, approve: boolean) => {
-    try {
-      this.rootStore.frezeScreen();
-      await agent.Activity.approveHappening(activityId, approve);
-      runInAction(() => {
-        toast.success("Uspešno ste odobrili/odbili događaj");
-        this.pendingHappeningActivitiesRegistry.delete(activityId);
-        this.rootStore.modalStore.closeModal();
-        this.rootStore.unFrezeScreen();
-      });
-    } catch (error: any) {
-      runInAction(() => {
-        this.rootStore.unFrezeScreen();
-        this.rootStore.modalStore.closeModal();
-        toast.error(error?.data.errors.error);
-      });
-    }
-  };
-
-  approveChallenge = async (challengeAnswerId: string, approve: boolean) => {
-    try {
-      this.rootStore.frezeScreen();
-      if (approve) {
-        await agent.Activity.approveChallengeAnswer(challengeAnswerId);
-      } else {
-        await agent.Activity.disapproveChallengeAnswer(challengeAnswerId);
-      }
-      runInAction(() => {
-        toast.success("Uspešno ste odobrili/odbili odgovor na izazov");
-        this.challengeApprovalRegistry.delete(challengeAnswerId);
-        this.rootStore.modalStore.closeModal();
-        this.rootStore.unFrezeScreen();
-      });
-    } catch (error: any) {
-      runInAction(() => {
         this.rootStore.unFrezeScreen();
         this.rootStore.modalStore.closeModal();
         toast.error(error?.data.errors.error);
