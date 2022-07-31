@@ -119,17 +119,6 @@ export default class ActivityStore {
     return params;
   }
 
-  // get pendingHappeningActivityAxiosParams() {
-  //   const params = new URLSearchParams();
-  //   params.append("limit", String(LIMIT));
-  //   params.append(
-  //     "offset",
-  //     `${this.pendingActivitiesPage ? this.pendingActivitiesPage * LIMIT : 0}`
-  //   );
-  //   this.predicate.forEach((value, key) => params.append(key, value));
-  //   return params;
-  // }
-
   getApprovedActivity = async (id: string) => {
     try {
       this.loadingInitial = true;

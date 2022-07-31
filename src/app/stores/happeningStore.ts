@@ -3,7 +3,6 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { RootStore } from "./rootStore";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
-import { IChallengeAnswerForm } from "../models/activity";
 
 const LIMIT = 5;
 
@@ -24,7 +23,6 @@ export default class HappeningStore {
   pendingHappeningActivitiesPage = 0;
 
   pendingHappeningActivityCount = 0;
-
 
   setPredicate = (predicate: string, value: string | Date) => {
     if (this.predicate.has(predicate)) this.predicate.delete(predicate);
@@ -67,7 +65,6 @@ export default class HappeningStore {
         happenings.forEach((happening) => {
           this.pendingHappeningActivitiesRegistry.set(happening.id, happening);
         });
-        //this.pendingActivityCount = happeningCount;
         this.rootStore.activityStore.pendingActivityCount = happeningCount;
         this.loadingInitial = false;
       });

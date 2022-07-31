@@ -57,11 +57,10 @@ export default class ChallengeStore {
       const challengeAnswersEnvelope =
         await agent.Challenge.getChallengeAnswers(
           activityId,
-          //this.pendingActivityAxiosParams
           this.rootStore.activityStore.pendingActivityAxiosParams
         );
-      const { challengeAnswers, challengeAnswerCount } =
-        challengeAnswersEnvelope;
+        const { challengeAnswers, challengeAnswerCount } = challengeAnswersEnvelope;
+       
       runInAction(() => {
         challengeAnswers.forEach((challengeAnswer) => {
           this.challengeAnswersRegistry.set(

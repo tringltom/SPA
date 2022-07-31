@@ -174,16 +174,16 @@ const Favorite = {
   get: () : Promise<IUserFavoriteActivity> => requests.get(`favorites/me/ids`),
   getOwnerFavoriteActivityIds: () : Promise<number[]> => requests.get(`favorites/me/ids`),
   getFavoritedActivities:(id: number, params: URLSearchParams) : Promise<IFavoritedActivitiesEnvelope> => 
-  axios.get(`/favorites/user/${id}`,{params: params}).then(responseBody),
+    axios.get(`/favorites/user/${id}`,{params: params}).then(responseBody),
   createFavoriteActivity: (id: number) : Promise<IUserFavoriteActivity> => requests.post(`favorites/${id}`, {}),
   removeFavoriteActivity: (id: number): Promise<void> => requests.delete(`/favorites/${id}`),
 }
 
 const Challenge = {
   getChallengeAnswers: (activityId: string, params: URLSearchParams) : Promise<IChallengeAnswerEnvelope> =>
-  axios.get(`/challenges/me/answers/activity/${activityId}`,{params: params}).then(responseBody),
+    axios.get(`/challenges/me/answers/activity/${activityId}`,{params: params}).then(responseBody),
   getChallengeConfirmedAnswers: (params: URLSearchParams) : Promise<IChallengeEnvelope> =>
-  axios.get("/challenges/pending",{params: params}).then(responseBody),
+    axios.get("/challenges/pending",{params: params}).then(responseBody),
   answerChallenge: (id: string, answer : IChallengeAnswerForm): Promise<void> => {
     let formData = new FormData();
     Object.keys(answer).forEach((key) => {
@@ -205,7 +205,7 @@ const Challenge = {
 
 const Happening = {
   getHappeningsForApproval: (params: URLSearchParams) : Promise<IHappeningEnvelope> =>
-  axios.get("/happenings/pending",{params: params}).then(responseBody),
+    axios.get("/happenings/pending",{params: params}).then(responseBody),
   approveHappening : (id: string, approve: boolean) : Promise<void> =>
     requests.patch(`/happenings/${id}/completion-approval`, {approve}),
   attendToHappening: (id: string) : Promise<void> =>
