@@ -16,6 +16,7 @@ export default class ChallengeStore {
 
   submitting = false;
   
+  predicate = new Map();
   challengeAnswersRegistry = new Map();
   challengeApprovalRegistry = new Map();
 
@@ -35,6 +36,13 @@ export default class ChallengeStore {
     return Array.from(this.challengeApprovalRegistry.values());
   }
 
+  setPredicate = (predicate: string, value: string | Date) => {
+    if (this.predicate.has(predicate)) this.predicate.delete(predicate);
+    if (value !== "") {
+      this.predicate.set(predicate, value);
+    }
+  };
+
   setChallengeAnswersPage = (page: number) => {
     this.challengeAnswersPage = page;
   };
@@ -51,13 +59,30 @@ export default class ChallengeStore {
     return Math.ceil(this.challengeApprovalCount / LIMIT);
   }
 
+  get challengeAnswerAxiosParams() {
+    const params = new URLSearchParams();
+    params.append("limit", String(LIMIT));
+    params.append(
+      "offset",
+      `${this.challengeAnswersPage ? this.challengeAnswersPage * LIMIT : 0}`
+    );
+    this.predicate.forEach((value, key) => {
+      if (key === "startDate") {
+        params.append(key, value.toISOString());
+      } else {
+        params.append(key, value);
+      }
+    });
+    return params;
+  }
+
   loadChallengeAnswers = async (activityId: string) => {
     this.loadingInitial = true;
     try {
       const challengeAnswersEnvelope =
         await agent.Challenge.getChallengeAnswers(
           activityId,
-          this.rootStore.activityStore.pendingActivityAxiosParams
+          this.challengeAnswerAxiosParams
         );
         const { challengeAnswers, challengeAnswerCount } = challengeAnswersEnvelope;
        
@@ -68,7 +93,7 @@ export default class ChallengeStore {
             challengeAnswer
           );
         });
-        this.rootStore.activityStore.pendingActivityCount = challengeAnswerCount;
+        this.challengeAnswerCount = challengeAnswerCount;
       });
     } catch (error) {
       runInAction(() => {
@@ -83,7 +108,7 @@ export default class ChallengeStore {
     try {
       const challengeAnswersEnvelope =
         await agent.Challenge.getChallengeConfirmedAnswers(
-            this.rootStore.activityStore.pendingActivityAxiosParams
+            this.challengeAnswerAxiosParams
         );
       const { challenges, challengeCount } = challengeAnswersEnvelope;
       runInAction(() => {
@@ -93,7 +118,7 @@ export default class ChallengeStore {
             challenge
           );
         });
-        this.rootStore.activityStore.pendingActivityCount = challengeCount;
+        this.challengeAnswerCount = challengeCount;
         this.loadingInitial = false;
       });
     } catch (error) {

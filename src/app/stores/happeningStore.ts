@@ -48,7 +48,7 @@ export default class HappeningStore {
     params.append("limit", String(LIMIT));
     params.append(
       "offset",
-      `${this.rootStore.activityStore.pendingActivitiesPage ? this.rootStore.activityStore.pendingActivitiesPage * LIMIT : 0}`
+      `${this.pendingHappeningActivitiesPage ? this.pendingHappeningActivitiesPage * LIMIT : 0}`
     );
     this.predicate.forEach((value, key) => params.append(key, value));
     return params;
@@ -65,7 +65,7 @@ export default class HappeningStore {
         happenings.forEach((happening) => {
           this.pendingHappeningActivitiesRegistry.set(happening.id, happening);
         });
-        this.rootStore.activityStore.pendingActivityCount = happeningCount;
+        this.pendingHappeningActivityCount = happeningCount;
         this.loadingInitial = false;
       });
     } catch (error) {
