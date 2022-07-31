@@ -11,6 +11,4 @@ https://mobx.js.org/getting-started
 
 https://mobx.js.org/react-integration.html
 
-https://www.smashingmagazine.com/2020/08/mobx-state-manager-react-native-applications/
-
 
