@@ -17,7 +17,7 @@ const ChallengeAnswers : React.FC<RouteComponentProps<DetailParams>>= ({match}) 
   const challengeId = match.params.id;
 
   const rootStore = useContext(RootStoreContext);
-  const { loadChallengeAnswers, setChallengeAnswersPage, challengeAnswersPage, totalChallengeAnswerPages, challengeAnswerArray, confirmChallengeAnswer, loadingInitial } = rootStore.activityStore;
+  const { loadChallengeAnswers, setChallengeAnswersPage, challengeAnswersPage, totalChallengeAnswerPages, challengeAnswerArray, confirmChallengeAnswer, loadingInitial } = rootStore.challengeStore;
   const { openModal } = rootStore.modalStore;
 
   const [loadingNext, setLoadingNext] = useState(false);

@@ -20,7 +20,8 @@ const validate = combineValidators({
 
 export const ChallengeAnswerForm : React.FC<{activityId: string}> = ({activityId})  => {
   const rootStore = useContext(RootStoreContext);
-  const { answerChallenge, submitting } = rootStore.activityStore;
+  const { submitting } = rootStore.activityStore;
+  const { answerChallenge } = rootStore.challengeStore;
   const { openModal } = rootStore.modalStore;
 
   return (

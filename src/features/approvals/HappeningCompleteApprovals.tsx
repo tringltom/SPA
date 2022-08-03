@@ -19,7 +19,7 @@ const HappeningCompleteApprovals: React.FC = () => {
     totalPendingHappeningActivitiesPages,
     pendingHappeningActivitiesArray,
     approveHappening
-  } = rootStore.activityStore;
+  } = rootStore.happeningStore;
   const { openModal } = rootStore.modalStore;
   
   const [loadingNext, setLoadingNext] = useState(false);

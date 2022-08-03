@@ -16,7 +16,7 @@ import { getButtonData } from '../../app/layout/ReviewButtonData';
 export const ApprovedActivityListItem: React.FC<{activity: IActivity, favorite:boolean, review: ReviewTypes | null}> = ({activity, favorite, review}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const { attendToHappening, cancelAttendenceToHappening } = rootStore.activityStore;
+  const { attendToHappening, cancelAttendenceToHappening } = rootStore.happeningStore;
   const { reviewActivity, reviewing } = rootStore.reviewStore;
   const { resolveFavoriteActivity, resolvingFavourite } = rootStore.favoriteStore;
   const { userId } = rootStore.userStore;

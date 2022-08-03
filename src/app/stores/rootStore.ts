@@ -11,6 +11,8 @@ import UserStore from "./userStore";
 import agent from "../api/agent";
 import { createContext } from "react";
 import { toast } from "react-toastify";
+import ChallengeStore from "./challengeStore";
+import HappeningStore from "./happeningStore";
 
 configure({ enforceActions: "always" });
 
@@ -22,6 +24,8 @@ export class RootStore {
   reviewStore: ReviewStore;
   favoriteStore: FavoriteStore;
   profileStore: ProfileStore;
+  challengeStore: ChallengeStore;
+  happeningStore: HappeningStore;
   hubStore: HubStore;
 
   constructor() {
@@ -32,6 +36,8 @@ export class RootStore {
     this.reviewStore = new ReviewStore(this);
     this.favoriteStore = new FavoriteStore(this);
     this.profileStore = new ProfileStore(this);
+    this.challengeStore = new ChallengeStore(this);
+    this.happeningStore = new HappeningStore(this);
     this.hubStore = new HubStore(this);
     makeAutoObservable(this);
   };
