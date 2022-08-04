@@ -26,7 +26,7 @@ import PrivateRoute from "./PrivateRoute";
 import ProfilePage from "../../features/profile/ProfilePage";
 import PuzzleForm from "../../features/activities/PuzzleForm";
 import QuoteForm from "../../features/activities/QuoteForm";
-import RegisterSuccess from "../../features/user/RegisterSuccess";
+import TwRegisterSuccess from "../../features/user/TwRegisterSuccess";
 import { RootStoreContext } from "../stores/rootStore";
 import { ToastContainer } from "react-toastify";
 import WelcomeScreen from "../../features/WelcomeScreen";
@@ -101,7 +101,7 @@ const App: React.FC<RouteComponentProps> = () => {
                 <Switch>
                   <Route
                     path="/users/registerSuccess"
-                    component={RegisterSuccess}
+                    component={TwRegisterSuccess}
                   />
                   <Route path="/users/verifyEmail" component={TwVerifyEmail} />
                   <Route path="/activities/attendence-confirmation" component={HappeningConfirmation} />
