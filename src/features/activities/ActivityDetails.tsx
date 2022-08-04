@@ -31,9 +31,9 @@ const ActivityDetails : React.FC<RouteComponentProps<DetailParams>>= ({match}) =
     approvedActivity,
     getApprovedActivity,
     resetApprovedActivity,
-    completeHappening,
   } = rootStore.activityStore;
   const { openModal } = rootStore.modalStore;
+  const {completeHappening} = rootStore.happeningStore;
 
   useEffect(() => {
     if (activityId) getApprovedActivity(activityId);

@@ -1309,6 +1309,22 @@ Ensure the default browser behavior of the `hidden` attribute.
     padding-right: 2.75rem;
   }
 
+  .md\:pb-5 {
+    padding-bottom: 1.25rem;
+  }
+
+  .md\:pr-11 {
+    padding-right: 2.75rem;
+  }
+
+  .md\:pt-8 {
+    padding-top: 2rem;
+  }
+
+  .md\:pt-0 {
+    padding-top: 0px;
+  }
+
   .md\:text-3xl {
     font-size: 1.875rem;
     line-height: 2.25rem;
