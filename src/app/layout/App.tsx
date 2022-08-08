@@ -21,12 +21,11 @@ import JokeForm from "../../features/activities/JokeForm";
 import { LoadingComponent } from "./LoadingComponent";
 import ModalContainer from "../common/modals/ModalContainer";
 import Navbar from "../../features/navbar/Navbar";
-import NotFound from "./NotFound";
 import PrivateRoute from "./PrivateRoute";
 import ProfilePage from "../../features/profile/ProfilePage";
 import PuzzleForm from "../../features/activities/PuzzleForm";
 import QuoteForm from "../../features/activities/QuoteForm";
-import RegisterSuccess from "../../features/user/RegisterSuccess";
+import TwRegisterSuccess from "../../features/user/TwRegisterSuccess";
 import { RootStoreContext } from "../stores/rootStore";
 import { ToastContainer } from "react-toastify";
 import WelcomeScreen from "../../features/WelcomeScreen";
@@ -34,6 +33,7 @@ import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import TwVerifyEmail from '../../features/user/TwVerifyEmail';
 import { LoadScript } from '@react-google-maps/api';
+import TwNotFound from './TwNotFound';
 
 const App: React.FC<RouteComponentProps> = () => {
   const rootStore = useContext(RootStoreContext);
@@ -101,7 +101,7 @@ const App: React.FC<RouteComponentProps> = () => {
                 <Switch>
                   <Route
                     path="/users/registerSuccess"
-                    component={RegisterSuccess}
+                    component={TwRegisterSuccess}
                   />
                   <Route path="/users/verifyEmail" component={TwVerifyEmail} />
                   <Route path="/activities/attendence-confirmation" component={HappeningConfirmation} />
@@ -123,7 +123,7 @@ const App: React.FC<RouteComponentProps> = () => {
                   <PrivateRoute path="/happeningCompleteApprovals" component={HappeningCompleteApprovals} />
                   <PrivateRoute path="/challengeAnswers/:id" component={ChallengeAnswers} />
                   <PrivateRoute path="/challengeCompleteApprovals" component={ChallengeCompleteApprovals} />
-                  <Route component={NotFound} />
+                  <Route component={TwNotFound} />
                 </Switch>
               </Container>
             </Fragment>

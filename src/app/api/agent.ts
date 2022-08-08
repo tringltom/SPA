@@ -122,48 +122,10 @@ const Activity = {
     axios.get("/activities/others",{params: params}).then(responseBody),
   getApprovedActivities:(id: number, params: URLSearchParams) : Promise<IApprovedActivitiesEnvelope> => 
     axios.get(`/activities/approved-activities/user/${id}`,{params: params}).then(responseBody),
-  getFavoritedActivities:(id: number, params: URLSearchParams) : Promise<IFavoritedActivitiesEnvelope> => 
-    axios.get(`/activities/favorited-activities/user/${id}`,{params: params}).then(responseBody),
-  getHappeningsForApproval: (params: URLSearchParams) : Promise<IHappeningEnvelope> =>
-    axios.get("/activities/pending-happenings",{params: params}).then(responseBody),
-  getChallengeAnswers: (activityId: string, params: URLSearchParams) : Promise<IChallengeAnswerEnvelope> =>
-    axios.get(`/activities/me/challenge-answers/activity/${activityId}`,{params: params}).then(responseBody),
-  getChallengeConfirmedAnswers: (params: URLSearchParams) : Promise<IChallengeEnvelope> =>
-    axios.get("/activities/pending-challenges",{params: params}).then(responseBody),
   answerPuzzle: (id: string, answer : string) : Promise<number> => 
     requests.patch(`/activities/${id}/puzzle-answer`, {answer}),
-  answerChallenge: (id: string, answer : IChallengeAnswerForm): Promise<void> => {
-    let formData = new FormData();
-    Object.keys(answer).forEach((key) => {
-      if (key === "images") {
-        answer[key]?.map((image) => formData.append(key, image));
-      } else {
-        formData.append(key, answer[key]);
-      }
-    });
-    return requests.postForm(`/activities/${id}/challenge-answer`, formData);
-  },
-  confirmChallengeAnswer: (id: string) : Promise<void> => 
-    requests.patch(`/activities/challenge-confirmation/${id}`, {}),
-  approveChallengeAnswer: (id: string) : Promise<void> => 
-    requests.post(`/activities/challenge-answer-approval/${id}`, {}),
-  disapproveChallengeAnswer: (id: string) : Promise<void> => 
-    requests.patch(`/activities/challenge-answer-disapproval/${id}`, {}),
   approvePendingActivity : (id: string) : Promise<IActivity> =>
     requests.post(`/activities/pending-activity/${id}`, {}),
-  approveHappening : (id: string, approve: boolean) : Promise<void> =>
-    requests.patch(`/activities/${id}/happening-completion-approval`, {approve}),
-  attendToHappening: (id: string) : Promise<void> =>
-    requests.post(`/activities/${id}/attendence`, {}),
-  cancelAttendenceToHappening: (id: string) : Promise<void> =>
-    requests.delete(`/activities/${id}/attendence`),
-  confirmAttendenceToHappening: (id: string) : Promise<void> =>
-    requests.patch(`/activities/${id}/attendence-confirmation`, {}),
-  completeHappening: (id: string, images: Blob[]): Promise<string> => {
-    let formData = new FormData();
-    images.map((image) => formData.append('images', image));
-    return requests.postForm(`/activities/${id}/happening-completion`, formData);
-  },
 };
 
 const PendingActivity = {
@@ -211,8 +173,52 @@ const Review = {
 const Favorite = {
   get: () : Promise<IUserFavoriteActivity> => requests.get(`favorites/me/ids`),
   getOwnerFavoriteActivityIds: () : Promise<number[]> => requests.get(`favorites/me/ids`),
+  getFavoritedActivities:(id: number, params: URLSearchParams) : Promise<IFavoritedActivitiesEnvelope> => 
+    axios.get(`/favorites/user/${id}`,{params: params}).then(responseBody),
+  createFavoriteActivity: (id: number) : Promise<IUserFavoriteActivity> => requests.post(`favorites/${id}`, {}),
   removeFavoriteActivity: (id: number): Promise<void> => requests.delete(`/favorites/${id}`),
-  createFavoriteActivity: (id: number) : Promise<IUserFavoriteActivity> => requests.post(`favorites/${id}`, {})
+}
+
+const Challenge = {
+  getChallengeAnswers: (activityId: string, params: URLSearchParams) : Promise<IChallengeAnswerEnvelope> =>
+    axios.get(`/challenges/me/answers/activity/${activityId}`,{params: params}).then(responseBody),
+  getChallengeConfirmedAnswers: (params: URLSearchParams) : Promise<IChallengeEnvelope> =>
+    axios.get("/challenges/pending",{params: params}).then(responseBody),
+  answerChallenge: (id: string, answer : IChallengeAnswerForm): Promise<void> => {
+    let formData = new FormData();
+    Object.keys(answer).forEach((key) => {
+      if (key === "images") {
+        answer[key]?.map((image) => formData.append(key, image));
+      } else {
+        formData.append(key, answer[key]);
+      }
+    });
+    return requests.postForm(`/challenges/${id}/answer`, formData);
+  },
+  confirmChallengeAnswer: (id: string) : Promise<void> => 
+    requests.patch(`/challenges/confirmation/${id}`, {}),
+  approveChallengeAnswer: (id: string) : Promise<void> => 
+    requests.post(`/challenges/answer-approval/${id}`, {}),
+  disapproveChallengeAnswer: (id: string) : Promise<void> => 
+    requests.patch(`/challenges/answer-disapproval/${id}`, {}),
+}
+
+const Happening = {
+  getHappeningsForApproval: (params: URLSearchParams) : Promise<IHappeningEnvelope> =>
+    axios.get("/happenings/pending",{params: params}).then(responseBody),
+  approveHappening : (id: string, approve: boolean) : Promise<void> =>
+    requests.patch(`/happenings/${id}/completion-approval`, {approve}),
+  attendToHappening: (id: string) : Promise<void> =>
+    requests.post(`/happenings/${id}/attendence`, {}),
+  cancelAttendenceToHappening: (id: string) : Promise<void> =>
+    requests.delete(`/happenings/${id}/attendence`),
+  confirmAttendenceToHappening: (id: string) : Promise<void> =>
+    requests.patch(`/happenings/${id}/attendence-confirmation`, {}),
+  completeHappening: (id: string, images: Blob[]): Promise<string> => {
+    let formData = new FormData();
+    images.map((image) => formData.append('images', image));
+    return requests.postForm(`/happenings/${id}/completion`, formData);
+  },
 }
 
 const Profile = {
@@ -228,6 +234,8 @@ const sites = {
   Dice,
   Review,
   Favorite,
+  Challenge,
+  Happening,
   Profile,
 };
 

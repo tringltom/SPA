@@ -18,7 +18,7 @@ const HappeningConfirmation: React.FC<RouteComponentProps> = ({ location }) => {
   const { id } = queryString.parse(location.search);
 
   useEffect(() => {
-    agent.Activity.confirmAttendenceToHappening(id as string)
+    agent.Happening.confirmAttendenceToHappening(id as string)
       .then(() => {
         SetStatus(Status.Success);
       })

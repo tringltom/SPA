@@ -21,7 +21,7 @@ const ChallengeCompleteApprovals = () => {
     totalChallengeApprovalPages,
     challengeApprovalArray,
     approveChallenge
-  } = rootStore.activityStore;
+  } = rootStore.challengeStore;
   
   const { openModal } = rootStore.modalStore;
   

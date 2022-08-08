@@ -1,0 +1,1 @@
+Folder u kome se ignoruje neposedovanje typescript typova za odredjene biblioteke.
