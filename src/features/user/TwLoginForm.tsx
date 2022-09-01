@@ -26,10 +26,10 @@ const TwLoginForm = () => {
   const { login, fbLogin, loading } = rootStore.userStore;
   const { openModal } = rootStore.modalStore;
 
-  const [toggleField, setToggleField] = useState(false);
+  const [togglePasswordField, setTogglePasswordField] = useState(false);
 
-  const toggleType = () => {
-    setToggleField(toggleField ? false : true);
+  const togglePasswordType = () => {
+    setTogglePasswordField(togglePasswordField ? false : true);
   };
 
   return (
@@ -108,7 +108,7 @@ const TwLoginForm = () => {
                     />
 
                     <input
-                      type={toggleField ? "text" : "password"}
+                      type={togglePasswordField ? "text" : "password"}
                       id="password"
                       className={`block bg-formBg rounded-md pl-12 pr-10 pb-2 pt-6 sm:pl-16 md:pr-11 text-sm sm:text-base md:text-xl h-14 sm:h-17 w-full peer ${
                         error && touched
@@ -130,8 +130,8 @@ const TwLoginForm = () => {
                     </label>
 
                     <Icon
-                      iconName={toggleField ? "eyeSlash" : "eye"}
-                      onClick={toggleType}
+                      iconName={togglePasswordField ? "eyeSlash" : "eye"}
+                      onClick={togglePasswordType}
                       className="absolute w-[23px] h-[23px] top-[17px] sm:top-6 right-4 md:right-5"
                     />
                   </div>
